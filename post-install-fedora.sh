@@ -59,7 +59,6 @@ ${YUM_INSTALL} ibus-chewing
 ${YUM_INSTALL} gnome-tweak-tool dconf-editor
 ${YUM_INSTALL} gnome-shell-extension-alternate-tab
 ${YUM_INSTALL} gnome-shell-extension-pidgin
-${YUM_INSTALL} gnome-shell-extension-remove-bluetooth-icon
 ${YUM_INSTALL} gnome-shell-extension-user-theme
 
 # desktop experience
