@@ -30,7 +30,7 @@ ${YUM_INSTALL} curl colordiff meld vim wget
 ${YUM_INSTALL} ethtool htop iftop iperf tcpdump
 
 # general tools
-${YUM_INSTALL} p7zip p7zip-plugins unrar unzip
+${YUM_INSTALL} p7zip p7zip-plugins unzip
 
 # adobe flash plugin
 ${RPM_INSTALL} http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
@@ -48,6 +48,9 @@ ${YUM_INSTALL} ffmpeg gstreamer gstreamer-ffmpeg \
                gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-ugly \
                gstreamer-plugins-bad gstreamer-plugins-bad-free gstreamer-plugins-bad-nonfree
 ${YUM_INSTALL} vlc
+
+# general tools (rpmfusion)
+${YUM_INSTALL} unrar
 
 # communication
 ${YUM_INSTALL} pidgin pidgin-sipe
