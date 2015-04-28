@@ -14,6 +14,25 @@ RPM_INSTALL="sudo rpm -ivh"
 YUM_INSTALL="sudo yum install -y"
 YUM_UPDATE="sudo yum update -y"
 
+# detect current running user
+if [ ! -z ${SUDO_USER} ]; then
+  HOMEDIR=$(eval echo ~${SUDO_USER})
+else
+  HOMEDIR=${HOME}
+fi
+
+# bashrc
+if [ -f ${HOMEDIR}/.bashrc ]; then
+  cp ${HOMEDIR}/.bashrc ${HOMEDIR}/.bashrc.bak
+fi
+cp _bashrc ${HOMEDIR}/.bashrc
+
+# vimrc
+if [ -f ${HOMEDIR}/.vimrc ]; then
+  cp ${HOMEDIR}/.vimrc ${HOMEDIR}/.vimrc.bak
+fi
+cp _vimrc ${HOMEDIR}/.vimrc
+
 # ensure we are running with latest yum toolkit
 ${YUM_UPDATE} yum
 
