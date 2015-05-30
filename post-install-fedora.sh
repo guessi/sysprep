@@ -53,6 +53,10 @@ ${DO_INSTALL} git gitg tig
 ${DO_INSTALL} curl colordiff meld vim wget
 ${DO_INSTALL} ethtool htop iftop iperf tcpdump
 
+# git global settings
+git config --global diff.tool colordiff
+git config --global core.editor vim
+
 # docker
 ${DO_INSTALL} docker
 
