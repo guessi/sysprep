@@ -53,6 +53,9 @@ ${DO_INSTALL} git gitg tig
 ${DO_INSTALL} curl colordiff meld vim wget
 ${DO_INSTALL} ethtool htop iftop iperf tcpdump
 
+# docker
+${DO_INSTALL} docker
+
 # general tools
 ${DO_INSTALL} p7zip p7zip-plugins unzip
 
