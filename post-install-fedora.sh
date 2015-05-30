@@ -115,6 +115,7 @@ sudo tee /etc/yum.repos.d/dropbox.repo > /dev/null << EOF
 name=Dropbox Repository
 baseurl=http://linux.dropbox.com/fedora/\$releasever/
 gpgkey=https://linux.dropbox.com/fedora/rpm-public-key.asc
+enabled=0
 EOF
 
 ${DO_INSTALL} nautilus-dropbox
