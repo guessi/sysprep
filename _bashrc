@@ -69,11 +69,16 @@ alias sdpsa='sudo docker ps -a'
 alias sdrm='sudo docker rm -f'
 alias sdrmi='sudo docker rmi -f'
 
-# lenovo trackpoint
-if [ $(cat /sys/devices/virtual/dmi/id/chassis_vendor) = "LENOVO" ]; then
-	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation" 1
-	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Button" 2
-	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Timeout" 200
+
+OS_VERSION=$(awk -F'=' '/VERSION_ID=/{print$2}' /etc/os-release)
+
+if [ ${OS_VERSION} -lt 22 ]; then
+  # lenovo trackpoint
+  if [ $(cat /sys/devices/virtual/dmi/id/chassis_vendor) = "LENOVO" ]; then
+  	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation" 1
+  	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Button" 2
+  	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Timeout" 200
+  fi
 fi
 
 # custom aliases
