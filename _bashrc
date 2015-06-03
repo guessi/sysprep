@@ -49,15 +49,6 @@ alias scp='scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 
 # git
 alias g='git'
-alias gadd='git add'
-alias gcheckout='git checkout'
-alias gcherrypick='git cherry-pick'
-alias gdiff='git diff'
-alias glog='git log --oneline --decorate'
-alias gmerge='git merge'
-alias gpull='git pull'
-alias gpush='git push'
-alias grm='git rm'
 
 # docker
 alias sd='sudo docker'
