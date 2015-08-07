@@ -40,39 +40,38 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
 
-alias syu='sudo yum update'
-alias syi='sudo yum install'
+# yum have been replaced by dnf after fedora 22 released
+if [ $(lsb_release -sr) -lt 22 ]; then
+  alias syu='sudo yum update'
+  alias syi='sudo yum install'
+else
+  alias sdu='sudo dnf update'
+  alias sdi='sudo dnf install'
+fi
 
 # ignore ssh/scp warnings
-alias ssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-alias scp='scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+SSH_OPTION='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+alias ssh='ssh ${SSH_OPTION}'
+alias scp='scp ${SSH_OPTION}'
 
 # git
 alias g='git'
 
 # docker
 alias sd='sudo docker'
-alias sdbuild='sudo docker build'
-alias sdclean='sudo docker rm $(sudo docker ps -q -f status=exited)'
-alias sdcleani='sudo docker rmi $(sudo docker images -q -f dangling=true)'
-alias sdps='sudo docker ps'
-alias sdpsa='sudo docker ps -a'
-alias sdrm='sudo docker rm -f'
-alias sdrmi='sudo docker rmi -f'
+alias sdcleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
+alias sdcleanupimage='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
 
-
-OS_VERSION=$(awk -F'=' '/VERSION_ID=/{print$2}' /etc/os-release)
-
-if [ ${OS_VERSION} -lt 22 ]; then
+if [ $(lsb_release -sr) -lt 22 ]; then
   # lenovo trackpoint
   if [ $(cat /sys/devices/virtual/dmi/id/chassis_vendor) = "LENOVO" ]; then
-  	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation" 1
-  	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Button" 2
-  	xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Timeout" 200
+    xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation" 1
+    xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Button" 2
+    xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Timeout" 200
   fi
 fi
 
 # custom aliases
 if [ -f ~/.bash_aliases ]; then
-	. ~/.bash_aliases
+  . ~/.bash_aliases
 fi
