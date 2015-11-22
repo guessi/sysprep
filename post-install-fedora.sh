@@ -38,8 +38,12 @@ if [ -f ${HOMEDIR}/.vimrc ]; then
 fi
 cp _vimrc ${HOMEDIR}/.vimrc
 
-# ensure we are running with latest yum toolkit
-${DO_UPDATE} yum
+# ensure we are running with latest dnf/yum toolkit
+if [ ${OS_VERSION} -lt 22 ]; then
+  ${DO_UPDATE} yum
+else
+  ${DO_UPDATE} dnf
+fi
 
 # ssh services
 ${DO_INSTALL} openssh-clients
