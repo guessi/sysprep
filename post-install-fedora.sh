@@ -67,6 +67,7 @@ git config --global alias.st status
 git config --global alias.br branch
 git config --global alias.hist 'log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short'
 git config --global alias.lo 'log --oneline --decorate'
+git config --global push.default simple
 
 # docker
 ${DO_INSTALL} docker
