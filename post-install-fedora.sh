@@ -137,3 +137,11 @@ ${DO_INSTALL} nautilus-dropbox
 
 # system update
 ${DO_UPDATE}
+
+# enable sshd.service on boot
+systemctl enable sshd
+systenctl start sshd
+
+# enable docker.service on boot
+systemctl enable docker
+systenctl start docker
