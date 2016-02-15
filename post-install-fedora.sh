@@ -1,17 +1,17 @@
 #!/bin/sh
 
-DISTRO=$(lsb_release -is)
+DISTRO="$(lsb_release -is)"
 
 if [ "${DISTRO}" != "Fedora" ]; then
   echo "Sorry, this script was written for Fedora only"
   exit 1
 fi
 
-OS_VERSION=$(lsb_release -rs)
+OS_VERSION="$(lsb_release -rs)"
 
 RPM_IMPORT="sudo rpm --import"
 RPM_INSTALL="sudo rpm -ivh"
-if [ ${OS_VERSION} -lt 22 ]; then
+if [ "${OS_VERSION}" -lt 22 ]; then
   DO_INSTALL="sudo yum install -y"
   DO_UPDATE="sudo yum update -y"
 else
@@ -20,26 +20,26 @@ else
 fi
 
 # detect current running user
-if [ ! -z ${SUDO_USER} ]; then
-  HOMEDIR=$(eval echo ~${SUDO_USER})
+if [ ! -z "${SUDO_USER}" ]; then
+  HOMEDIR="$(eval echo ~"${SUDO_USER}")"
 else
-  HOMEDIR=${HOME}
+  HOMEDIR="${HOME}"
 fi
 
 # bashrc
-if [ -f ${HOMEDIR}/.bashrc ]; then
-  cp ${HOMEDIR}/.bashrc ${HOMEDIR}/.bashrc.bak
+if [ -f "${HOMEDIR}/.bashrc" ]; then
+  cp "${HOMEDIR}/.bashrc" "${HOMEDIR}/.bashrc.bak"
 fi
-cp _bashrc ${HOMEDIR}/.bashrc
+cp _bashrc "${HOMEDIR}/.bashrc"
 
 # vimrc
-if [ -f ${HOMEDIR}/.vimrc ]; then
-  cp ${HOMEDIR}/.vimrc ${HOMEDIR}/.vimrc.bak
+if [ -f "${HOMEDIR}/.vimrc" ]; then
+  cp "${HOMEDIR}/.vimrc" "${HOMEDIR}/.vimrc.bak"
 fi
-cp _vimrc ${HOMEDIR}/.vimrc
+cp _vimrc "${HOMEDIR}/.vimrc"
 
 # ensure we are running with latest dnf/yum toolkit
-if [ ${OS_VERSION} -lt 22 ]; then
+if [ "${OS_VERSION}" -lt 22 ]; then
   ${DO_UPDATE} yum
 else
   ${DO_UPDATE} dnf
@@ -84,8 +84,8 @@ ${DO_INSTALL} flash-plugin
 ${DO_INSTALL} nspluginwrapper alsa-plugins-pulseaudio libcurl
 
 # multimedia (rpmfusion)
-${RPM_INSTALL} http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm
-${RPM_INSTALL} http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${OS_VERSION}.noarch.rpm
+${RPM_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
+${RPM_INSTALL} "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${OS_VERSION}.noarch.rpm"
 
 ${DO_INSTALL} ffmpeg gstreamer gstreamer-ffmpeg \
                gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-ugly \
