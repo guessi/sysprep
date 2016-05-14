@@ -1,13 +1,13 @@
 #!/bin/sh
 
-DISTRO="$(lsb_release -is)"
+DISTRO="$(awk -F'=' '/^NAME=/{print$2}' /etc/os-release)"
 
 if [ "${DISTRO}" != "Fedora" ]; then
   echo "Sorry, this script was written for Fedora only"
   exit 1
 fi
 
-OS_VERSION="$(lsb_release -rs)"
+OS_VERSION="$(awk -F '=' '/^VERSION_ID=/{print$2}' /etc/os-release)"
 
 RPM_IMPORT="sudo rpm --import"
 RPM_INSTALL="sudo rpm -ivh"
