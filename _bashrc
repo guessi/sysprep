@@ -22,7 +22,7 @@ fi
 export NSS_SSL_CBC_RANDOM_IV=0
 
 # svn
-export SVN_EDITOR=vim
+export SVN_EDITOR='vim'
 
 # history
 HISTTIMEFORMAT='%F %T '
@@ -40,15 +40,6 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
 
-# yum have been replaced by dnf after fedora 22 released
-if [ $(lsb_release -sr) -lt 22 ]; then
-  alias syu='sudo yum update'
-  alias syi='sudo yum install'
-else
-  alias sdu='sudo dnf update'
-  alias sdi='sudo dnf install'
-fi
-
 # ignore ssh/scp warnings
 SSH_OPTION='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 alias ssh='ssh ${SSH_OPTION}'
@@ -58,7 +49,6 @@ alias scp='scp ${SSH_OPTION}'
 alias g='git'
 
 # docker
-alias sd='sudo docker'
 alias sdcleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
 alias sdcleanupimage='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
 
