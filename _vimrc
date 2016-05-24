@@ -64,6 +64,9 @@ set tenc=utf-8
 " always treat *.md as markdown file
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
+" ignore files
+set wildignore+=*.so,*.swp,*.zip,*.exe
+
 " setting up vundle
 let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
 if !filereadable(vundle_readme)
@@ -108,3 +111,10 @@ call vundle#end()
      \     endif <CR>
 
 let g:neocomplcache_enable_at_startup = 1
+
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn|node_modules)$',
+  \ 'file': '\v\.(exe|so|dll|pyc|DS_Store)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
