@@ -87,6 +87,8 @@ call vundle#begin()
   Plugin 'kien/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
   Plugin 'Shougo/neocomplcache.vim'
+  
+  Plugin 'fatih/vim-go'
 
   " Plugin 'klen/python-mode'
 
