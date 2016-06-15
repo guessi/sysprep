@@ -40,11 +40,6 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
 
-# ignore ssh/scp warnings
-SSH_OPTION='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-alias ssh='ssh ${SSH_OPTION}'
-alias scp='scp ${SSH_OPTION}'
-
 # git
 alias g='git'
 

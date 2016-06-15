@@ -38,6 +38,17 @@ if [ -f "${HOMEDIR}/.vimrc" ]; then
 fi
 cp _vimrc "${HOMEDIR}/.vimrc"
 
+# ssh config
+mkdir -p "${HOMEDIR}/.ssh"
+cat > "${HOMEDIR}/.ssh/config <<-EOF
+Host *
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+  ServerAliveInterval 60
+  LogLevel=quiet
+EOF
+chmod 0640 "${HOMEDIR}/.ssh/config"
+
 # ensure we are running with latest dnf/yum toolkit
 if [ "${OS_VERSION}" -lt 22 ]; then
   ${DO_UPDATE} yum
