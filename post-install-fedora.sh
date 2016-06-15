@@ -11,7 +11,8 @@ OS_VERSION="$(awk -F '=' '/^VERSION_ID=/{print$2}' /etc/os-release)"
 
 RPM_IMPORT="sudo rpm --import"
 RPM_INSTALL="sudo rpm -ivh"
-if [ "${OS_VERSION}" -lt 22 ]; then
+
+if [ -z "$(which dnf)" ]; then
   DO_INSTALL="sudo yum install -y"
   DO_UPDATE="sudo yum update -y"
 else
@@ -20,7 +21,7 @@ else
 fi
 
 # detect current running user
-if [ ! -z "${SUDO_USER}" ]; then
+if [ -n "${SUDO_USER}" ]; then
   HOMEDIR="$(eval echo ~"${SUDO_USER}")"
 else
   HOMEDIR="${HOME}"
@@ -50,10 +51,10 @@ EOF
 chmod 0640 "${HOMEDIR}/.ssh/config"
 
 # ensure we are running with latest dnf/yum toolkit
-if [ "${OS_VERSION}" -lt 22 ]; then
-  ${DO_UPDATE} yum
-else
+if [ -n "$(which dnf)" ]; then
   ${DO_UPDATE} dnf
+else
+  ${DO_UPDATE} yum
 fi
 
 # ssh services
