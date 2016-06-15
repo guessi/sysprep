@@ -9,15 +9,21 @@ fi
 
 OS_VERSION="$(awk -F '=' '/^VERSION_ID=/{print$2}' /etc/os-release)"
 
-RPM_IMPORT="sudo rpm --import"
-RPM_INSTALL="sudo rpm -ivh"
+if [ "$(whoami)" != "root" ]; then
+  SUDO='sudo -E'
+else
+  SUDO=''
+fi
+
+RPM_IMPORT="${SUDO} rpm --import"
+RPM_INSTALL="${SUDO} rpm -ivh"
 
 if [ -z "$(which dnf)" ]; then
-  DO_INSTALL="sudo yum install -y"
-  DO_UPDATE="sudo yum update -y"
+  DO_INSTALL="${SUDO} yum install -y"
+  DO_UPDATE="${SUDO} yum update -y"
 else
-  DO_INSTALL="sudo dnf install -y"
-  DO_UPDATE="sudo dnf update -y"
+  DO_INSTALL="${SUDO} dnf install -y"
+  DO_UPDATE="${SUDO} dnf update -y"
 fi
 
 # detect current running user
@@ -128,7 +134,7 @@ fi
 gsettings set org.gnome.shell always-show-log-out true
 
 # google chrome
-sudo tee /etc/yum.repos.d/google-chrome.repo > /dev/null << EOF
+${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
 [google-chrome]
 name=google-chrome - 64-bit
 baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
@@ -140,7 +146,7 @@ EOF
 ${DO_INSTALL} google-chrome-stable
 
 # dropbox
-sudo tee /etc/yum.repos.d/dropbox.repo > /dev/null << EOF
+${SUDO} tee /etc/yum.repos.d/dropbox.repo >/dev/null <<-EOF
 [Dropbox]
 name=Dropbox Repository
 baseurl=http://linux.dropbox.com/fedora/\$releasever/
