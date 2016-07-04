@@ -47,7 +47,7 @@ cp _vimrc "${HOMEDIR}/.vimrc"
 
 # ssh config
 mkdir -p "${HOMEDIR}/.ssh"
-cat > "${HOMEDIR}/.ssh/config <<-EOF
+cat > "${HOMEDIR}/.ssh/config" <<-EOF
 Host *
   StrictHostKeyChecking no
   UserKnownHostsFile=/dev/null
