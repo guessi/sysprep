@@ -44,8 +44,9 @@ alias vi='vim'
 alias g='git'
 
 # docker
-alias sdcleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
-alias sdcleanupimage='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
+alias dockercontainercleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
+alias dockerimagecleanup='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
+alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | awk -F "/" "/docker.io/{print$2}" | xargs -r -n 1 sudo docker pull'
 
 if [ $(lsb_release -sr) -lt 22 ]; then
   # lenovo trackpoint
