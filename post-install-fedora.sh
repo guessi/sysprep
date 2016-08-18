@@ -87,6 +87,15 @@ git config --global alias.hist 'log --pretty=format:"%h %ad | %s%d [%an]" --grap
 git config --global alias.lo 'log --oneline --decorate'
 git config --global push.default simple
 
+# create link for git-prompt.sh
+if [ -f /etc/profile.d/git-prompt.sh ] || [ -L /etc/profile.d/git-prompt.sh ]; then
+  rm -f /etc/profile.d/git-prompt.sh
+fi
+
+if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
+  ${SUDO} ln -s -f /usr/share/git-core/contrib/completion/git-prompt.sh /etc/profile.d/
+fi
+
 # docker
 ${DO_INSTALL} docker
 
