@@ -46,7 +46,7 @@ alias g='git'
 # docker
 alias dockercontainercleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
 alias dockerimagecleanup='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
-alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | awk -F "/" "/docker.io/{print$2}" | xargs -r -n 1 sudo docker pull'
+alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | xargs -r -n 1 sudo docker pull'
 
 if [ $(awk -F'=' '/^VERSION_ID/{print$2}' /etc/os-release) -lt 22 ]; then
   # lenovo trackpoint
