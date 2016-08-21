@@ -97,7 +97,7 @@ if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
 fi
 
 # general tools
-${DO_INSTALL} p7zip p7zip-plugins unzip
+${DO_INSTALL} p7zip p7zip-plugins unzip libcurl
 
 # adobe flash plugin
 ${RPM_INSTALL} http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
@@ -105,7 +105,7 @@ ${RPM_IMPORT} /etc/pki/rpm-gpg/RPM-GPG-KEY-adobe-linux
 ${DO_INSTALL} flash-plugin
 
 # multimedia
-${DO_INSTALL} nspluginwrapper alsa-plugins-pulseaudio libcurl
+${DO_INSTALL} alsa-plugins-pulseaudio
 
 # multimedia (rpmfusion)
 ${RPM_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
@@ -114,6 +114,7 @@ ${RPM_INSTALL} "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-
 ${DO_INSTALL} ffmpeg gstreamer gstreamer-ffmpeg \
                gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-ugly \
                gstreamer-plugins-bad gstreamer-plugins-bad-free gstreamer-plugins-bad-nonfree
+
 ${DO_INSTALL} vlc
 
 # general tools (rpmfusion)
