@@ -96,9 +96,6 @@ if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
   ${SUDO} ln -s -f /usr/share/git-core/contrib/completion/git-prompt.sh /etc/profile.d/
 fi
 
-# docker
-${DO_INSTALL} docker
-
 # general tools
 ${DO_INSTALL} p7zip p7zip-plugins unzip
 
@@ -171,7 +168,3 @@ ${DO_UPDATE}
 # enable sshd.service on boot
 systemctl enable sshd
 systemctl start sshd
-
-# enable docker.service on boot
-systemctl enable docker
-systemctl start docker
