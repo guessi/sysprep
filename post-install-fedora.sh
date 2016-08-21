@@ -2,6 +2,11 @@
 
 DISTRO="$(awk -F'=' '/^NAME=/{print$2}' /etc/os-release)"
 
+if [ "$(whoami)" = "root" ]; then
+  echo "Please execute the script the user who have \`sudo\` permission"
+  exit 1
+fi
+
 if [ "${DISTRO}" != "Fedora" ]; then
   echo "Sorry, this script was written for Fedora only"
   exit 1
@@ -89,7 +94,7 @@ git config --global push.default simple
 
 # create link for git-prompt.sh
 if [ -f /etc/profile.d/git-prompt.sh ] || [ -L /etc/profile.d/git-prompt.sh ]; then
-  rm -f /etc/profile.d/git-prompt.sh
+  ${SUDO} rm -vf /etc/profile.d/git-prompt.sh
 fi
 
 if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
