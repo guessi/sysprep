@@ -48,15 +48,6 @@ alias dockercontainercleanup='sudo docker ps -q -f status=exited | xargs -r sudo
 alias dockerimagecleanup='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
 alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | xargs -r -n 1 sudo docker pull'
 
-if [ $(awk -F'=' '/^VERSION_ID/{print$2}' /etc/os-release) -lt 22 ]; then
-  # lenovo trackpoint
-  if [ $(cat /sys/devices/virtual/dmi/id/chassis_vendor) = "LENOVO" ]; then
-    xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation" 1
-    xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Button" 2
-    xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Timeout" 200
-  fi
-fi
-
 # custom aliases
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
