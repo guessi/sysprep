@@ -76,7 +76,7 @@ ${DO_INSTALL} openssh-server
 ${DO_INSTALL} bash openssl
 
 # develop tools
-${DO_INSTALL} git gitg tig
+${DO_INSTALL} git gitg tig git-extras
 ${DO_INSTALL} curl colordiff meld vim wget
 ${DO_INSTALL} ethtool htop iftop iperf tcpdump
 
