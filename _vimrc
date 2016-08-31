@@ -64,6 +64,9 @@ set tenc=utf-8
 " always treat *.md as markdown file
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
+" always treat Jenkinsfile as groovy file
+autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
+
 " ignore files
 set wildignore+=*.so,*.swp,*.zip,*.exe
 
