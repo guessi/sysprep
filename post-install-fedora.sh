@@ -3,7 +3,7 @@
 DISTRO="$(awk -F'=' '/^NAME=/{print$2}' /etc/os-release)"
 
 if [ "$(whoami)" = "root" ]; then
-  echo "Please execute the script the user who have \`sudo\` permission"
+  echo "Please DO NOT execute the script the user who have \`sudo\` permission"
   exit 1
 fi
 
