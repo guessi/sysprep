@@ -172,5 +172,5 @@ ${DO_INSTALL} nautilus-dropbox
 ${DO_UPDATE}
 
 # enable sshd.service on boot
-systemctl enable sshd
-systemctl start sshd
+${SUDO} systemctl enable sshd
+${SUDO} systemctl start sshd
