@@ -22,6 +22,7 @@ set autoread
 filetype on
 filetype plugin on
 filetype indent on
+filetype plugin indent on
 
 " colorcolumn
 set colorcolumn=80
@@ -68,7 +69,7 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
 
 " ignore files
-set wildignore+=*.so,*.swp,*.zip,*.exe
+set wildignore+=*.so,*.swp,*.zip,*.exe,*.pyc,*.pyo
 
 " setting up vundle
 let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
@@ -77,36 +78,35 @@ if !filereadable(vundle_readme)
   echo ""
   silent !mkdir -p ~/.vim/bundle
   silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+  !vim +BundleInstall +qall
 endif
 set rtp+=~/.vim/bundle/vundle
 
 " setup plugins
 call vundle#begin()
-  Plugin 'bling/vim-airline'
+  Plugin 'gmarik/vundle'
+
+  Plugin 'vim-airline/vim-airline'
+  Plugin 'vim-airline/vim-airline-themes'
+
   Plugin 'airblade/vim-gitgutter'
   Plugin 'tpope/vim-fugitive'
+  Plugin 'tpope/vim-git'
   Plugin 'mhinz/vim-signify'
 
-  Plugin 'kien/ctrlp.vim'
+  Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
   Plugin 'Shougo/neocomplcache.vim'
-  
+  Plugin 'tomtom/tcomment_vim'
+
   Plugin 'fatih/vim-go'
-
-  " Plugin 'klen/python-mode'
-
-  Plugin 'Markdown'
-  Plugin 'jQuery'
-  Plugin 'python.vim'
-  Plugin 'tComment'
+  Plugin 'nvie/vim-flake8'
+  Plugin 'hdima/python-syntax'
+  Plugin 'plasticboy/vim-markdown'
 call vundle#end()
 
 " <Ctrl-N> <F9> NERDTREE Toggle
-:map <C-n> :NERDTreeToggle<CR>
-:nnoremap <silent> <F9> :NERDTreeToggle<CR>
-
-" <F5>: toggle on/off number of line
-:map <silent> <F5> :set number! number?<CR>
+:map <silent> <C-n> :NERDTreeToggle<CR>
 
 " <F6>: toggle on/off syntax highlighting
 :map <silent> <F6> :if exists("g:syntax_on") <Bar>
@@ -119,7 +119,8 @@ let g:neocomplcache_enable_at_startup = 1
 
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn|node_modules)$',
+  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
   \ 'file': '\v\.(exe|so|dll|pyc|DS_Store)$',
-  \ 'link': 'some_bad_symbolic_links',
   \ }
+
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
