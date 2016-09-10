@@ -168,6 +168,15 @@ EOF
 
 ${DO_INSTALL} nautilus-dropbox
 
+# bbs
+${DO_INSTALL} pcmanx-gtk2
+
+# irc
+${DO_INSTALL} hexchat
+
+# chinese fonts
+${DO_INSTALL} wqy-zenhei-fonts wqy-microhei-fonts
+
 # system update
 ${DO_UPDATE}
 
