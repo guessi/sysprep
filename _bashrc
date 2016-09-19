@@ -46,7 +46,7 @@ alias g='git'
 # docker
 alias dockercontainercleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
 alias dockerimagecleanup='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
-alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | xargs -r -n 1 sudo docker pull'
+alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | egrep "^docker.io\/" | xargs -r -n 1 sudo docker pull'
 
 # custom aliases
 if [ -f ~/.bash_aliases ]; then
