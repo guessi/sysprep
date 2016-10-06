@@ -13,6 +13,7 @@ fi
 # sudo ln -s /usr/share/git-core/contrib/completion/git-prompt.sh /etc/profile.d/
 if [ -f /etc/profile.d/git-prompt.sh ] && \
    [ -L /etc/profile.d/git-prompt.sh ]; then
+  GIT_PS1_SHOWDIRTYSTATE=true
   PS1='$(__git_ps1 "(%s) ")\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;35m\]\h\[\e[0m\]:\[\e[1;36m\]\W\[\e[0m\]\$ '
 else
   PS1='\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;35m\]\h\[\e[0m\]:\[\e[1;36m\]\W\[\e[0m\]\$ '
