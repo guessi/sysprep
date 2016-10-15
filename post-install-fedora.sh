@@ -115,16 +115,12 @@ ${DO_INSTALL} vlc
 # general tools (rpmfusion)
 ${DO_INSTALL} unrar
 
-# communication
-${DO_INSTALL} pidgin pidgin-sipe
-
 # input method
 ${DO_INSTALL} ibus-chewing
 
 # gnome toolkits
 ${DO_INSTALL} gnome-tweak-tool dconf-editor
 ${DO_INSTALL} gnome-shell-extension-alternate-tab
-${DO_INSTALL} gnome-shell-extension-pidgin
 ${DO_INSTALL} gnome-shell-extension-user-theme
 ${DO_INSTALL} nautilus-open-terminal
 
