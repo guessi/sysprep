@@ -99,6 +99,26 @@ fi
 # general tools
 ${DO_INSTALL} p7zip p7zip-plugins unzip libcurl
 
+# bbs
+${DO_INSTALL} pcmanx-gtk2
+
+# irc
+${DO_INSTALL} hexchat
+
+# chinese fonts
+${DO_INSTALL} wqy-zenhei-fonts wqy-microhei-fonts
+
+# input method
+${DO_INSTALL} ibus-chewing
+
+# gnome toolkits
+${DO_INSTALL} gnome-tweak-tool dconf-editor
+${DO_INSTALL} gnome-shell-extension-alternate-tab
+${DO_INSTALL} gnome-shell-extension-user-theme
+${DO_INSTALL} nautilus-open-terminal
+
+gsettings set org.gnome.shell always-show-log-out true
+
 # multimedia
 ${DO_INSTALL} alsa-plugins-pulseaudio
 
@@ -114,17 +134,6 @@ ${DO_INSTALL} vlc
 
 # general tools (rpmfusion)
 ${DO_INSTALL} unrar
-
-# input method
-${DO_INSTALL} ibus-chewing
-
-# gnome toolkits
-${DO_INSTALL} gnome-tweak-tool dconf-editor
-${DO_INSTALL} gnome-shell-extension-alternate-tab
-${DO_INSTALL} gnome-shell-extension-user-theme
-${DO_INSTALL} nautilus-open-terminal
-
-gsettings set org.gnome.shell always-show-log-out true
 
 # google chrome
 ${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
@@ -148,15 +157,6 @@ enabled=1
 EOF
 
 ${DO_INSTALL} nautilus-dropbox
-
-# bbs
-${DO_INSTALL} pcmanx-gtk2
-
-# irc
-${DO_INSTALL} hexchat
-
-# chinese fonts
-${DO_INSTALL} wqy-zenhei-fonts wqy-microhei-fonts
 
 # system update
 ${DO_UPDATE}
