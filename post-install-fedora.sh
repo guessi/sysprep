@@ -75,7 +75,6 @@ ${DO_INSTALL} ethtool htop iftop iperf tcpdump
 git config --global diff.tool colordiff
 git config --global core.editor vim
 git config --global color.ui true
-git config --global alias.br branch
 git config --global alias.ci commit
 git config --global alias.co checkout
 git config --global alias.cp cherry-pick
