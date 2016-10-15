@@ -128,11 +128,6 @@ ${DO_INSTALL} gnome-shell-extension-pidgin
 ${DO_INSTALL} gnome-shell-extension-user-theme
 ${DO_INSTALL} nautilus-open-terminal
 
-# desktop experience
-if [ "${OS_VERSION}" -lt 24 ]; then
-  ${DO_INSTALL} gnome-shell-theme-zukitwo
-fi
-
 gsettings set org.gnome.shell always-show-log-out true
 
 # google chrome
