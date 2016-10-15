@@ -23,13 +23,8 @@ fi
 RPM_IMPORT="${SUDO} rpm --import"
 RPM_INSTALL="${SUDO} rpm -ivh"
 
-if [ -z "$(which dnf)" ]; then
-  DO_INSTALL="${SUDO} yum install -y"
-  DO_UPDATE="${SUDO} yum update -y"
-else
-  DO_INSTALL="${SUDO} dnf install -y"
-  DO_UPDATE="${SUDO} dnf update -y"
-fi
+DO_INSTALL="${SUDO} dnf install -y"
+DO_UPDATE="${SUDO} dnf update -y"
 
 # detect current running user
 if [ -n "${SUDO_USER}" ]; then
@@ -61,12 +56,8 @@ Host *
 EOF
 chmod 0640 "${HOMEDIR}/.ssh/config"
 
-# ensure we are running with latest dnf/yum toolkit
-if [ -n "$(which dnf)" ]; then
-  ${DO_UPDATE} dnf
-else
-  ${DO_UPDATE} yum
-fi
+# ensure we are running with latest dnf
+${DO_UPDATE} dnf
 
 # ssh services
 ${DO_INSTALL} openssh-clients
