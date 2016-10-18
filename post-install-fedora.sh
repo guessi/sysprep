@@ -76,6 +76,7 @@ ${DO_INSTALL} ethtool htop iftop iperf tcpdump
 git config --global diff.tool colordiff
 git config --global core.editor vim
 git config --global color.ui true
+git config --global color.status true
 git config --global alias.ci commit
 git config --global alias.co checkout
 git config --global alias.dc 'diff --cached'
@@ -84,6 +85,8 @@ git config --global alias.hist 'log --pretty=format:"%C(yellow)%h%C(reset) %C(di
 git config --global alias.lo 'log --oneline --decorate'
 git config --global alias.lt '!git describe --tags --abbrev=0 2>/dev/null || echo "not tag defined"'
 git config --global alias.st 'status -s'
+git config --global log.decorate true
+git config --global merge.ff false
 git config --global push.default simple
 
 # create link for git-prompt.sh
