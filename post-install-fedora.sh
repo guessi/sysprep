@@ -52,6 +52,7 @@ Host *
   StrictHostKeyChecking no
   UserKnownHostsFile=/dev/null
   ServerAliveInterval 60
+  UseRoaming no
   LogLevel=quiet
 EOF
 chmod 0640 "${HOMEDIR}/.ssh/config"
