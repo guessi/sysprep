@@ -95,7 +95,7 @@ git config --global alias.lo 'log --oneline --decorate'
 git config --global alias.lt '!git describe --tags --abbrev=0 2>/dev/null || echo "not tag defined"'
 git config --global alias.st 'status -s'
 git config --global log.decorate true
-git config --global merge.ff false
+git config --global merge.ff true
 git config --global push.default simple
 
 # create link for git-prompt.sh
