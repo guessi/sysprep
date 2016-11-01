@@ -117,7 +117,6 @@ call vundle#end()
 
 let g:neocomplcache_enable_at_startup = 1
 
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
   \ 'file': '\v\.(exe|so|dll|pyc|DS_Store)$',
