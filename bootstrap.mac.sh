@@ -49,10 +49,10 @@ fi
 cat > "${HOMEDIR}/.ssh/config" <<-EOF
 Host *
   StrictHostKeyChecking no
-  UserKnownHostsFile=/dev/null
+  UserKnownHostsFile /dev/null
   ServerAliveInterval 60
   # UseRoaming no
-  LogLevel=quiet
+  LogLevel quiet
 EOF
 cat "${HOMEDIR}/.ssh/config.bak" | tee -a "${HOMEDIR}/.ssh/config" >/dev/null
 sed -i -e '2,$s/^Host /\'$'\nHost /g' "${HOMEDIR}/.ssh/config"
