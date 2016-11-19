@@ -18,6 +18,46 @@ fi
 show_stage "Environment"
 sw_vers
 
+# detect current running user
+if [ -n "${SUDO_USER}" ]; then
+  HOMEDIR="$(eval echo ~"${SUDO_USER}")"
+else
+  HOMEDIR="${HOME}"
+fi
+
+# bashrc
+if [ -f "${HOMEDIR}/.bashrc" ]; then
+  cp "${HOMEDIR}/.bashrc" "${HOMEDIR}/.bashrc.bak"
+fi
+cp _bashrc "${HOMEDIR}/.bashrc"
+
+# vimrc
+if [ -f "${HOMEDIR}/.vimrc" ]; then
+  cp "${HOMEDIR}/.vimrc" "${HOMEDIR}/.vimrc.bak"
+fi
+cp _vimrc "${HOMEDIR}/.vimrc"
+
+# ssh config
+mkdir -p "${HOMEDIR}/.ssh"
+if [ -f "${HOMEDIR}/.ssh/config" ]; then
+  awk '
+    /^Host \*$/ || /^$/ { show=0 }
+    /^Host [a-zA-z0-9][a-zA-z0-9\-]+/ { show=1 }
+    show { print }
+  ' "${HOMEDIR}/.ssh/config" | tee "${HOMEDIR}/.ssh/config.bak" >/dev/null
+fi
+cat > "${HOMEDIR}/.ssh/config" <<-EOF
+Host *
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
+  ServerAliveInterval 60
+  # UseRoaming no
+  LogLevel=quiet
+EOF
+cat "${HOMEDIR}/.ssh/config.bak" | tee -a "${HOMEDIR}/.ssh/config" >/dev/null
+sed -i -e '2,$s/^Host /\'$'\nHost /g' "${HOMEDIR}/.ssh/config"
+chmod 0640 "${HOMEDIR}/.ssh/config"
+
 if [ -z "$(which ruby)" ]; then
   show_stage "ruby: command not found, aborting"
   exit 1
