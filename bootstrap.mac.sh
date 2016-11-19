@@ -10,6 +10,11 @@ show_stage() {
   echo "$(tput setaf 4)==>$(tput sgr0) $(tput bold)${1}$(tput sgr0)"
 }
 
+if [ "$(whoami)" = "root" ]; then
+  echo "Please DO NOT execute the script the user who have \`root\` privilege"
+  exit 1
+fi
+
 if [ "$(uname -s)" != "Darwin" ]; then
   show_stage "Abort, it is design for macOS only"
   exit 1
