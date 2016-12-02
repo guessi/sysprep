@@ -65,6 +65,9 @@ set tenc=utf-8
 " always treat *.md as markdown file
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
+" always treat Dockerfile.* as Dockerfile
+autocmd BufNewFile,BufReadPost Dockerfile.* set filetype=dockerfile
+
 " always treat Jenkinsfile as groovy file
 autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
 
@@ -90,13 +93,12 @@ call vundle#begin()
   Plugin 'vim-airline/vim-airline-themes'
 
   Plugin 'airblade/vim-gitgutter'
-  Plugin 'tpope/vim-fugitive'
   Plugin 'tpope/vim-git'
   Plugin 'mhinz/vim-signify'
 
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
-  Plugin 'Shougo/neocomplcache.vim'
+  Plugin 'Shougo/neocomplete.vim'
   Plugin 'tomtom/tcomment_vim'
 
   Plugin 'fatih/vim-go'
@@ -105,17 +107,21 @@ call vundle#begin()
   Plugin 'plasticboy/vim-markdown'
 call vundle#end()
 
-" <Ctrl-N> <F9> NERDTREE Toggle
+set pastetoggle=<F9>
+
+" <Ctrl-N> NERDTREE Toggle
 :map <silent> <C-n> :NERDTreeToggle<CR>
 
 " <F6>: toggle on/off syntax highlighting
 :map <silent> <F6> :if exists("g:syntax_on") <Bar>
      \       syntax off <Bar>
      \     else <Bar>
-     \       syntax enable <Bar>
+     \       syntax on <Bar>
+     \       hi ColorColumn ctermbg=7 <Bar>
      \     endif <CR>
 
-let g:neocomplcache_enable_at_startup = 1
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
 
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
