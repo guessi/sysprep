@@ -77,9 +77,10 @@ ${DO_INSTALL} openssh-server
 ${DO_INSTALL} bash openssl
 
 # develop tools
-${DO_INSTALL} git gitg tig git-extras
+${DO_INSTALL} git tig git-extras
 ${DO_INSTALL} curl colordiff meld vim wget
-${DO_INSTALL} ethtool htop iftop iperf tcpdump
+${DO_INSTALL} ethtool htop iftop iperf tcpdump fping
+${DO_INSTALL} ShellCheck
 
 # create link for git-prompt.sh
 if [ -f /etc/profile.d/git-prompt.sh ] || [ -L /etc/profile.d/git-prompt.sh ]; then
