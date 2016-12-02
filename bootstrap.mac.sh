@@ -36,6 +36,12 @@ if [ -f "${HOMEDIR}/.bashrc" ]; then
 fi
 cp _bashrc "${HOMEDIR}/.bashrc"
 
+# bash_profile
+if [ -f "${HOMEDIR}/.bash_profile" ]; then
+  cp "${HOMEDIR}/.bash_profile" "${HOMEDIR}/.bash_profile.bak"
+fi
+cp _bashrc "${HOMEDIR}/.bash_profile"
+
 # vimrc
 if [ -f "${HOMEDIR}/.vimrc" ]; then
   cp "${HOMEDIR}/.vimrc" "${HOMEDIR}/.vimrc.bak"
