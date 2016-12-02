@@ -7,6 +7,7 @@ git config --global color.ui true
 git config --global color.status true
 git config --global alias.ci commit
 git config --global alias.co checkout
+git config --global alias.d 'diff'
 git config --global alias.dc 'diff --cached'
 git config --global alias.find '!git ls-files | grep -i'
 git config --global alias.hist 'log --pretty=format:"%C(yellow)%h%C(reset) %C(dim green)%ad%C(reset) %s%C(red)%d%C(reset) [%C(cyan)%an%C(reset)]" --graph --date=short'
