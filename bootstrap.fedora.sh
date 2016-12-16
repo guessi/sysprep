@@ -20,9 +20,6 @@ else
   SUDO=''
 fi
 
-RPM_IMPORT="${SUDO} rpm --import"
-RPM_INSTALL="${SUDO} rpm -ivh"
-
 DO_INSTALL="${SUDO} dnf install -y"
 DO_UPDATE="${SUDO} dnf update -y"
 
@@ -118,8 +115,8 @@ gsettings set org.gnome.shell always-show-log-out true
 ${DO_INSTALL} alsa-plugins-pulseaudio
 
 # multimedia (rpmfusion)
-${RPM_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
-${RPM_INSTALL} "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${OS_VERSION}.noarch.rpm"
+${DO_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
+${DO_INSTALL} "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${OS_VERSION}.noarch.rpm"
 
 ${DO_INSTALL} ffmpeg gstreamer gstreamer-ffmpeg \
                gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-ugly \
