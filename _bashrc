@@ -73,9 +73,19 @@ alias vi='vim'
 alias g='git'
 
 # docker
-alias dockercontainercleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
-alias dockerimagecleanup='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
-alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | egrep "^docker.io\/" | xargs -r -n 1 sudo docker pull'
+if [ "${OS_TYPE}" = "Linux" ]; then
+  alias dockercontainercleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
+  alias dockerimagecleanup='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
+  alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | egrep "^docker.io\/" | xargs -r -n 1 sudo docker pull'
+elif [ "${OS_TYPE}" = "Darwin" ]; then
+  alias dockercontainercleanup='docker ps -q -f status=exited | xargs docker rm -f'
+  alias dockerimagecleanup='docker images -q -f dangling=true | xargs docker rmi -f'
+  alias dockerimageupdate='docker images --format "{{.Repository}}:{{.Tag}}" | xargs -n 1 docker pull'
+else
+  unalias dockercontainercleanup
+  unalias dockerimagecleanup
+  unalias dockerimageupdate
+fi
 
 # custom aliases
 if [ -f "~/.bash_aliases" ]; then
