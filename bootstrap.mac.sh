@@ -75,7 +75,7 @@ if [ -z "$(which ruby)" ]; then
 fi
 
 show_stage "Checking for Homebrew existence"
-if [ -z “$(which brew)” ]; then
+if [ -z "$(which brew)" ]; then
   HOMEBREW="https://raw.githubusercontent.com/Homebrew/install/master/install"
   ruby -e "$(curl -fsSL ${HOMEBREW})"
 fi
