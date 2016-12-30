@@ -23,13 +23,6 @@ fi
 show_stage "Environment"
 sw_vers
 
-# detect current running user
-if [ -n "${SUDO_USER}" ]; then
-  HOMEDIR="$(eval echo ~"${SUDO_USER}")"
-else
-  HOMEDIR="${HOME}"
-fi
-
 # bashrc
 if [ -f "${HOMEDIR}/.bashrc" ]; then
   cp "${HOMEDIR}/.bashrc" "${HOMEDIR}/.bashrc.bak"
