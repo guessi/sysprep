@@ -2,6 +2,7 @@
 syntax on
 colorscheme pablo
 set bg=dark
+set history=1000
 
 " general
 set backspace=indent,eol,start
