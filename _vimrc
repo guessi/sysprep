@@ -19,9 +19,6 @@ set laststatus=2
 set autoread
 
 " filetype support
-filetype on
-filetype plugin on
-filetype indent on
 filetype plugin indent on
 
 " colorcolumn
@@ -36,9 +33,9 @@ set nobackup
 set nowritebackup
 
 " indention
-"set autoindent
-"set smartindent
-"set cindent
+set autoindent
+set smartindent
+set cindent
 
 " tabs
 set expandtab
