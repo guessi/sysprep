@@ -4,7 +4,7 @@ sysprep
 my personal bootstrap scripts
 
 
-# Bootstrap Fedora 23/24/25
+# Bootstrap Fedora 25+
 
     $ ./bootstrap.fedora.sh
     $ ./bootstrap.fedora.repository.sh
