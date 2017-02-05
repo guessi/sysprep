@@ -27,19 +27,19 @@ sw_vers
 if [ -f "${HOMEDIR}/.bashrc" ]; then
   cp "${HOMEDIR}/.bashrc" "${HOMEDIR}/.bashrc.bak"
 fi
-cp _bashrc "${HOMEDIR}/.bashrc"
+cp bash.bashrc "${HOMEDIR}/.bashrc"
 
 # bash_profile
 if [ -f "${HOMEDIR}/.bash_profile" ]; then
   cp "${HOMEDIR}/.bash_profile" "${HOMEDIR}/.bash_profile.bak"
 fi
-cp _bashrc "${HOMEDIR}/.bash_profile"
+cp bash.bashrc "${HOMEDIR}/.bash_profile"
 
 # vimrc
 if [ -f "${HOMEDIR}/.vimrc" ]; then
   cp "${HOMEDIR}/.vimrc" "${HOMEDIR}/.vimrc.bak"
 fi
-cp _vimrc "${HOMEDIR}/.vimrc"
+cp vim.vimrc "${HOMEDIR}/.vimrc"
 
 # ssh config
 mkdir -p "${HOMEDIR}/.ssh"

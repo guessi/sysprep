@@ -34,13 +34,13 @@ fi
 if [ -f "${HOMEDIR}/.bashrc" ]; then
   cp "${HOMEDIR}/.bashrc" "${HOMEDIR}/.bashrc.bak"
 fi
-cp _bashrc "${HOMEDIR}/.bashrc"
+cp bash.bashrc "${HOMEDIR}/.bashrc"
 
 # vimrc
 if [ -f "${HOMEDIR}/.vimrc" ]; then
   cp "${HOMEDIR}/.vimrc" "${HOMEDIR}/.vimrc.bak"
 fi
-cp _vimrc "${HOMEDIR}/.vimrc"
+cp vim.vimrc "${HOMEDIR}/.vimrc"
 
 # ssh config
 mkdir -p "${HOMEDIR}/.ssh"
