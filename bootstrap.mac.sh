@@ -23,6 +23,8 @@ fi
 show_stage "Environment"
 sw_vers
 
+HOMEDIR="${HOME}"
+
 # bashrc
 if [ -f "${HOMEDIR}/.bashrc" ]; then
   cp "${HOMEDIR}/.bashrc" "${HOMEDIR}/.bashrc.bak"
