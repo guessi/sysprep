@@ -8,8 +8,8 @@ DISABLE_AUTO_UPDATE=true
 # history
 export HIST_STAMPS="yyyy-mm-dd"
 export HISTIGNORE="&:ls:bg:fg:exit:clear:cd"
-export HISTSIZE=25000
 export HISTFILE=~/.zsh_history
+export HISTSIZE=25000
 export SAVEHIST=10000
 
 # antigen
@@ -26,7 +26,9 @@ antigen bundles << BUNDLES
   git-extras
   pip
   screen
+  sudo
   vagrant
+  z
   zsh_reload
 
   zsh-users/zsh-completions
@@ -43,19 +45,19 @@ PROMPT='%{$fg[blue]%}%n%{$reset_color%}:%{$fg[$user_color]%}$(_fishy_collapsed_w
 RPROMPT=''
 
 alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i'
-
 alias df='df -kTh'
 alias diff='colordiff'
 alias du='du -kh'
+alias fd='find . -type d -name'
+alias ff='find . -type f -name'
+alias g='git'
 alias h='history'
 alias j='job -l'
-alias ls='ls -FG'
 alias ll='ls -l'
+alias ls='ls -F'
+alias mv='mv -i'
+alias rm='rm -i'
 alias vi='vim'
-
-alias g='git'
 
 alias dockercontainercleanup='docker ps -q -f status=exited | xargs docker rm -f'
 alias dockerimagecleanup='docker images -q -f dangling=true | xargs docker rmi -f'

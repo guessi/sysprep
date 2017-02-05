@@ -61,16 +61,16 @@ alias cp='cp -i'
 alias df='df -kTh'
 alias diff='colordiff'
 alias du='du -kh'
+alias fd='find . -type d -name'
+alias ff='find . -type f -name'
+alias g='git'
 alias h='history'
 alias j='job -l'
-alias ls='ls -F'
 alias ll='ls -l'
+alias ls='ls -F'
 alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
-
-# git
-alias g='git'
 
 # docker
 if [ "${OS_TYPE}" = "Linux" ]; then
