@@ -30,17 +30,21 @@ else
   HOMEDIR="${HOME}"
 fi
 
-# bashrc
-if [ -f "${HOMEDIR}/.bashrc" ]; then
-  cp "${HOMEDIR}/.bashrc" "${HOMEDIR}/.bashrc.bak"
-fi
-cp bash.bashrc "${HOMEDIR}/.bashrc"
+setupconfig() {
+  if diff "${1}" "${2}" >/dev/null; then
+    rm -f "${2}.bak"
+    return
+  fi
 
-# vimrc
-if [ -f "${HOMEDIR}/.vimrc" ]; then
-  cp "${HOMEDIR}/.vimrc" "${HOMEDIR}/.vimrc.bak"
-fi
-cp vim.vimrc "${HOMEDIR}/.vimrc"
+  if [ -f "${2}" ]; then
+    cp "${2}" "${2}.bak"
+  fi
+  cp "${1}" "${2}"
+}
+
+setupconfig bash.bashrc       "${HOMEDIR}/.bashrc"
+setupconfig bash.bash_profile "${HOMEDIR}/.bash_profile"
+setupconfig vim.vimrc         "${HOMEDIR}/.vimrc"
 
 # ssh config
 mkdir -p "${HOMEDIR}/.ssh"

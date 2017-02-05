@@ -25,23 +25,24 @@ sw_vers
 
 HOMEDIR="${HOME}"
 
-# bashrc
-if [ -f "${HOMEDIR}/.bashrc" ]; then
-  cp "${HOMEDIR}/.bashrc" "${HOMEDIR}/.bashrc.bak"
-fi
-cp bash.bashrc "${HOMEDIR}/.bashrc"
+setupconfig() {
+  show_stage "Setup config: ${1}"
+  if diff "${1}" "${2}" >/dev/null; then
+    rm -f "${2}.bak"
+    echo "Skip"
+    return
+  fi
 
-# bash_profile
-if [ -f "${HOMEDIR}/.bash_profile" ]; then
-  cp "${HOMEDIR}/.bash_profile" "${HOMEDIR}/.bash_profile.bak"
-fi
-cp bash.bashrc "${HOMEDIR}/.bash_profile"
+  if [ -f "${2}" ]; then
+    cp "${2}" "${2}.bak"
+  fi
+  cp "${1}" "${2}"
+  echo "Done"
+}
 
-# vimrc
-if [ -f "${HOMEDIR}/.vimrc" ]; then
-  cp "${HOMEDIR}/.vimrc" "${HOMEDIR}/.vimrc.bak"
-fi
-cp vim.vimrc "${HOMEDIR}/.vimrc"
+setupconfig bash.bashrc       "${HOMEDIR}/.bashrc"
+setupconfig bash.bash_profile "${HOMEDIR}/.bash_profile"
+setupconfig vim.vimrc         "${HOMEDIR}/.vimrc"
 
 # ssh config
 mkdir -p "${HOMEDIR}/.ssh"
@@ -78,13 +79,6 @@ fi
 show_stage "Cheking updates for Homebrew"
 brew update
 brew update # yes, run it again
-
-if [ ! -f "$(pwd)/Brewfile" ]; then
-  show_stage "Skip, Brewfile not found"
-else
-  show_stage "Brewfile found (backup: Brewfile.orig)"
-  cp -vf Brewfile Brewfile.orig
-fi
 
 show_stage "Loading packages from Brewfile"
 brew bundle
