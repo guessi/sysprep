@@ -1,6 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
 # disable auto update (manual update: upgrade_oh_my_zsh)
 DISABLE_UPDATE_PROMPT=true
 DISABLE_AUTO_UPDATE=true
@@ -22,8 +25,8 @@ antigen bundles << BUNDLES
   colored-man-pages
   command-not-found
   docker
-  git
-  git-extras
+  # git
+  # git-extras
   pip
   screen
   sudo
@@ -52,7 +55,7 @@ alias fd='find . -type d -name'
 alias ff='find . -type f -name'
 alias g='git'
 alias h='history'
-alias j='jobs -l'
+# alias j='job -l'
 alias ll='ls -l'
 alias ls='ls -F'
 alias mv='mv -i'
