@@ -61,6 +61,7 @@ Host *
   UserKnownHostsFile /dev/null
   ServerAliveInterval 60
   UseRoaming no
+  UseKeychain yes
   LogLevel quiet
 EOF
 cat "${HOMEDIR}/.ssh/config.bak" | tee -a "${HOMEDIR}/.ssh/config" >/dev/null
