@@ -3,6 +3,7 @@
 # git global settings
 git config --global diff.tool colordiff
 git config --global core.editor vim
+git config --global core.pager 'less -F -X'
 git config --global color.ui true
 git config --global color.status true
 git config --global alias.ci commit
