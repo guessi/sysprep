@@ -136,7 +136,7 @@ ${DO_INSTALL} unrar
 ${DO_INSTALL} VirtualBox
 
 # vagrant
-VAGRANT_VERSION="1.9.1"
+VAGRANT_VERSION="1.9.3"
 ${DO_INSTALL} https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.rpm
 
 # google chrome
