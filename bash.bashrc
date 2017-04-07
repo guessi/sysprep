@@ -72,20 +72,34 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
 
-# docker
+# secure docker under linux system
 if [ "${OS_TYPE}" = "Linux" ]; then
-  alias dockercontainercleanup='sudo docker ps -q -f status=exited | xargs -r sudo docker rm -f'
-  alias dockerimagecleanup='sudo docker images -q -f dangling=true | xargs -r sudo docker rmi -f'
-  alias dockerimageupdate='sudo docker images --format "{{.Repository}}:{{.Tag}}" | egrep "^docker.io\/" | xargs -r -n 1 sudo docker pull'
-elif [ "${OS_TYPE}" = "Darwin" ]; then
-  alias dockercontainercleanup='docker ps -q -f status=exited | xargs docker rm -f'
-  alias dockerimagecleanup='docker images -q -f dangling=true | xargs docker rmi -f'
-  alias dockerimageupdate='docker images --format "{{.Repository}}:{{.Tag}}" | xargs -n 1 docker pull'
-else
-  unalias dockercontainercleanup
-  unalias dockerimagecleanup
-  unalias dockerimageupdate
+  alias docker='sudo /usr/bin/docker'
 fi
+
+unalias dockercontainercleanup 2>/dev/null
+function dockercontainercleanup {
+  for container in $(docker ps -q -f status=exited); do
+    docker rm -f ${container}
+  done
+}
+
+unalias dockerimagecleanup 2>/dev/null
+function dockerimagecleanup {
+  for image in $(docker images -q -f dangling=true); do
+    docker rmi -f ${image}
+  done
+}
+
+unalias dockerimageupdate 2>/dev/null
+function dockerimageupdate {
+  # cleanup BEFORE pull, ensure there is no image with no-tag
+  dockerimagecleanup
+
+  for image in $(docker images --format '{{.Repository}}:{{.Tag}}'); do
+    docker pull ${image} || true
+  done
+}
 
 # custom aliases
 if [ -f "~/.bash_aliases" ]; then

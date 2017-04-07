@@ -165,6 +165,12 @@ ${DO_INSTALL} nautilus-dropbox
 # system update
 ${DO_UPDATE}
 
+# allow current user to run docker with sudo (absolute path)
+${SUDO} tee /etc/sudoers.d/docker >/dev/null <<-EOF
+# allow current user to run docker with sudo (absolute path)
+${USER} ALL=(ALL) NOPASSWD: /usr/bin/docker
+EOF
+
 # enable sshd.service on boot
 ${SUDO} systemctl enable sshd
 ${SUDO} systemctl start sshd
