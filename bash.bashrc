@@ -93,12 +93,12 @@ function dockerimagecleanup {
 
 unalias dockerimageupdate 2>/dev/null
 function dockerimageupdate {
-  # cleanup BEFORE pull, ensure there is no image with no-tag
-  dockerimagecleanup
-
-  for image in $(docker images --format '{{.Repository}}:{{.Tag}}'); do
+  for image in $(docker images -f dangling=false --format '{{.Repository}}:{{.Tag}}' | grep -v "none"); do
     docker pull ${image} || true
   done
+
+  # cleanup after image pull
+  dockerimagecleanup
 }
 
 # custom aliases

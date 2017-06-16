@@ -64,4 +64,4 @@ alias vi='vim'
 
 alias dockercontainercleanup='docker ps -q -f status=exited | xargs docker rm -f'
 alias dockerimagecleanup='docker images -q -f dangling=true | xargs docker rmi -f'
-alias dockerimageupdate='docker images --format "{{.Repository}}:{{.Tag}}" | xargs -n 1 docker pull'
+alias dockerimageupdate='docker images -f dangling=false --format "{{.Repository}}:{{.Tag}}" | grep -v "none" | xargs -n 1 docker pull'
