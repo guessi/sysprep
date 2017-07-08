@@ -169,6 +169,7 @@ ${DO_UPDATE}
 ${SUDO} tee /etc/sudoers.d/docker >/dev/null <<-EOF
 # allow current user to run docker with sudo (absolute path)
 ${USER} ALL=(ALL) NOPASSWD: /usr/bin/docker
+${USER} ALL=(ALL) NOPASSWD: /usr/local/bin/docker-compose
 EOF
 
 # enable sshd.service on boot
