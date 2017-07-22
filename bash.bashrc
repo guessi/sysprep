@@ -74,8 +74,8 @@ alias vi='vim'
 
 # secure docker under linux system
 if [ "${OS_TYPE}" = "Linux" ]; then
-  alias docker='sudo /usr/bin/docker'
-  alias docker-compose='sudo /usr/local/bin/docker-compose'
+  alias docker='sudo docker'
+  alias docker-compose='sudo docker-compose'
 fi
 
 unalias dockercontainercleanup 2>/dev/null

@@ -162,15 +162,19 @@ EOF
 
 ${DO_INSTALL} nautilus-dropbox
 
-# system update
-${DO_UPDATE}
+# docker
+${DO_INSTALL} docker docker-compose docker-vim
 
 # allow current user to run docker with sudo (absolute path)
 ${SUDO} tee /etc/sudoers.d/docker >/dev/null <<-EOF
 # allow current user to run docker with sudo (absolute path)
 ${USER} ALL=(ALL) NOPASSWD: /usr/bin/docker
+${USER} ALL=(ALL) NOPASSWD: /usr/bin/docker-compose
 ${USER} ALL=(ALL) NOPASSWD: /usr/local/bin/docker-compose
 EOF
+
+# system update
+${DO_UPDATE}
 
 # enable sshd.service on boot
 ${SUDO} systemctl enable sshd
