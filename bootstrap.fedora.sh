@@ -30,6 +30,8 @@ else
   HOMEDIR="${HOME}"
 fi
 
+EXTENSION_BASE="${HOMEDIR}/.local/share/gnome-shell/extensions"
+
 setupconfig() {
   if diff "${1}" "${2}" >/dev/null; then
     rm -f "${2}.bak"
@@ -40,6 +42,14 @@ setupconfig() {
     cp "${2}" "${2}.bak"
   fi
   cp "${1}" "${2}"
+}
+
+setup_extension() {
+  gnome-shell-extension-tool -d ${2} || true
+  rm -rf ${EXTENSION_BASE}/${2}
+  git clone https://github.com/${1} ${EXTENSION_BASE}/${2}
+  gnome-shell-extension-tool -e ${2} || true
+  echo
 }
 
 setupconfig bash.bashrc       "${HOMEDIR}/.bashrc"
@@ -172,6 +182,47 @@ ${USER} ALL=(ALL) NOPASSWD: /usr/bin/docker
 ${USER} ALL=(ALL) NOPASSWD: /usr/bin/docker-compose
 ${USER} ALL=(ALL) NOPASSWD: /usr/local/bin/docker-compose
 EOF
+
+# gnome-shell-extension
+${DO_INSTALL} gnome-shell-extension-apps-menu                                 \
+              gnome-shell-extension-panel-osd                                 \
+              gnome-shell-extension-user-theme                                \
+              gnome-shell-extension-places-menu                               \
+              gnome-shell-extension-window-list                               \
+              gnome-shell-extension-alternate-tab                             \
+              gnome-shell-extension-topicons-plus                             \
+              gnome-shell-extension-launch-new-instance                       \
+              gnome-shell-extension-do-not-disturb-button                     \
+              gnome-shell-extension-activities-configurator                   \
+              gnome-shell-extension-screenshot-window-sizer
+
+# https://extensions.gnome.org/extension/690/easyscreencast/
+setup_extension EasyScreenCast/EasyScreenCast                                 \
+                EasyScreenCast@iacopodeenosee.gmail.com
+
+# https://extensions.gnome.org/extension/779/clipboard-indicator/
+setup_extension Tudmotu/gnome-shell-extension-clipboard-indicator             \
+                clipboard-indicator@tudmotu.com
+
+# https://extensions.gnome.org/extension/72/recent-items/
+setup_extension bananenfisch/RecentItems                                      \
+                RecentItems@bananenfisch.net
+
+# https://extensions.gnome.org/extension/517/caffeine/
+setup_extension eonpatapon/gnome-shell-extension-caffeine                     \
+                caffeine@patapon.info
+
+# https://extensions.gnome.org/extension/104/netspeed/
+setup_extension hedayaty/NetSpeed                                             \
+                netspeed@hedayaty.gmail.com
+
+# https://extensions.gnome.org/extension/1073/transparent-osd/
+setup_extension ipaq3870/gsext-transparent-osd                                \
+                transparentosd@ipaq3870
+
+# special workaround for gsext-transparent-osd
+cp -rf ${EXTENSION_BASE}/transparentosd@ipaq3870/transparentosd@ipaq3870/     \
+       ${EXTENSION_BASE}/transparentosd@ipaq3870/
 
 # system update
 ${DO_UPDATE}
