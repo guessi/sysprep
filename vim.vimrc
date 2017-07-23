@@ -73,19 +73,19 @@ autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
 set wildignore+=*.so,*.swp,*.zip,*.exe,*.pyc,*.pyo
 
 " setting up vundle
-let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
 if !filereadable(vundle_readme)
   echo "Installing Vundle.."
   echo ""
   silent !mkdir -p ~/.vim/bundle
-  silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+  silent !git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
   !vim +BundleInstall +qall
 endif
-set rtp+=~/.vim/bundle/vundle
+set rtp+=~/.vim/bundle/Vundle.vim
 
 " setup plugins
 call vundle#begin()
-  Plugin 'gmarik/vundle'
+  Plugin 'VundleVim/Vundle.vim'
 
   Plugin 'vim-airline/vim-airline'
   Plugin 'vim-airline/vim-airline-themes'
