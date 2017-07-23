@@ -90,9 +90,12 @@ call vundle#begin()
   Plugin 'vim-airline/vim-airline'
   Plugin 'vim-airline/vim-airline-themes'
 
+  Plugin 'tpope/vim-fugitive'
   Plugin 'airblade/vim-gitgutter'
   Plugin 'tpope/vim-git'
+  Plugin 'tpope/vim-endwise'
   Plugin 'mhinz/vim-signify'
+  Plugin 'Yggdroot/indentLine'
 
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
@@ -103,6 +106,7 @@ call vundle#begin()
   Plugin 'nvie/vim-flake8'
   Plugin 'hdima/python-syntax'
   Plugin 'plasticboy/vim-markdown'
+  Plugin 'vim-ruby/vim-ruby'
 call vundle#end()
 
 set pastetoggle=<F9>
@@ -117,6 +121,15 @@ set pastetoggle=<F9>
      \       syntax on <Bar>
      \       hi ColorColumn ctermbg=7 <Bar>
      \     endif <CR>
+
+" manual setup required (macOS):
+" 1. wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+" 2. install PowerlineSymbols
+" 3. setup non-ASCII font
+"
+" reference:
+" - https://powerline.readthedocs.io/en/latest/installation.html#fonts-installation
+let g:airline_powerline_fonts = 1
 
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
