@@ -224,6 +224,17 @@ setup_extension ipaq3870/gsext-transparent-osd                                \
 cp -rf ${EXTENSION_BASE}/transparentosd@ipaq3870/transparentosd@ipaq3870/     \
        ${EXTENSION_BASE}/transparentosd@ipaq3870/
 
+# font setup for vim-airline
+mkdir -p ${HOMEDIR}/.local/share/fonts/
+wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+mv PowerlineSymbols.otf ${HOMEDIR}/.local/share/fonts/
+
+mkdir -p ${HOMEDIR}/.config/fontconfig/conf.d/
+wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+mv 10-powerline-symbols.conf ${HOMEDIR}/.config/fontconfig/conf.d/
+
+fc-cache -vf ${HOMEDIR}/.local/share/fonts/
+
 # system update
 ${DO_UPDATE}
 
