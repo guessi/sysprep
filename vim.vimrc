@@ -95,7 +95,7 @@ call vundle#begin()
   Plugin 'tpope/vim-git'
   Plugin 'tpope/vim-endwise'
   Plugin 'mhinz/vim-signify'
-  Plugin 'Yggdroot/indentLine'
+  " Plugin 'Yggdroot/indentLine'
 
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
