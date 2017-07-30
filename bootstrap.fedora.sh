@@ -172,6 +172,9 @@ EOF
 
 ${DO_INSTALL} nautilus-dropbox
 
+# ruby
+${DO_INSTALL} rubygems ruby-devel
+
 # docker
 ${DO_INSTALL} docker docker-compose docker-vim
 
