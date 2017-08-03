@@ -4,13 +4,13 @@ sysprep
 my personal bootstrap scripts
 
 
-# Bootstrap Fedora 25+
+# Bootstrap Fedora Workstation 25+
 
     $ ./bootstrap.fedora.sh
     $ ./bootstrap.git.preference.sh
 
 
-# Bootstrap macOS Sierra
+# Bootstrap macOS Sierra 10.12.0+
 
     $ ./bootstrap.mac.sh
     $ ./bootstrap.git.preference.sh
