@@ -101,6 +101,7 @@ call vundle#begin()
   Plugin 'Shougo/neocomplete.vim'
   Plugin 'tomtom/tcomment_vim'
 
+  Plugin 'pearofducks/ansible-vim'
   Plugin 'fatih/vim-go'
   Plugin 'nvie/vim-flake8'
   Plugin 'hdima/python-syntax'
