@@ -24,9 +24,8 @@ filetype plugin indent on
 
 " colorcolumn
 set colorcolumn=80
-hi ColorColumn ctermfg=0
-hi ColorColumn ctermbg=7
-hi LineNr ctermfg=black ctermbg=darkgrey
+hi ColorColumn ctermfg=150 ctermbg=236
+hi LineNr ctermfg=111 ctermbg=256
 
 " trun off annoyed swap files
 set noswapfile
@@ -64,10 +63,10 @@ set tenc=utf-8
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
 " always treat Dockerfile.* as Dockerfile
-autocmd BufNewFile,BufReadPost Dockerfile.* set filetype=dockerfile
+autocmd BufNewFile,BufReadPost Dockerfile* set filetype=dockerfile
 
 " always treat Jenkinsfile as groovy file
-autocmd BufNewFile,BufReadPost Jenkinsfile set filetype=groovy
+autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
 " ignore files
 set wildignore+=*.so,*.swp,*.zip,*.exe,*.pyc,*.pyo
