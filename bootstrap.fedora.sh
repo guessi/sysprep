@@ -130,8 +130,13 @@ gsettings set org.gnome.shell always-show-log-out true
 ${DO_INSTALL} alsa-plugins-pulseaudio
 
 # multimedia (rpmfusion)
-${DO_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
-${DO_INSTALL} "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${OS_VERSION}.noarch.rpm"
+if ! rpm -qa | grep -q "rpmfusion-free-release"; then
+  ${DO_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
+fi
+
+if ! rpm -qa | grep -q "rpmfusion-nonfree-release"; then
+  ${DO_INSTALL} "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${OS_VERSION}.noarch.rpm"
+fi
 
 ${DO_INSTALL} ffmpeg gstreamer gstreamer-ffmpeg \
                gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-ugly \
@@ -147,7 +152,9 @@ ${DO_INSTALL} VirtualBox
 
 # vagrant
 VAGRANT_VERSION="1.9.7"
-${DO_INSTALL} https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.rpm
+if ! rpm -qa | grep -q "vagrant-${VAGRANT_VERSION}"; then
+  ${DO_INSTALL} https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.rpm
+fi
 
 # google chrome
 ${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
