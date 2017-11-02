@@ -30,12 +30,13 @@ sudo apt upgrade -y
 # better working environment
 sudo apt install -y                                                           \
          colordiff                                                            \
-         firefox-esr                                                          \
          git-extras                                                           \
          jq                                                                   \
          meld                                                                 \
          scim-chewing                                                         \
          tig                                                                  \
+         ttf-wqy-microhei                                                     \
+         ttf-wqy-zenhei                                                       \
          vim                                                                  \
          vlc
 
@@ -43,6 +44,7 @@ sudo apt install -y                                                           \
 sudo apt purge -y                                                             \
          bluej                                                                \
          claws-mail                                                           \
+         debian-reference*                                                    \
          epiphany-browser                                                     \
          geany                                                                \
          geany-common                                                         \
@@ -58,10 +60,9 @@ sudo apt purge -y                                                             \
          scratch                                                              \
          scratch2                                                             \
          sonic-pi                                                             \
-         wolfram-engine
-
-# (optional) remove chromium-browser
-sudo apt purge -y chromium-browser
+         wolfram-engine                                                       \
+         *mathematica*                                                        \
+         *game*
 
 # cleanup
 sudo apt autoremove -y
@@ -76,7 +77,6 @@ sudo rm -rf /usr/share/raspi-ui-overrides/applications/raspi_resources.desktop
 sudo sed -i '/^NoDisplay/s/true/false/' /usr/share/raspi-ui-overrides/applications/htop.desktop
 
 # cleanup unwanted contents after packages removal
-rm -rf ~/.config/chromium
 rm -rf ~/.config/geany/
 rm -rf ~/.config/sonic-pi.net/
 rm -rf ~/.thonny/
