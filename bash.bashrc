@@ -78,19 +78,8 @@ if [ "${OS_TYPE}" = "Linux" ]; then
   alias docker-compose='sudo docker-compose'
 fi
 
-unalias dockercontainercleanup 2>/dev/null
-function dockercontainercleanup {
-  for container in $(docker ps -q -f status=exited); do
-    docker rm -f ${container}
-  done
-}
-
-unalias dockerimagecleanup 2>/dev/null
-function dockerimagecleanup {
-  for image in $(docker images -q -f dangling=true); do
-    docker rmi -f ${image}
-  done
-}
+alias dockerimagecleanup='docker image prune --force'
+alias dockercontainercleanup='docker container prune --force'
 
 unalias dockerimageupdate 2>/dev/null
 function dockerimageupdate {

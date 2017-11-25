@@ -62,6 +62,15 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
 
-alias dockercontainercleanup='docker ps -q -f status=exited | xargs docker rm -f'
-alias dockerimagecleanup='docker images -q -f dangling=true | xargs docker rmi -f'
-alias dockerimageupdate='docker images -f dangling=false --format "{{.Repository}}:{{.Tag}}" | grep -v "none" | xargs -n 1 docker pull'
+alias dockercontainercleanup='docker container prune --force'
+alias dockerimagecleanup='docker image prune --force'
+
+unalias dockerimageupdate 2>/dev/null
+function dockerimageupdate {
+  for image in $(docker images -f dangling=false --format '{{.Repository}}:{{.Tag}}' | grep -v "none"); do
+    docker pull ${image} || true
+  done
+
+  # cleanup after image pull
+  dockerimagecleanup
+}
