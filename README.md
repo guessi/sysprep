@@ -14,3 +14,8 @@ my personal bootstrap scripts
 
     $ ./bootstrap.mac.sh
     $ ./bootstrap.git.preference.sh
+
+# Bootstrap raspbian 9+ (raspberry pi 3)
+
+    $ ./bootstrap.rspi3.sh
+    $ ./bootstrap.git.preference.sh
