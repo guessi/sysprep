@@ -2,7 +2,7 @@
 export GOPATH=$HOME/go
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$GOPATH/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH
+export PATH=$GOPATH/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/opt/curl/bin:$PATH
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
