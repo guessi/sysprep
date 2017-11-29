@@ -28,8 +28,6 @@ antigen bundles << BUNDLES
   colored-man-pages
   command-not-found
   docker
-  # git
-  # git-extras
   pip
   screen
   sudo
