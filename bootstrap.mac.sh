@@ -91,12 +91,4 @@ show_stage "Cache cleanup"
 brew cleanup
 brew cask cleanup
 
-if [ -z "$(git config --get user.name)" ]; then
-  show_stage "Warning, git config 'user.name' not set"
-fi
-
-if [ -z "$(git config --get user.email)" ]; then
-  show_stage "Warning, git config 'user.email' not set"
-fi
-
 show_stage "All jobs done!!!"
