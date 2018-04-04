@@ -227,6 +227,8 @@ cp -rf ${EXTENSION_BASE}/transparentosd@ipaq3870/transparentosd@ipaq3870/     \
        ${EXTENSION_BASE}/transparentosd@ipaq3870/
 
 # font setup for vim-airline
+# reference:
+# - https://powerline.readthedocs.io/en/latest/installation.html#fonts-installation
 mkdir -p ${HOMEDIR}/.local/share/fonts/
 wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
 mv PowerlineSymbols.otf ${HOMEDIR}/.local/share/fonts/

@@ -124,8 +124,8 @@ set pastetoggle=<F9>
      \     endif <CR>
 
 " manual setup required (macOS):
-" 1. wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-" 2. install PowerlineSymbols
+" 1. open https://github.com/powerline/fonts
+" 2. download and install 'DejaVu Sans Mono for Powerline'
 " 3. setup non-ASCII font
 "
 " reference:
