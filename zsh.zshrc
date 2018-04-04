@@ -63,6 +63,10 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
 
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
+
 alias dockercontainercleanup='docker container prune --force'
 alias dockerimagecleanup='docker image prune --force'
 
