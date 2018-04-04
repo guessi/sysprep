@@ -107,6 +107,7 @@ call vundle#begin()
   Plugin 'hdima/python-syntax'
   Plugin 'plasticboy/vim-markdown'
   Plugin 'vim-ruby/vim-ruby'
+  Plugin 'hashivim/vim-terraform'
 call vundle#end()
 
 set pastetoggle=<F9>
