@@ -107,7 +107,10 @@ call vundle#begin()
   Plugin 'hdima/python-syntax'
   Plugin 'plasticboy/vim-markdown'
   Plugin 'vim-ruby/vim-ruby'
+
   Plugin 'hashivim/vim-terraform'
+  Plugin 'vim-syntastic/syntastic'
+  Plugin 'juliosueiras/vim-terraform-completion'
 call vundle#end()
 
 set pastetoggle=<F9>
@@ -135,8 +138,10 @@ let g:airline_powerline_fonts = 1
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
 
+let g:terraform_completion_keys = 1
+
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
+  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules|\.terraform)$',
   \ 'file': '\v\.(exe|so|dll|pyc|DS_Store)$',
   \ }
 

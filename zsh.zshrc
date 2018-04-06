@@ -25,12 +25,14 @@ antigen use oh-my-zsh
 antigen theme fishy
 
 antigen bundles << BUNDLES
+  aws
   colored-man-pages
   command-not-found
   docker
   pip
   screen
   sudo
+  terraform
   vagrant
   z
   zsh_reload
