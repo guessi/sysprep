@@ -18,6 +18,7 @@ set showmatch
 set showmode
 set laststatus=2
 set autoread
+set viminfo=""
 
 " filetype support
 filetype plugin indent on
@@ -68,6 +69,9 @@ autocmd BufNewFile,BufReadPost Dockerfile* set filetype=dockerfile
 " always treat Jenkinsfile as groovy file
 autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
+" always treat Jenkinsfile as groovy file
+autocmd BufNewFile,BufReadPost *.tf set filetype=terraform
+
 " ignore files
 set wildignore+=*.so,*.swp,*.zip,*.exe,*.pyc,*.pyo
 
@@ -84,33 +88,35 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 " setup plugins
 call vundle#begin()
+  " basic
   Plugin 'VundleVim/Vundle.vim'
 
+  " theme
   Plugin 'vim-airline/vim-airline'
   Plugin 'vim-airline/vim-airline-themes'
 
-  Plugin 'tpope/vim-fugitive'
+  " git
   Plugin 'airblade/vim-gitgutter'
-  Plugin 'tpope/vim-git'
-  Plugin 'tpope/vim-endwise'
   Plugin 'mhinz/vim-signify'
-  " Plugin 'Yggdroot/indentLine'
+  Plugin 'tpope/vim-endwise'
+  Plugin 'tpope/vim-fugitive'
+  Plugin 'tpope/vim-git'
 
+  " useful plugins
+  Plugin 'Xuyuanp/nerdtree-git-plugin'
+  " Plugin 'Yggdroot/indentLine'
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
-  Plugin 'Shougo/neocomplete.vim'
   Plugin 'tomtom/tcomment_vim'
 
-  Plugin 'pearofducks/ansible-vim'
+  " syntax highlighting
   Plugin 'fatih/vim-go'
-  Plugin 'nvie/vim-flake8'
+  Plugin 'hashivim/vim-terraform'
   Plugin 'hdima/python-syntax'
+  Plugin 'nvie/vim-flake8'
+  Plugin 'pearofducks/ansible-vim'
   Plugin 'plasticboy/vim-markdown'
   Plugin 'vim-ruby/vim-ruby'
-
-  Plugin 'hashivim/vim-terraform'
-  Plugin 'vim-syntastic/syntastic'
-  Plugin 'juliosueiras/vim-terraform-completion'
 call vundle#end()
 
 set pastetoggle=<F9>
@@ -134,9 +140,6 @@ set pastetoggle=<F9>
 " reference:
 " - https://powerline.readthedocs.io/en/latest/installation.html#fonts-installation
 let g:airline_powerline_fonts = 1
-
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_smart_case = 1
 
 let g:terraform_completion_keys = 1
 
