@@ -2,7 +2,7 @@
 export GOPATH=$HOME/go
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$GOPATH/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/opt/curl/bin:$PATH
+export PATH=$GOPATH/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/opt/curl/bin:$HOME/work/tools/arcanist/bin:$PATH
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -47,7 +47,19 @@ antigen apply
 # User configuration
 unsetopt beep
 
-PROMPT='%{$fg[blue]%}%n%{$reset_color%}:%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status) %# %{$reset_color%}'
+function kube-context {
+  if [ ! -d ".kube" ]; then
+    return
+  fi
+  CONTEXT=$(command kubectl config current-context) && \
+    (
+      # printf "[$(echo ${CONTEXT} | cut -d_ -f2)]"
+      # printf "[$(echo ${CONTEXT} | cut -d_ -f3)]"
+      printf "[$(echo ${CONTEXT} | cut -d_ -f4)] "
+    )
+}
+
+PROMPT='%{$fg[yellow]%}$(kube-context)%{$reset_color%}%{$fg[blue]%}%n%{$reset_color%}:%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status) %# %{$reset_color%}'
 RPROMPT=''
 
 alias cp='cp -i'
@@ -64,9 +76,14 @@ alias ls='ls -F'
 alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
+alias md5='md5 -r'
 
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
+fi
+
+if [ $commands[helm] ]; then
+  source <(helm completion zsh)
 fi
 
 alias dockercontainercleanup='docker container prune --force'
@@ -80,4 +97,12 @@ function dockerimageupdate {
 
   # cleanup after image pull
   dockerimagecleanup
+}
+
+function gcp-set-kubecfg() {
+  gcloud config set project $1
+  gcloud config set compute/region $2
+  gcloud config set compute/zone $3
+  gcloud config set container/cluster $4
+  gcloud container clusters get-credentials $4
 }

@@ -53,6 +53,7 @@ set smartcase
 " misc
 set noerrorbells
 set novisualbell
+set clipboard=unnamed
 
 " encoding
 set fileencoding=utf-8
@@ -71,6 +72,9 @@ autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
 " always treat Jenkinsfile as groovy file
 autocmd BufNewFile,BufReadPost *.tf set filetype=terraform
+
+" always treat *.ts as javascript file
+autocmd BufNewFile,BufReadPost *.ts set filetype=javascript
 
 " ignore files
 set wildignore+=*.so,*.swp,*.zip,*.exe,*.pyc,*.pyo
@@ -122,6 +126,8 @@ call vundle#end()
 set pastetoggle=<F9>
 
 " <Ctrl-N> NERDTREE Toggle
+" <Ctrl-w-w> to switch between panels
+" - https://stackoverflow.com/a/25254470
 :map <silent> <C-n> :NERDTreeToggle<CR>
 
 " <F6>: toggle on/off syntax highlighting
@@ -139,7 +145,7 @@ set pastetoggle=<F9>
 "
 " reference:
 " - https://powerline.readthedocs.io/en/latest/installation.html#fonts-installation
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 
 let g:terraform_completion_keys = 1
 
