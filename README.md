@@ -4,6 +4,12 @@ sysprep
 my personal bootstrap scripts
 
 
+# Bootstrap Ubuntu 18.04+
+
+    $ ./bootstrap.ubuntu.sh
+    $ ./bootstrap.git.preference.sh
+
+
 # Bootstrap Fedora Workstation 25+
 
     $ ./bootstrap.fedora.sh
