@@ -48,7 +48,7 @@ antigen apply
 unsetopt beep
 
 function kube-context {
-  if [ ! -d ".kube" ]; then
+  if [ ! -d "${HOME}/.kube" ]; then
     return
   fi
   CONTEXT=$(command kubectl config current-context) && \
