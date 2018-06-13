@@ -26,6 +26,9 @@ git config --global --bool merge.ff true
 git config --global includeIf."gitdir:~/github/".path ~/.gitconfig-github
 git config --global includeIf."gitdir:~/go/src/github.com/".path ~/.gitconfig-github
 
+# go go go: https://golang.org/doc/faq#git_https
+git config --global url."ssh://git@github.com/".insteadOf "https://github.com/"
+
 # setup user info
 if [ -z "$(git config --global --get user.name)" ] || \
    [ -z "$(git config --global --get user.email)" ]; then
