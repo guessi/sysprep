@@ -51,7 +51,7 @@ function kube-context {
   if [ ! -d "${HOME}/.kube" ]; then
     return
   fi
-  CONTEXT=$(command kubectl config current-context) && \
+  CONTEXT=$(command kubectl config current-context 2>/dev/null) && \
     (
       # printf "[$(echo ${CONTEXT} | cut -d_ -f2)]"
       # printf "[$(echo ${CONTEXT} | cut -d_ -f3)]"
@@ -99,7 +99,7 @@ function dockerimageupdate {
   dockerimagecleanup
 }
 
-function gcp-set-kubecfg() {
+function gcp-setup-kubecfg() {
   gcloud config set project $1
   gcloud config set compute/region $2
   gcloud config set compute/zone $3

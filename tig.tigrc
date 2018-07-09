@@ -1,0 +1,20 @@
+set main-view            = line-number:yes,interval=5           \
+                           date:default                         \
+                           author:full,width=12                 \
+                           id                                   \
+                           commit-title:yes,graph,refs,overflow=no
+
+set main-options         = -n 500
+set show-changes         = yes
+set tab-size             = 4
+set history-size         = 0
+set truncation-delimiter = " "
+
+color graph-commit       11       default
+color cursor              8       236
+color date               25       default
+color author             26       default
+color id                 22       default
+color line-number        25       default
+color main-tag		      9       default    bold
+color main-local-tag      9       default
