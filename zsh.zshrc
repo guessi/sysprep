@@ -99,10 +99,35 @@ function dockerimageupdate {
   dockerimagecleanup
 }
 
-function gcp-setup-kubecfg() {
+function sync-git-folders() {
+  for dir in $(find . -type d -name ".git"); do pushd $(dirname $dir); git pull; popd; done
+}
+
+function switch-cluster() {
   gcloud config set project $1
   gcloud config set compute/region $2
   gcloud config set compute/zone $3
   gcloud config set container/cluster $4
   gcloud container clusters get-credentials $4
+}
+
+function get-node-by-type() {
+  node_info_regular=$(kubectl get no -l cloud.google.com/gke-preemptible!=true)
+  echo "==> Type: regular (Count: $(($(echo $node_info_regular | wc -l) -1)))"
+  echo
+  echo $node_info_regular
+  echo
+  node_info_preemptible=$(kubectl get no -l cloud.google.com/gke-preemptible=true)
+  echo "==> Type: preemptible (Count: $(($(echo $node_info_preemptible | wc -l) -1)))"
+  echo
+  echo $node_info_preemptible
+  echo
+}
+
+function get-all() {
+  kubectl get hpa,deploy,po,svc,ing $@
+}
+
+function get-pod-sort-by-nodename() {
+  kubectl get po -o wide --sort-by='{.spec.nodeName}' $@
 }
