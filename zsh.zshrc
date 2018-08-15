@@ -31,7 +31,6 @@ antigen bundles << BUNDLES
   docker
   pip
   screen
-  sudo
   terraform
   vagrant
   z
@@ -53,8 +52,6 @@ function kube-context {
   fi
   CONTEXT=$(command kubectl config current-context 2>/dev/null) && \
     (
-      # printf "[$(echo ${CONTEXT} | cut -d_ -f2)]"
-      # printf "[$(echo ${CONTEXT} | cut -d_ -f3)]"
       printf "[$(echo ${CONTEXT} | cut -d_ -f4)] "
     )
 }
@@ -86,29 +83,41 @@ if [ $commands[helm] ]; then
   source <(helm completion zsh)
 fi
 
+if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then
+  source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+fi
+
 alias dockercontainercleanup='docker container prune --force'
 alias dockerimagecleanup='docker image prune --force'
 
 unalias dockerimageupdate 2>/dev/null
 function dockerimageupdate {
-  for image in $(docker images -f dangling=false --format '{{.Repository}}:{{.Tag}}' | grep -v "none"); do
-    docker pull ${image} || true
-  done
-
-  # cleanup after image pull
-  dockerimagecleanup
+  docker container prune --force
+  docker image ls -f dangling=false --format '{{.Repository}}:{{.Tag}}' | grep -v "None" | xargs -n 1 docker image pull
+  docker image prune --force
 }
 
 function sync-git-folders() {
-  for dir in $(find . -type d -name ".git"); do pushd $(dirname $dir); git pull; popd; done
+  for dir in $(find . -type d -name ".git"); do pushd $(dirname $dir); git pull; git fetch -p -a; popd; done
 }
 
-function switch-cluster() {
+function find-load-balancer-by-ip() {
+  if [ $# -eq 1 ]; then
+    gcloud compute forwarding-rules list --filter IPAddress=$1
+  fi
+}
+
+function switch-project() {
   gcloud config set project $1
   gcloud config set compute/region $2
   gcloud config set compute/zone $3
+}
+
+function switch-cluster() {
+  switch-project $1 $2 $3
   gcloud config set container/cluster $4
-  gcloud container clusters get-credentials $4
+  gcloud container clusters get-credentials --region $2 $4 2>/dev/null || \
+  gcloud container clusters get-credentials --zone   $3 $4 2>/dev/null
 }
 
 function get-node-by-type() {
@@ -116,6 +125,7 @@ function get-node-by-type() {
   node_regular_count=$(($(echo $node_regular | wc -l) -1))
   node_preemptible=$(kubectl get no -l cloud.google.com/gke-preemptible=true 2>/dev/null)
   node_preemptible_count=$(($(echo $node_preemptible | wc -l) -1))
+  node_total_count=$((node_regular_count + node_preemptible_count))
 
   if [ $node_regular_count -gt 0 ]; then
     echo "==> Node Type: regular (Count: $node_regular_count)"
@@ -133,6 +143,8 @@ function get-node-by-type() {
 
   echo "==> Regular Node: $node_regular_count"
   echo "==> Preemptible Node: $node_preemptible_count"
+  echo
+  echo "==> Total Node: $node_total_count"
 }
 
 function get-all() {
@@ -140,5 +152,10 @@ function get-all() {
 }
 
 function get-pod-by-node() {
-  kubectl get po -o wide --sort-by='{.spec.nodeName}' $@
+  kubectl $@ get po -o wide | awk '{print$1,$7}' | column -t | sort -k 2
 }
+
+# define your extra configuration in ~/.zshrc.extra
+if [ -f ~/.zshrc.extra ]; then
+  source ~/.zshrc.extra
+fi

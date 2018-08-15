@@ -72,6 +72,7 @@ autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
 " always treat Jenkinsfile as groovy file
 autocmd BufNewFile,BufReadPost *.tf set filetype=terraform
+autocmd BufNewFile,BufReadPost *.tfvars set filetype=terraform
 
 " always treat *.ts as javascript file
 autocmd BufNewFile,BufReadPost *.ts set filetype=javascript
@@ -155,3 +156,5 @@ let g:ctrlp_custom_ignore = {
   \ }
 
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+
+let g:terraform_align=1
