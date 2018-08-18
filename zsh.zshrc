@@ -112,22 +112,33 @@ function switch-cluster() {
 }
 
 function get-node-by-type() {
-  node_info_regular=$(kubectl get no -l cloud.google.com/gke-preemptible!=true)
-  echo "==> Type: regular (Count: $(($(echo $node_info_regular | wc -l) -1)))"
-  echo
-  echo $node_info_regular
-  echo
-  node_info_preemptible=$(kubectl get no -l cloud.google.com/gke-preemptible=true)
-  echo "==> Type: preemptible (Count: $(($(echo $node_info_preemptible | wc -l) -1)))"
-  echo
-  echo $node_info_preemptible
-  echo
+  node_regular=$(kubectl get no -l cloud.google.com/gke-preemptible!=true 2>/dev/null)
+  node_regular_count=$(($(echo $node_regular | wc -l) -1))
+  node_preemptible=$(kubectl get no -l cloud.google.com/gke-preemptible=true 2>/dev/null)
+  node_preemptible_count=$(($(echo $node_preemptible | wc -l) -1))
+
+  if [ $node_regular_count -gt 0 ]; then
+    echo "==> Node Type: regular (Count: $node_regular_count)"
+    echo
+    echo $node_regular
+    echo
+  fi
+
+  if [ $node_preemptible_count -gt 0 ]; then
+    echo "==> Node Type: preemptible (Count: $node_preemptible_count)"
+    echo
+    echo $node_preemptible
+    echo
+  fi
+
+  echo "==> Regular Node: $node_regular_count"
+  echo "==> Preemptible Node: $node_preemptible_count"
 }
 
 function get-all() {
-  kubectl get hpa,deploy,po,svc,ing $@
+  kubectl get hpa,deploy,po,svc,ing,statefulsets,pvc,pv $@
 }
 
-function get-pod-sort-by-nodename() {
+function get-pod-by-node() {
   kubectl get po -o wide --sort-by='{.spec.nodeName}' $@
 }
