@@ -89,14 +89,13 @@ brew bundle check
 
 show_stage "Cache cleanup"
 brew cleanup
-brew cask cleanup
 
 show_stage "Setup Antigen"
 if [ -n "$(which git)" ]; then
   if [ ! -d "~/.antigen" ]; then
     git clone https://github.com/zsh-users/antigen.git ~/.antigen
   else
-    cd ~/.antigen && git checkout master && git pull origin master
+    cd ~/.antigen && git checkout master && git reset --hard origin/master
   fi
 else
   show_stage "git: command not found, aborting"
