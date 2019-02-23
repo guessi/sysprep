@@ -6,7 +6,7 @@ set history=1000
 
 " general
 set backspace=indent,eol,start
-set cursorline
+set nocursorline
 set nocompatible
 set nolist
 set nowrap
@@ -70,7 +70,7 @@ autocmd BufNewFile,BufReadPost Dockerfile* set filetype=dockerfile
 " always treat Jenkinsfile as groovy file
 autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
-" always treat Jenkinsfile as groovy file
+" always treat *.tf{vars} as groovy file
 autocmd BufNewFile,BufReadPost *.tf set filetype=terraform
 autocmd BufNewFile,BufReadPost *.tfvars set filetype=terraform
 
@@ -113,6 +113,8 @@ call vundle#begin()
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
   Plugin 'tomtom/tcomment_vim'
+  Plugin 'ervandew/supertab'
+  Plugin 'junegunn/vim-easy-align'
 
   " syntax highlighting
   Plugin 'fatih/vim-go'
@@ -138,6 +140,14 @@ set pastetoggle=<F9>
      \       syntax on <Bar>
      \       hi ColorColumn ctermbg=7 <Bar>
      \     endif <CR>
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+nmap <silent> gb :Gblame<CR>
 
 " manual setup required (macOS):
 " 1. open https://github.com/powerline/fonts

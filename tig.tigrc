@@ -16,5 +16,5 @@ color date               25       default
 color author             26       default
 color id                 22       default
 color line-number        25       default
-color main-tag		      9       default    bold
+color main-tag            9       default    bold
 color main-local-tag      9       default

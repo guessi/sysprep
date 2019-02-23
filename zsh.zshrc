@@ -1,8 +1,10 @@
 # define GOPATH
 export GOPATH=$HOME/go
+# export GOROOT=/usr/local/opt/go/libexec
+export GOROOT=/usr/local/go
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$GOPATH/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/opt/curl/bin:$HOME/work/tools/arcanist/bin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:$GOROOT/bin:$GOPATH/bin:$HOME/work/tools/arcanist/bin:/usr/local/opt/curl/bin:$PATH
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -13,7 +15,6 @@ DISABLE_AUTO_UPDATE=true
 
 # history
 export HIST_STAMPS="yyyy-mm-dd"
-export HISTIGNORE="&:ls:bg:fg:exit:clear:cd"
 export HISTFILE=~/.zsh_history
 export HISTSIZE=25000
 export SAVEHIST=10000
@@ -46,7 +47,18 @@ antigen apply
 # User configuration
 unsetopt beep
 
-function kube-context {
+function prompt-gcloud-project {
+  if [ ! -d "${HOME}/.config/gcloud" ]; then
+    return
+  fi
+
+  PROJECT=$(command gcloud config configurations describe default --format json | jq -r '.properties.core.project') && \
+    (
+      printf "[$(echo ${PROJECT})] "
+    )
+}
+
+function prompt-kube-context {
   if [ ! -d "${HOME}/.kube" ]; then
     return
   fi
@@ -56,7 +68,7 @@ function kube-context {
     )
 }
 
-PROMPT='%{$fg[yellow]%}$(kube-context)%{$reset_color%}%{$fg[blue]%}%n%{$reset_color%}:%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status) %# %{$reset_color%}'
+PROMPT='%{$fg[yellow]%}$(prompt-gcloud-project)$(prompt-kube-context)%{$reset_color%}%{$fg[blue]%}%n%{$reset_color%}:%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status) %# %{$reset_color%}'
 RPROMPT=''
 
 alias cp='cp -i'
@@ -152,7 +164,7 @@ function get-all() {
 }
 
 function get-pod-by-node() {
-  kubectl $@ get po -o wide | awk '{print$1,$7}' | column -t | sort -k 2
+  kubectl $@ get po -o wide | awk '{print$7,$1}' | sort | column -t
 }
 
 # define your extra configuration in ~/.zshrc.extra
