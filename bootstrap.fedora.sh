@@ -23,6 +23,27 @@ fi
 DO_INSTALL="${SUDO} dnf install -y"
 DO_UPDATE="${SUDO} dnf update -y"
 
+# repositories setup
+${SUDO} dnf config-manager --add-repo \
+    https://download.docker.com/linux/fedora/docker-ce.repo
+
+${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
+[google-chrome]
+name=google-chrome - 64-bit
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+EOF
+
+if ! rpm -qa | grep -q "rpmfusion-free-release"; then
+  ${DO_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
+fi
+
+if ! rpm -qa | grep -q "rpmfusion-nonfree-release"; then
+  ${DO_INSTALL} "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${OS_VERSION}.noarch.rpm"
+fi
+
 # detect current running user
 if [ -n "${SUDO_USER}" ]; then
   HOMEDIR="$(eval echo ~"${SUDO_USER}")"
@@ -55,6 +76,8 @@ setup_extension() {
 setupconfig bash.bashrc       "${HOMEDIR}/.bashrc"
 setupconfig bash.bash_profile "${HOMEDIR}/.bash_profile"
 setupconfig vim.vimrc         "${HOMEDIR}/.vimrc"
+setupconfig tig.tigrc         "${HOMEDIR}/.tigrc"
+setupconfig zsh.zshrc         "${HOMEDIR}/.zshrc"
 
 # ssh config
 mkdir -p "${HOMEDIR}/.ssh"
@@ -79,20 +102,48 @@ sed -i -e '2,$s/^Host /\nHost /g' "${HOMEDIR}/.ssh/config"
 chmod 0640 "${HOMEDIR}/.ssh/config"
 
 # ensure we are running with latest dnf
-${DO_UPDATE} dnf
+${DO_UPDATE}                                                                  \
+    dnf                                                                       \
+    dnf-plugins-core                                                          \
+    openssh-clients                                                           \
+    openssh-server
 
-# ssh services
-${DO_INSTALL} openssh-clients
-${DO_INSTALL} openssh-server
+# developer tools
+${DO_INSTALL}                                                                 \
+    ShellCheck                                                                \
+    ack                                                                       \
+    bash                                                                      \
+    colordiff                                                                 \
+    curl                                                                      \
+    ethtool                                                                   \
+    fping                                                                     \
+    git                                                                       \
+    git-extras                                                                \
+    htop                                                                      \
+    iftop                                                                     \
+    iperf                                                                     \
+    jq                                                                        \
+    libcurl                                                                   \
+    meld                                                                      \
+    openssl                                                                   \
+    p7zip                                                                     \
+    p7zip-plugins                                                             \
+    ruby-devel                                                                \
+    rubygems                                                                  \
+    tcpdump                                                                   \
+    tig                                                                       \
+    unrar                                                                     \
+    unzip                                                                     \
+    vim                                                                       \
+    wget
 
-# security upgrade for heartbleed and shellshock
-${DO_INSTALL} bash openssl
-
-# develop tools
-${DO_INSTALL} git tig git-extras
-${DO_INSTALL} curl colordiff meld vim wget
-${DO_INSTALL} ethtool htop iftop iperf tcpdump fping
-${DO_INSTALL} ShellCheck jq
+# general setup
+${DO_INSTALL}                                                                 \
+    hexchat                                                                   \
+    ibus-chewing                                                              \
+    pcmanx-gtk2                                                               \
+    wqy-microhei-fonts                                                        \
+    wqy-zenhei-fonts
 
 # create link for git-prompt.sh
 if [ -f /etc/profile.d/git-prompt.sh ] || [ -L /etc/profile.d/git-prompt.sh ]; then
@@ -103,49 +154,28 @@ if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
   ${SUDO} ln -s -f /usr/share/git-core/contrib/completion/git-prompt.sh /etc/profile.d/
 fi
 
-# general tools
-${DO_INSTALL} p7zip p7zip-plugins unzip libcurl
-
-# bbs
-${DO_INSTALL} pcmanx-gtk2
-
-# irc
-${DO_INSTALL} hexchat
-
-# chinese fonts
-${DO_INSTALL} wqy-zenhei-fonts wqy-microhei-fonts
-
-# input method
-${DO_INSTALL} ibus-chewing
-
 # gnome toolkits
-${DO_INSTALL} gnome-tweak-tool dconf-editor
-${DO_INSTALL} gnome-shell-extension-alternate-tab
-${DO_INSTALL} gnome-shell-extension-user-theme
-${DO_INSTALL} nautilus-open-terminal
+${DO_INSTALL}                                                                 \
+    dconf-editor                                                              \
+    gnome-shell-extension-alternate-tab                                       \
+    gnome-shell-extension-user-theme                                          \
+    gnome-tweak-tool                                                          \
+    nautilus-open-terminal
 
 gsettings set org.gnome.shell always-show-log-out true
 
-# multimedia
-${DO_INSTALL} alsa-plugins-pulseaudio
-
-# multimedia (rpmfusion)
-if ! rpm -qa | grep -q "rpmfusion-free-release"; then
-  ${DO_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
-fi
-
-if ! rpm -qa | grep -q "rpmfusion-nonfree-release"; then
-  ${DO_INSTALL} "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${OS_VERSION}.noarch.rpm"
-fi
-
-${DO_INSTALL} ffmpeg gstreamer gstreamer-ffmpeg \
-               gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-ugly \
-               gstreamer-plugins-bad gstreamer-plugins-bad-free gstreamer-plugins-bad-nonfree
-
-${DO_INSTALL} vlc
-
-# general tools (rpmfusion)
-${DO_INSTALL} unrar
+${DO_INSTALL}                                                                 \
+    alsa-plugins-pulseaudio                                                   \
+    ffmpeg                                                                    \
+    gstreamer                                                                 \
+    gstreamer-ffmpeg                                                          \
+    gstreamer-plugins-bad                                                     \
+    gstreamer-plugins-bad-free                                                \
+    gstreamer-plugins-bad-nonfree                                             \
+    gstreamer-plugins-base                                                    \
+    gstreamer-plugins-good                                                    \
+    gstreamer-plugins-ugly                                                    \
+    vlc
 
 # virtualbox
 ${DO_INSTALL} VirtualBox
@@ -156,26 +186,13 @@ if ! rpm -qa | grep -q "vagrant-${VAGRANT_VERSION}"; then
   ${DO_INSTALL} https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.rpm
 fi
 
-# google chrome
-${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
-[google-chrome]
-name=google-chrome - 64-bit
-baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
-enabled=1
-gpgcheck=1
-gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
-EOF
-
 ${DO_INSTALL} google-chrome-stable
 
 # dropbox (rpmfusion-nonfree)
 ${DO_INSTALL} nautilus-dropbox
 
-# ruby
-${DO_INSTALL} rubygems ruby-devel
-
-# docker
-${DO_INSTALL} docker docker-compose docker-vim
+# docker-ce
+${DO_INSTALL} docker-ce docker-ce docker-ce-cli containerd.io docker-compose
 
 # allow current user to run docker with sudo (absolute path)
 ${SUDO} tee /etc/sudoers.d/docker >/dev/null <<-EOF
@@ -186,45 +203,18 @@ ${USER} ALL=(ALL) NOPASSWD: /usr/local/bin/docker-compose
 EOF
 
 # gnome-shell-extension
-${DO_INSTALL} gnome-shell-extension-apps-menu                                 \
-              gnome-shell-extension-panel-osd                                 \
-              gnome-shell-extension-user-theme                                \
-              gnome-shell-extension-places-menu                               \
-              gnome-shell-extension-window-list                               \
-              gnome-shell-extension-alternate-tab                             \
-              gnome-shell-extension-topicons-plus                             \
-              gnome-shell-extension-launch-new-instance                       \
-              gnome-shell-extension-do-not-disturb-button                     \
-              gnome-shell-extension-activities-configurator                   \
-              gnome-shell-extension-screenshot-window-sizer
-
-# https://extensions.gnome.org/extension/690/easyscreencast/
-setup_extension EasyScreenCast/EasyScreenCast                                 \
-                EasyScreenCast@iacopodeenosee.gmail.com
-
-# https://extensions.gnome.org/extension/779/clipboard-indicator/
-setup_extension Tudmotu/gnome-shell-extension-clipboard-indicator             \
-                clipboard-indicator@tudmotu.com
-
-# https://extensions.gnome.org/extension/72/recent-items/
-setup_extension bananenfisch/RecentItems                                      \
-                RecentItems@bananenfisch.net
-
-# https://extensions.gnome.org/extension/517/caffeine/
-setup_extension eonpatapon/gnome-shell-extension-caffeine                     \
-                caffeine@patapon.info
-
-# https://extensions.gnome.org/extension/104/netspeed/
-setup_extension hedayaty/NetSpeed                                             \
-                netspeed@hedayaty.gmail.com
-
-# https://extensions.gnome.org/extension/1073/transparent-osd/
-setup_extension ipaq3870/gsext-transparent-osd                                \
-                transparentosd@ipaq3870
-
-# special workaround for gsext-transparent-osd
-cp -rf ${EXTENSION_BASE}/transparentosd@ipaq3870/transparentosd@ipaq3870/     \
-       ${EXTENSION_BASE}/transparentosd@ipaq3870/
+${DO_INSTALL}                                                                 \
+    gnome-shell-extension-activities-configurator                             \
+    gnome-shell-extension-alternate-tab                                       \
+    gnome-shell-extension-apps-menu                                           \
+    gnome-shell-extension-launch-new-instance                                 \
+    gnome-shell-extension-netspeed                                            \
+    gnome-shell-extension-panel-osd                                           \
+    gnome-shell-extension-places-menu                                         \
+    gnome-shell-extension-screenshot-window-sizer                             \
+    gnome-shell-extension-system-monitor-applet                               \
+    gnome-shell-extension-topicons-plus                                       \
+    gnome-shell-extension-user-theme
 
 # font setup for vim-airline
 # reference:
@@ -245,3 +235,7 @@ ${DO_UPDATE}
 # enable sshd.service on boot
 ${SUDO} systemctl enable sshd
 ${SUDO} systemctl start sshd
+
+# enable docker.service on boot
+${SUDO} systemctl enable docker
+${SUDO} systemctl start docker
