@@ -4,7 +4,7 @@ export GOPATH=$HOME/go
 export GOROOT=/usr/local/go
 
 # If you come from bash you might have to change your $PATH.
-export PATH=/usr/local/bin:/usr/local/sbin:$GOROOT/bin:$GOPATH/bin:$HOME/work/tools/arcanist/bin:/usr/local/opt/curl/bin:$PATH
+export PATH=$GOROOT/bin:$GOPATH/bin:/usr/local/bin:/usr/local/sbin:$HOME/work/tools/arcanist/bin:/usr/local/opt/curl/bin:$PATH
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
