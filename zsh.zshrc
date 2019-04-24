@@ -47,28 +47,25 @@ antigen apply
 # User configuration
 unsetopt beep
 
-function prompt-gcloud-project {
-  if [ ! -d "${HOME}/.config/gcloud" ]; then
+function prompt-context() {
+  if [ ! -d "${HOME}/.config/gcloud" ] || \
+     [ ! -f "${HOME}/.config/gcloud/active_config" ]; then
     return
   fi
 
-  PROJECT=$(command gcloud config configurations describe default --format json | jq -r '.properties.core.project') && \
-    (
-      printf "[$(echo ${PROJECT})] "
-    )
-}
-
-function prompt-kube-context {
-  if [ ! -d "${HOME}/.kube" ]; then
-    return
+  local ACTIVE_CONFIG="$(cat ~/.config/gcloud/active_config)"
+  local CONFIGURATION="${HOME}/.config/gcloud/configurations/config_${ACTIVE_CONFIG}"
+  if [ ! -f "${CONFIGURATION}" ]; then
+      return
   fi
-  CONTEXT=$(command kubectl config current-context 2>/dev/null) && \
+
+  CONTEXT=$(cat ${CONFIGURATION} | awk -F'=' '/^(project|cluster)/{print $2}' | xargs | sed -e 's/ /] [/' 2>/dev/null) && \
     (
-      printf "[$(echo ${CONTEXT} | cut -d_ -f4)] "
+      printf "[${CONTEXT}] "
     )
 }
 
-PROMPT='%{$fg[yellow]%}$(prompt-gcloud-project)$(prompt-kube-context)%{$reset_color%}%{$fg[blue]%}%n%{$reset_color%}:%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status) %# %{$reset_color%}'
+PROMPT='%{$fg[yellow]%}$(prompt-context)%{$reset_color%}%{$fg[blue]%}%n%{$reset_color%}:%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status) %# %{$reset_color%}'
 RPROMPT=''
 
 alias cp='cp -i'
@@ -164,7 +161,23 @@ function get-all() {
 }
 
 function get-pod-by-node() {
-  kubectl $@ get po -o wide | awk '{print$7,$1}' | sort | column -t
+  kubectl $@ get po -o wide | awk '{print$7,$1,$5}' | sort | column -t
+}
+
+function cleanup_history() {
+  rm -rf ~/.oracle_jre_usage
+  rm -rf ~/.terraform.d
+  rm -rf ~/.kube
+  rm -rf ~/.DS_Store
+  rm -rf ~/.calc_history
+  rm -rf ~/.httpie
+  rm -rf ~/.lesshst
+  rm -rf ~/.python_history
+  rm -rf ~/.z
+  rm -rf ~/.zsh_history
+  rm -rf ~/.config/gcloud/logs
+
+  find ~/.vagrant.d/boxes -type d -exec rmdir {} \; 2>/dev/null
 }
 
 # define your extra configuration in ~/.zshrc.extra
