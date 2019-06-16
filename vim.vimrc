@@ -25,8 +25,14 @@ filetype plugin indent on
 
 " colorcolumn
 set colorcolumn=80
-hi ColorColumn ctermfg=150 ctermbg=236
-hi LineNr ctermfg=111 ctermbg=256
+
+" highlight
+hi ColorColumn ctermfg=150  ctermbg=236
+hi LineNr      ctermfg=111  ctermbg=256
+hi DiffAdd     ctermfg=NONE ctermbg=22  cterm=BOLD
+hi DiffDelete  ctermfg=NONE ctermbg=52  cterm=BOLD
+hi DiffChange  ctermfg=NONE ctermbg=23  cterm=BOLD
+hi DiffText    ctermfg=NONE ctermbg=23  cterm=BOLD
 
 " trun off annoyed swap files
 set noswapfile
@@ -67,15 +73,22 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 " always treat Dockerfile.* as Dockerfile
 autocmd BufNewFile,BufReadPost Dockerfile* set filetype=dockerfile
 
-" always treat Jenkinsfile as groovy file
+" always treat Jenkinsfile as groovy
 autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
-" always treat *.tf{vars} as groovy file
+" always treat *.tf{vars,state} as terraform
 autocmd BufNewFile,BufReadPost *.tf set filetype=terraform
 autocmd BufNewFile,BufReadPost *.tfvars set filetype=terraform
+autocmd BufNewFile,BufReadPost *.tfstate set filetype=terraform
 
 " always treat *.ts as javascript file
 autocmd BufNewFile,BufReadPost *.ts set filetype=javascript
+
+" always treat Makefile* as make file
+autocmd BufNewFile,BufReadPost Makefile* set filetype=make
+
+" don't expand tab for filetype = make
+autocmd FileType make set noexpandtab
 
 " ignore files
 set wildignore+=*.so,*.swp,*.zip,*.exe,*.pyc,*.pyo
@@ -109,7 +122,6 @@ call vundle#begin()
 
   " useful plugins
   Plugin 'Xuyuanp/nerdtree-git-plugin'
-  " Plugin 'Yggdroot/indentLine'
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree'
   Plugin 'tomtom/tcomment_vim'
@@ -158,13 +170,16 @@ nmap <silent> gb :Gblame<CR>
 " - https://powerline.readthedocs.io/en/latest/installation.html#fonts-installation
 let g:airline_powerline_fonts = 0
 
-let g:terraform_completion_keys = 1
-
+" Ctrl-P
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules|\.terraform)$',
   \ 'file': '\v\.(exe|so|dll|pyc|DS_Store)$',
   \ }
 
+" NertTree
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 
+" Terraform
 let g:terraform_align=1
+let g:terraform_completion_keys = 1
+let g:terraform_fmt_on_save=1

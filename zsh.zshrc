@@ -65,7 +65,7 @@ function prompt-context() {
     )
 }
 
-PROMPT='%{$fg[yellow]%}$(prompt-context)%{$reset_color%}%{$fg[blue]%}%n%{$reset_color%}:%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status) %# %{$reset_color%}'
+PROMPT='%{$fg[yellow]%}$(prompt-context)%{$reset_color%}%{$fg[blue]%}%n%{$reset_color%}:%{$fg[green]%}$(_fishy_collapsed_wd)%{$reset_color%}$(git_prompt_info)$(git_prompt_status) %# %{$reset_color%}'
 RPROMPT=''
 
 alias cp='cp -i'
@@ -76,25 +76,15 @@ alias fd='find . -type d -name'
 alias ff='find . -type f -name'
 alias g='git'
 alias h='history'
-# alias j='job -l'
 alias ll='ls -l'
 alias ls='ls -F'
 alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
 alias md5='md5 -r'
+alias watch="watch "
 
-if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
-fi
-
-if [ $commands[helm] ]; then
-  source <(helm completion zsh)
-fi
-
-if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then
-  source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-fi
+# docker
 
 alias dockercontainercleanup='docker container prune --force'
 alias dockerimagecleanup='docker image prune --force'
@@ -106,8 +96,12 @@ function dockerimageupdate {
   docker image prune --force
 }
 
-function sync-git-folders() {
-  for dir in $(find . -type d -name ".git"); do pushd $(dirname $dir); git pull; git fetch -p -a; popd; done
+# google cloud platform
+
+function gcloud_completion() {
+  # workaround for loading completion for google-cloud-sdk
+  source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+  source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 }
 
 function find-load-balancer-by-ip() {
@@ -128,6 +122,16 @@ function switch-cluster() {
   gcloud container clusters get-credentials --region $2 $4 2>/dev/null || \
   gcloud container clusters get-credentials --zone   $3 $4 2>/dev/null
 }
+
+# kubernetes
+
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
+
+if [ $commands[helm] ]; then
+  source <(helm completion zsh)
+fi
 
 function get-node-by-type() {
   node_regular=$(kubectl get no -l cloud.google.com/gke-preemptible!=true 2>/dev/null)
@@ -164,9 +168,19 @@ function get-pod-by-node() {
   kubectl $@ get po -o wide | awk '{print$7,$1,$5}' | sort | column -t
 }
 
+# misc
+
+function ssl_certs_check() {
+  echo | openssl s_client -servername $1 -connect $1:443 2>/dev/null | openssl x509 -noout -dates
+}
+
+function sync-git-folders() {
+  for dir in $(find . -type d -name ".git"); do pushd $(dirname $dir); git pull; git fetch -p -a; popd; done
+}
+
 function cleanup_history() {
   rm -rf ~/.oracle_jre_usage
-  rm -rf ~/.terraform.d
+  rm -rf ~/.terraform.d/checkpoint_*
   rm -rf ~/.kube
   rm -rf ~/.DS_Store
   rm -rf ~/.calc_history
