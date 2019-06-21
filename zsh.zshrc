@@ -165,7 +165,11 @@ function get-all() {
 }
 
 function get-pod-by-node() {
-  kubectl $@ get po -o wide | awk '{print$7,$1,$5}' | sort | column -t
+  if [ x"$1" = x"--all-namespaces" ]; then
+    kubectl get po $@ -o wide | awk '{print$8,$2,$6}' | sort | column -t
+  else
+    kubectl get po $@ -o wide | awk '{print$7,$1,$5}' | sort | column -t
+  fi
 }
 
 # misc
