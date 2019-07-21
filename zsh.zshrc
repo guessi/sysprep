@@ -1,10 +1,11 @@
 # define GOPATH
 export GOPATH=$HOME/go
-# export GOROOT=/usr/local/opt/go/libexec
-export GOROOT=/usr/local/go
+export GOROOT=/usr/local/opt/go/libexec # go package from `brew install golang`
+# export GOROOT=/usr/local/go
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$GOROOT/bin:$GOPATH/bin:/usr/local/bin:/usr/local/sbin:$HOME/work/tools/arcanist/bin:/usr/local/opt/curl/bin:$PATH
+export PATH="$HOME/.krew/bin:$PATH"
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -179,17 +180,19 @@ function ssl_certs_check() {
 }
 
 function sync-git-folders() {
-  for dir in $(find . -type d -name ".git"); do pushd $(dirname $dir); git pull; git fetch -p -a; popd; done
+  for dir in $(find . -type d -name ".git"); do pushd $(dirname $dir); git pull; git fetch -apP; popd; done
 }
 
 function cleanup_history() {
   rm -rf ~/.oracle_jre_usage
   rm -rf ~/.terraform.d/checkpoint_*
-  rm -rf ~/.kube
+  # rm -rf ~/.kube
   rm -rf ~/.DS_Store
   rm -rf ~/.calc_history
   rm -rf ~/.httpie
   rm -rf ~/.lesshst
+  rm -rf ~/.rediscli_history
+  rm -rf ~/.wget-hsts
   rm -rf ~/.python_history
   rm -rf ~/.z
   rm -rf ~/.zsh_history
