@@ -16,6 +16,7 @@ git config --global alias.st 'status -s'
 git config --global core.editor vim
 git config --global core.pager 'less -F -X'
 git config --global diff.tool colordiff
+git config --global log.date rfc-local
 git config --global push.default simple
 git config --global --bool color.status true
 git config --global --bool color.ui true
