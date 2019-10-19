@@ -128,6 +128,7 @@ ${DO_INSTALL}                                                                 \
     openssl                                                                   \
     p7zip                                                                     \
     p7zip-plugins                                                             \
+    ripgrep                                                                   \
     ruby-devel                                                                \
     rubygems                                                                  \
     tcpdump                                                                   \
@@ -153,6 +154,9 @@ fi
 if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
   ${SUDO} ln -s -f /usr/share/git-core/contrib/completion/git-prompt.sh /etc/profile.d/
 fi
+
+# setup z jump
+curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOMEDIR}/.zjump
 
 # gnome toolkits
 ${DO_INSTALL}                                                                 \
@@ -181,7 +185,7 @@ ${DO_INSTALL}                                                                 \
 ${DO_INSTALL} VirtualBox
 
 # vagrant
-VAGRANT_VERSION="2.2.3"
+VAGRANT_VERSION="2.2.6"
 if ! rpm -qa | grep -q "vagrant-${VAGRANT_VERSION}"; then
   ${DO_INSTALL} https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.rpm
 fi

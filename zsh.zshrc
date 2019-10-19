@@ -1,10 +1,12 @@
 # define GOPATH
 export GOPATH=$HOME/go
-export GOROOT=/usr/local/opt/go/libexec # go package from `brew install golang`
-# export GOROOT=/usr/local/go
+# export GOROOT=/usr/local/opt/go/libexec # go package from `brew install golang`
+export GOROOT=/usr/local/go
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$GOROOT/bin:$GOPATH/bin:/usr/local/bin:/usr/local/sbin:$HOME/work/tools/arcanist/bin:/usr/local/opt/curl/bin:$PATH
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH="/usr/local/opt/curl-openssl/bin:$PATH"
+export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
 
 export LC_ALL=en_US.UTF-8
@@ -37,6 +39,8 @@ antigen bundles << BUNDLES
   vagrant
   z
   zsh_reload
+
+  mattberther/zsh-pyenv
 
   zsh-users/zsh-completions
   zsh-users/zsh-autosuggestions
@@ -73,8 +77,6 @@ alias cp='cp -i'
 alias df='df -kTh'
 alias diff='colordiff'
 alias du='du -kh'
-alias fd='find . -type d -name'
-alias ff='find . -type f -name'
 alias g='git'
 alias h='history'
 alias ll='ls -l'
@@ -87,7 +89,7 @@ alias watch="watch "
 
 # docker
 
-alias dockercontainercleanup='docker container prune --force'
+alias dockercontainercleanup='docker container prune --force; docker volume prune --force; docker network prune --force'
 alias dockerimagecleanup='docker image prune --force'
 
 unalias dockerimageupdate 2>/dev/null
@@ -135,11 +137,11 @@ if [ $commands[helm] ]; then
 fi
 
 function get-node-by-type() {
-  node_regular=$(kubectl get no -l cloud.google.com/gke-preemptible!=true 2>/dev/null)
-  node_regular_count=$(($(echo $node_regular | wc -l) -1))
-  node_preemptible=$(kubectl get no -l cloud.google.com/gke-preemptible=true 2>/dev/null)
-  node_preemptible_count=$(($(echo $node_preemptible | wc -l) -1))
-  node_total_count=$((node_regular_count + node_preemptible_count))
+  local node_regular=$(kubectl get no -l cloud.google.com/gke-preemptible!=true 2>/dev/null)
+  local node_regular_count=$(($(echo $node_regular | wc -l) -1))
+  local node_preemptible=$(kubectl get no -l cloud.google.com/gke-preemptible=true 2>/dev/null)
+  local node_preemptible_count=$(($(echo $node_preemptible | wc -l) -1))
+  local node_total_count=$((node_regular_count + node_preemptible_count))
 
   if [ $node_regular_count -gt 0 ]; then
     echo "==> Node Type: regular (Count: $node_regular_count)"
@@ -173,6 +175,65 @@ function get-pod-by-node() {
   fi
 }
 
+function set-hpa() {
+  if [ $# -ne 4 ]; then
+    echo "invalid input"
+    return
+  fi
+
+  kubectl -n $1 patch hpa $2 --patch '{"spec":{"minReplicas":'$3',"maxReplicas":'$4'}}'
+}
+
+# golang
+
+function go-setup() {
+  local GOVERSION=$1
+  local PKG_REMOTE_PATH="https://dl.google.com/go/go${GOVERSION}.darwin-amd64.tar.gz"
+  local PKG_OUTPUT_PATH="/tmp/go${GOVERSION}.darwin-amd64.tar.gz"
+  local PKG_EXTRACT_PATH="/tmp/go-${GOVERSION}"
+  local PKG_TARGET_PATH="/usr/local/go-${GOVERSION}"
+
+  if [ -z "${GOVERSION}" ]; then
+    echo "abort, please specify the version to install."
+    return
+  fi
+
+  if [ -e "${PKG_TARGET_PATH}" ]; then
+    echo "abort, target version already existed."
+    return
+  fi
+
+  if [ ! -f "${PKG_OUTPUT_PATH}" ]; then
+    wget ${PKG_REMOTE_PATH} -O ${PKG_OUTPUT_PATH}
+  fi
+
+  rm -rf ${PKG_EXTRACT_PATH}
+  mkdir -p ${PKG_EXTRACT_PATH}
+  tar xf ${PKG_OUTPUT_PATH} --strip-components 1 -C ${PKG_EXTRACT_PATH}
+
+  sudo rm -rf ${PKG_TARGET_PATH}
+  sudo mv ${PKG_EXTRACT_PATH} ${PKG_TARGET_PATH}
+
+  go-switch ${GOVERSION}
+}
+
+function go-switch() {
+  local GOVERSION=$1
+
+  if [ -z "${GOVERSION}" ]; then
+    find /usr/local -maxdepth 1 -type d -name "go*"
+    return
+  fi
+
+  if [ ! -d "/usr/local/go-${GOVERSION}" ]; then
+    return
+  fi
+  sudo rm -f /usr/local/go
+  sudo ln -s -f /usr/local/go-${GOVERSION} /usr/local/go
+
+  go version
+}
+
 # misc
 
 function ssl_certs_check() {
@@ -180,13 +241,21 @@ function ssl_certs_check() {
 }
 
 function sync-git-folders() {
-  for dir in $(find . -type d -name ".git"); do pushd $(dirname $dir); git pull; git fetch -apP; popd; done
+  for dir in $(find . -type d -depth 1 -name ".git"); do
+    pushd $(dirname $dir)
+      git checkout master
+      git fetch -apP origin
+      git fetch -apP --tags origin
+      git pull
+    popd
+  done
 }
 
 function cleanup_history() {
   rm -rf ~/.oracle_jre_usage
   rm -rf ~/.terraform.d/checkpoint_*
   # rm -rf ~/.kube
+  # rm -rf ~/.config/gcloud
   rm -rf ~/.DS_Store
   rm -rf ~/.calc_history
   rm -rf ~/.httpie

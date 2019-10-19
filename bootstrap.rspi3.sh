@@ -33,6 +33,7 @@ sudo apt install -y                                                           \
          git-extras                                                           \
          jq                                                                   \
          meld                                                                 \
+         ripgrep                                                              \
          scim-chewing                                                         \
          tig                                                                  \
          ttf-wqy-microhei                                                     \
@@ -66,6 +67,9 @@ sudo apt purge -y                                                             \
 
 # cleanup
 sudo apt autoremove -y
+
+# setup z jump
+curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOMEDIR}/.zjump
 
 # remove unwanted menu items
 sudo rm -rf /usr/share/raspi-ui-overrides/applications/debian-reference-common.desktop

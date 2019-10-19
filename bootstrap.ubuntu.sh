@@ -78,7 +78,7 @@ ${DO_INSTALL} bash openssl
 
 # develop tools
 ${DO_INSTALL} git tig git-extras
-${DO_INSTALL} curl colordiff meld vim wget
+${DO_INSTALL} curl colordiff meld vim wget ripgrep
 ${DO_INSTALL} ethtool htop iftop iperf tcpdump fping
 ${DO_INSTALL} shellcheck jq
 
@@ -98,6 +98,9 @@ if [ ! -f /etc/profile.d/git-prompt.sh ]; then
   curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh | \
     ${SUDO} tee /etc/profile.d/git-prompt.sh >/dev/null
 fi
+
+# setup z jump
+curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOMEDIR}/.zjump
 
 # general tools
 ${DO_INSTALL} p7zip p7zip-full unrar unzip
@@ -139,7 +142,7 @@ echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(lsb_r
 ${DO_INSTALL} virtualbox-6.0
 
 # vagrant
-VAGRANT_VERSION="2.2.3"
+VAGRANT_VERSION="2.2.6"
 if ! (dpkg -l vagrant >/dev/null 2>&1); then
   ${SUDO} rm -f /tmp/vagrant_${VAGRANT_VERSION}_x86_64.deb
   wget https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb \
