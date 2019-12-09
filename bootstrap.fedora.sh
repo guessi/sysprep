@@ -123,6 +123,7 @@ ${DO_INSTALL}                                                                 \
     iftop                                                                     \
     iperf                                                                     \
     jq                                                                        \
+    keepassxc                                                                 \
     libcurl                                                                   \
     meld                                                                      \
     openssl                                                                   \
@@ -143,6 +144,14 @@ ${DO_INSTALL}                                                                 \
     hexchat                                                                   \
     ibus-chewing                                                              \
     pcmanx-gtk2                                                               \
+    google-noto-sans-cjk-ttc-fonts                                            \
+    google-noto-serif-cjk-ttc-fonts                                           \
+    google-noto-fonts-common                                                  \
+    google-noto-cjk-fonts-common                                              \
+    google-noto-emoji-color-fonts                                             \
+    google-noto-sans-sinhala-fonts                                            \
+    google-droid-sans-fonts                                                   \
+    google-droid-sans-mono-fonts                                              \
     wqy-microhei-fonts                                                        \
     wqy-zenhei-fonts
 
@@ -164,6 +173,7 @@ ${DO_INSTALL}                                                                 \
     gnome-shell-extension-alternate-tab                                       \
     gnome-shell-extension-user-theme                                          \
     gnome-tweak-tool                                                          \
+    gnome-nettool                                                             \
     nautilus-open-terminal
 
 gsettings set org.gnome.shell always-show-log-out true
