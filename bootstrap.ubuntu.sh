@@ -142,7 +142,7 @@ echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(lsb_r
 ${DO_INSTALL} virtualbox-6.0
 
 # vagrant
-VAGRANT_VERSION="2.2.6"
+VAGRANT_VERSION="2.2.7"
 if ! (dpkg -l vagrant >/dev/null 2>&1); then
   ${SUDO} rm -f /tmp/vagrant_${VAGRANT_VERSION}_x86_64.deb
   wget https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb \
