@@ -43,6 +43,9 @@ setupconfig() {
 setupconfig bash.bashrc       "${HOMEDIR}/.bashrc"
 setupconfig bash.bash_profile "${HOMEDIR}/.bash_profile"
 setupconfig vim.vimrc         "${HOMEDIR}/.vimrc"
+setupconfig zsh.zshrc         "${HOMEDIR}/.zshrc"
+setupconfig tig.tigrc         "${HOMEDIR}/.tigrc"
+setupconfig tmux.conf         "${HOMEDIR}/.tmux.conf"
 
 # ssh config
 mkdir -p "${HOMEDIR}/.ssh"
