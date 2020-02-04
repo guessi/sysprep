@@ -10,13 +10,13 @@ my personal bootstrap scripts
     $ ./bootstrap.git.preference.sh
 
 
-# Bootstrap Fedora Workstation 25+
+# Bootstrap Fedora Workstation 30+
 
     $ ./bootstrap.fedora.sh
     $ ./bootstrap.git.preference.sh
 
 
-# Bootstrap macOS Sierra 10.12.0+
+# Bootstrap macOS High Sierra 10.13.0+
 
     $ ./bootstrap.mac.sh
     $ ./bootstrap.git.preference.sh
