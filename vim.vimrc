@@ -178,6 +178,7 @@ let g:ctrlp_custom_ignore = {
 
 " NertTree
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+let NERDTreeShowHidden = 1
 
 " vim-go
 let g:go_def_mode='godef'

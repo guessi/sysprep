@@ -210,11 +210,14 @@ function go-setup() {
   rm -rf ${PKG_EXTRACT_PATH}
   mkdir -p ${PKG_EXTRACT_PATH}
   tar xf ${PKG_OUTPUT_PATH} --strip-components 1 -C ${PKG_EXTRACT_PATH}
+  if [ $? -ne 0 ]; then
+    rm -rf ${PKG_EXTRACT_PATH}
+  else
+    sudo rm -rf ${PKG_TARGET_PATH}
+    sudo mv ${PKG_EXTRACT_PATH} ${PKG_TARGET_PATH}
 
-  sudo rm -rf ${PKG_TARGET_PATH}
-  sudo mv ${PKG_EXTRACT_PATH} ${PKG_TARGET_PATH}
-
-  go-switch ${GOVERSION}
+    go-switch ${GOVERSION}
+  fi
 }
 
 function go-switch() {
@@ -232,6 +235,30 @@ function go-switch() {
   sudo ln -s -f /usr/local/go-${GOVERSION} /usr/local/go
 
   go version
+}
+
+# aws
+
+function ec2-list() {
+  if [ $# -lt 1 ]; then
+    echo "invalid input"
+    echo
+    echo "Usage: ec2-list profile-name        # with default region: ap-northeast-1"
+    echo "    or ec2-list profile-name region"
+
+    return
+  fi
+
+  local PROFILE=$1
+  local REGION=$2
+  if [ $# -eq 1 ]; then
+      # set default region
+      REGION="ap-northeast-1"
+  fi
+
+  aws ec2 describe-instances --output table \
+    --query 'Reservations[].Instances[].[Tags[?Key==`Name`] | [0].Value, State.Name, InstanceId, InstanceType, PrivateIpAddress, PublicIpAddress] | sort_by(@, &[3])' \
+    --profile ${PROFILE} --region ${REGION}
 }
 
 # misc
