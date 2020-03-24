@@ -72,6 +72,7 @@ brew "kubernetes-cli"
 brew "kubespy"
 brew "kustomize"
 brew "libusb-compat"
+brew "mas"
 brew "minikube"
 brew "protobuf"
 brew "mitmproxy"
@@ -148,3 +149,12 @@ cask "visual-studio-code"
 cask "vlc"
 cask "wireshark"
 cask "zoomus"
+mas "GarageBand", id: 682658836
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "LINE", id: 539883307
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Spark", id: 1176895641
+mas "stts", id: 1187772509
+mas "Trello", id: 1278508951
