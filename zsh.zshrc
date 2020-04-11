@@ -278,6 +278,11 @@ function sync-git-folders() {
   done
 }
 
+function remove_color() {
+  # https://unix.stackexchange.com/questions/140251/strip-color-on-os-x-with-bsd-sed-or-any-other-tool
+  sed -e "s,$(printf '\033')\\[[0-9;]*[a-zA-Z],,g" $1
+}
+
 function cleanup_history() {
   rm -rf ~/.oracle_jre_usage
   rm -rf ~/.terraform.d/checkpoint_*
