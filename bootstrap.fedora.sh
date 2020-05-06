@@ -170,7 +170,6 @@ curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOMEDIR}/.zjump
 # gnome toolkits
 ${DO_INSTALL}                                                                 \
     dconf-editor                                                              \
-    gnome-shell-extension-alternate-tab                                       \
     gnome-shell-extension-user-theme                                          \
     gnome-tweak-tool                                                          \
     gnome-nettool                                                             \
