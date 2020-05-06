@@ -1,6 +1,7 @@
 #!/bin/sh
 
 DISTRO="$(awk -F'=' '/^NAME=/{print$2}' /etc/os-release)"
+FEDORA_VERSION=$(awk -F'=' '/^VERSION_ID/{print$2}' /etc/os-release)
 
 if [ "$(whoami)" = "root" ]; then
   echo "Please DO NOT execute the script the user who have \`root\` privilege"
@@ -24,8 +25,11 @@ DO_INSTALL="${SUDO} dnf install -y"
 DO_UPDATE="${SUDO} dnf update -y"
 
 # repositories setup
+if [ "${FEDORA_VERSION}" -le 31 ]; then
+# FIXME: not supported by fedora 32 yet
 ${SUDO} dnf config-manager --add-repo \
     https://download.docker.com/linux/fedora/docker-ce.repo
+fi
 
 ${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
 [google-chrome]
@@ -180,15 +184,27 @@ gsettings set org.gnome.shell always-show-log-out true
 ${DO_INSTALL}                                                                 \
     alsa-plugins-pulseaudio                                                   \
     ffmpeg                                                                    \
-    gstreamer                                                                 \
-    gstreamer-ffmpeg                                                          \
-    gstreamer-plugins-bad                                                     \
-    gstreamer-plugins-bad-free                                                \
-    gstreamer-plugins-bad-nonfree                                             \
-    gstreamer-plugins-base                                                    \
-    gstreamer-plugins-good                                                    \
-    gstreamer-plugins-ugly                                                    \
     vlc
+
+if [ "${FEDORA_VERSION}" -le 31 ]; then
+    ${DO_INSTALL}                                                             \
+        gstreamer                                                             \
+        gstreamer-ffmpeg                                                      \
+        gstreamer-plugins-bad                                                 \
+        gstreamer-plugins-bad-free                                            \
+        gstreamer-plugins-bad-nonfree                                         \
+        gstreamer-plugins-base                                                \
+        gstreamer-plugins-good                                                \
+        gstreamer-plugins-ugly
+else
+    ${DO_INSTALL}                                                             \
+        gstreamer1                                                            \
+        gstreamer1-plugins-bad-free                                           \
+        gstreamer1-plugins-base                                               \
+        gstreamer1-plugins-good                                               \
+        gstreamer1-plugins-ugly                                               \
+        gstreamer1-plugins-ugly-free
+fi
 
 # virtualbox
 ${DO_INSTALL} VirtualBox
@@ -205,7 +221,10 @@ ${DO_INSTALL} google-chrome-stable
 ${DO_INSTALL} nautilus-dropbox
 
 # docker-ce
+if [ "${FEDORA_VERSION}" -le 31 ]; then
+# FIXME: not supported by fedora 32 yet
 ${DO_INSTALL} docker-ce docker-ce docker-ce-cli containerd.io docker-compose
+fi
 
 # allow current user to run docker with sudo (absolute path)
 ${SUDO} tee /etc/sudoers.d/docker >/dev/null <<-EOF
@@ -218,16 +237,18 @@ EOF
 # gnome-shell-extension
 ${DO_INSTALL}                                                                 \
     gnome-shell-extension-activities-configurator                             \
-    gnome-shell-extension-alternate-tab                                       \
     gnome-shell-extension-apps-menu                                           \
     gnome-shell-extension-launch-new-instance                                 \
     gnome-shell-extension-netspeed                                            \
-    gnome-shell-extension-panel-osd                                           \
     gnome-shell-extension-places-menu                                         \
     gnome-shell-extension-screenshot-window-sizer                             \
     gnome-shell-extension-system-monitor-applet                               \
     gnome-shell-extension-topicons-plus                                       \
     gnome-shell-extension-user-theme
+
+# FIXME: not supported by fedora 32 yet
+# - gnome-shell-extension-alternate-tab
+# - gnome-shell-extension-panel-osd
 
 # font setup for vim-airline
 # reference:
@@ -250,5 +271,8 @@ ${SUDO} systemctl enable sshd
 ${SUDO} systemctl start sshd
 
 # enable docker.service on boot
+if [ "${FEDORA_VERSION}" -le 31 ]; then
+# FIXME: not supported by fedora 32 yet
 ${SUDO} systemctl enable docker
 ${SUDO} systemctl start docker
+fi
