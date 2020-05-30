@@ -210,7 +210,7 @@ fi
 ${DO_INSTALL} VirtualBox
 
 # vagrant
-VAGRANT_VERSION="2.2.8"
+VAGRANT_VERSION="2.2.10"
 if ! rpm -qa | grep -q "vagrant-${VAGRANT_VERSION}"; then
   ${DO_INSTALL} https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.rpm
 fi

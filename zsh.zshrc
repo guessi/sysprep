@@ -243,25 +243,32 @@ function ec2-list() {
   if [ $# -lt 1 ]; then
     echo "invalid input"
     echo
-    echo "Usage: ec2-list profile-name        # with default region: ap-northeast-1"
-    echo "    or ec2-list profile-name region"
+    echo "Usage: ec2-list profile-name"
 
     return
   fi
 
   local PROFILE=$1
-  local REGION=$2
-  if [ $# -eq 1 ]; then
-      # set default region
-      REGION="ap-northeast-1"
-  fi
 
-  aws ec2 describe-instances --output table \
-    --query 'Reservations[].Instances[].[Tags[?Key==`Name`] | [0].Value, State.Name, InstanceId, InstanceType, PrivateIpAddress, PublicIpAddress] | sort_by(@, &[3])' \
-    --profile ${PROFILE} --region ${REGION}
+  if [ -n "${SIMPLE}" ]; then
+    aws ec2 describe-instances --output table \
+      --query 'Reservations[].Instances[].[Tags[?Key==`Name`] | [0].Value, State.Name, InstanceType, PrivateIpAddress] | sort_by(@, &[0])' \
+      --filters 'Name=instance-state-name,Values=running' \
+      --profile "${PROFILE}"
+  else
+    aws ec2 describe-instances --output table \
+      --query 'Reservations[].Instances[].[Tags[?Key==`Name`] | [0].Value, State.Name, InstanceId, InstanceType, PrivateIpAddress, PublicIpAddress] | sort_by(@, &[0])' \
+      --filters 'Name=instance-state-name,Values=running' \
+      --profile "${PROFILE}"
+  fi
 }
 
 # misc
+
+function random_password() {
+  bw generate -ulns --length 16
+  bw generate --words 5 -p
+}
 
 function ssl_certs_check() {
   echo | openssl s_client -servername $1 -connect $1:443 2>/dev/null | openssl x509 -noout -dates

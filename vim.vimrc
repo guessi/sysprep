@@ -77,12 +77,21 @@ autocmd BufNewFile,BufReadPost Dockerfile* set filetype=dockerfile
 autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
 " always treat *.tf{vars,state} as terraform
+autocmd BufNewFile,BufReadPost */playbooks/*.yml set filetype=yaml.ansible
+autocmd BufNewFile,BufReadPost */playbooks/*.yaml set filetype=yaml.ansible
+autocmd BufNewFile,BufReadPost */roles/*.yml set filetype=yaml.ansible
+autocmd BufNewFile,BufReadPost */roles/*.yaml set filetype=yaml.ansible
+
+" always treat *.tf{vars,state} as terraform
 autocmd BufNewFile,BufReadPost *.tf set filetype=terraform
 autocmd BufNewFile,BufReadPost *.tfvars set filetype=terraform
 autocmd BufNewFile,BufReadPost *.tfstate set filetype=terraform
 
 " always treat *.ts as javascript file
 autocmd BufNewFile,BufReadPost *.ts set filetype=javascript
+
+" always treat *.jsonnet as terraform
+autocmd BufNewFile,BufReadPost *.jsonnet set filetype=jsonnet
 
 " always treat Makefile* as make file
 autocmd BufNewFile,BufReadPost Makefile* set filetype=make
@@ -131,11 +140,13 @@ call vundle#begin()
   " syntax highlighting
   Plugin 'fatih/vim-go'
   Plugin 'hashivim/vim-terraform'
+  Plugin 'hashivim/vim-packer'
   Plugin 'hdima/python-syntax'
   Plugin 'nvie/vim-flake8'
   Plugin 'pearofducks/ansible-vim'
   Plugin 'plasticboy/vim-markdown'
   Plugin 'vim-ruby/vim-ruby'
+  Plugin 'google/vim-jsonnet'
 call vundle#end()
 
 set pastetoggle=<F9>
@@ -185,6 +196,12 @@ let g:go_def_mode='godef'
 let g:go_fmt_command = "goimports"
 let g:go_info_mode='gocode'
 let g:go_metalinter_command='golangci-lint'
+
+" ansible
+let g:ansible_name_highlight = 'b'
+let g:ansible_attribute_highlight = "ob"
+let g:ansible_unindent_after_newline = 1
+let g:ansible_extra_keywords_highlight = 1
 
 " Terraform
 let g:terraform_align=1
