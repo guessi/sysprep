@@ -9,19 +9,20 @@ if [ "$(lsb_release -ds | cut -d' ' -f1)" != "Raspbian" ]; then
 fi
 
 # check os code name
-if [ "$(lsb_release -sc)" != "stretch" ]; then
-  echo "support stretch only"
+if [ "$(lsb_release -sc)" != "buster" ] && [ "$(lsb_release -sc)" != "stretch" ]; then
+  echo "support buster (debian 10), or stretch (debian 9) only"
   exit 1
 fi
 
 # must be execute as default user
 if [ $(id -u) -ne 1000 ]; then
-  echo "support uid 1000 only"
+  echo "please run the script with default user \"pi (uid: 1000)\""
   exit 1
 fi
 
 # speed up installation
-echo "deb http://free.nchc.org.tw/raspbian/raspbian/ stretch main contrib non-free rpi" | sudo tee /etc/apt/sources.list
+sudo cp -vf /etc/apt/sources.list /etc/apt/sources.list.orig
+echo "deb http://free.nchc.org.tw/raspbian/raspbian/ $(lsb_release -sc) main contrib non-free rpi" | sudo tee /etc/apt/sources.list
 
 # system upgrade
 sudo apt update
