@@ -70,7 +70,7 @@ sudo apt purge -y                                                             \
 sudo apt autoremove -y
 
 # setup z jump
-curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOMEDIR}/.zjump
+curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOME}/.zjump
 
 # remove unwanted menu items
 sudo rm -rf /usr/share/raspi-ui-overrides/applications/debian-reference-common.desktop
@@ -89,4 +89,4 @@ rm -rf ~/Documents/*
 rm -rf ~/python_games
 
 # cleanup default directories if not empty
-rmdir Documents Downloads Music Pictures Public Templates Videos 2>/dev/null || true
+rmdir ~/Documents ~/Downloads ~/Music ~/Pictures ~/Public ~/Templates ~/Videos 2>/dev/null || true
