@@ -6,6 +6,7 @@ export GOROOT=/usr/local/go
 # If you come from bash you might have to change your $PATH.
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/curl-openssl/bin:$PATH"
+export PATH="/usr/local/opt/mysql-client@5.7/bin:$PATH"
 export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
 
@@ -239,34 +240,38 @@ function go-switch() {
 
 # aws
 
-function ec2-list() {
-  if [ $# -lt 1 ]; then
-    echo "invalid input"
-    echo
-    echo "Usage: ec2-list profile-name"
-
-    return
-  fi
-
+function ec2-list-simple() {
   local PROFILE=$1
 
-  if [ -n "${SIMPLE}" ]; then
     aws ec2 describe-instances --output table \
       --query 'Reservations[].Instances[].[Tags[?Key==`Name`] | [0].Value, State.Name, InstanceType, PrivateIpAddress] | sort_by(@, &[0])' \
       --filters 'Name=instance-state-name,Values=running' \
       --profile "${PROFILE}"
-  else
-    aws ec2 describe-instances --output table \
-      --query 'Reservations[].Instances[].[Tags[?Key==`Name`] | [0].Value, State.Name, InstanceId, InstanceType, PrivateIpAddress, PublicIpAddress] | sort_by(@, &[0])' \
-      --filters 'Name=instance-state-name,Values=running' \
-      --profile "${PROFILE}"
-  fi
+}
+
+function ec2-list() {
+  local PROFILE=$1
+
+  aws ec2 describe-instances --output table \
+    --query 'Reservations[].Instances[].[Tags[?Key==`Name`] | [0].Value, State.Name, InstanceId, InstanceType, PrivateIpAddress, PublicIpAddress] | sort_by(@, &[0])' \
+    --filters 'Name=instance-state-name,Values=running' \
+    --profile "${PROFILE}"
+}
+
+function ec2-ri-info() {
+  local PROFILE=$1
+
+  aws ec2 describe-instances --output text \
+    --query 'Reservations[].Instances[].[Tags[?Key==`Name`] | [0].Value, InstanceType] | sort_by(@, &[0])' \
+    --filters 'Name=instance-state-name,Values=running' \
+    --profile "${PROFILE}"
 }
 
 # misc
 
 function random_password() {
   bw generate -ulns --length 16
+  bw generate -uln  --length 16
   bw generate --words 5 -p
 }
 
@@ -291,22 +296,28 @@ function remove_color() {
 }
 
 function cleanup_history() {
-  rm -rf ~/.oracle_jre_usage
-  rm -rf ~/.terraform.d/checkpoint_*
-  # rm -rf ~/.kube
   # rm -rf ~/.config/gcloud
+  # rm -rf ~/.kube
   rm -rf ~/.DS_Store
   rm -rf ~/.calc_history
+  rm -rf ~/.config/gcloud/logs
   rm -rf ~/.httpie
   rm -rf ~/.lesshst
-  rm -rf ~/.rediscli_history
-  rm -rf ~/.wget-hsts
+  rm -rf ~/.mysql_history
+  rm -rf ~/.oracle_jre_usage
   rm -rf ~/.python_history
+  rm -rf ~/.rediscli_history
+  rm -rf ~/.sqlite_history
+  rm -rf ~/.terraform.d/checkpoint_*
+  rm -rf ~/.wget-hsts
   rm -rf ~/.z
   rm -rf ~/.zsh_history
-  rm -rf ~/.config/gcloud/logs
 
   find ~/.vagrant.d/boxes -type d -exec rmdir {} \; 2>/dev/null
+}
+
+function secure_remove() {
+  shred -u -n 9 $@
 }
 
 # define your extra configuration in ~/.zshrc.extra
