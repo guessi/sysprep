@@ -24,12 +24,12 @@ fi
 DO_INSTALL="${SUDO} dnf install -y"
 DO_UPDATE="${SUDO} dnf update -y"
 
-# repositories setup
-if [ "${FEDORA_VERSION}" -le 31 ]; then
-# FIXME: not supported by fedora 32 yet
+${DO_INSTALL} dnf-plugins-core
+
 ${SUDO} dnf config-manager --add-repo \
-    https://download.docker.com/linux/fedora/docker-ce.repo
-fi
+  https://download.docker.com/linux/fedora/docker-ce.repo
+
+${DO_INSTALL} docker-ce docker-ce-cli containerd.io
 
 ${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
 [google-chrome]
