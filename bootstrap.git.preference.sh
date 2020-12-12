@@ -18,6 +18,7 @@ git config --global core.pager 'less -F -X'
 git config --global diff.tool colordiff
 git config --global log.date rfc-local
 git config --global push.default simple
+git config --global pull.rebase false
 git config --global --bool color.status true
 git config --global --bool color.ui true
 git config --global --bool log.decorate true
