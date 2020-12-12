@@ -10,7 +10,7 @@ my personal bootstrap scripts
     $ ./bootstrap.git.preference.sh
 
 
-# Bootstrap Fedora Workstation 30+
+# Bootstrap Fedora Workstation 32+
 
     $ ./bootstrap.fedora.sh
     $ ./bootstrap.git.preference.sh
