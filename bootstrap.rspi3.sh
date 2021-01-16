@@ -21,8 +21,17 @@ if [ $(id -u) -ne 1000 ]; then
 fi
 
 # speed up installation
-sudo cp -vf /etc/apt/sources.list /etc/apt/sources.list.orig
+if [ ! -f "/etc/apt/sources.list.orig" ]; then
+  sudo cp -vf /etc/apt/sources.list \
+              /etc/apt/sources.list.orig
+fi
 echo "deb http://free.nchc.org.tw/raspbian/raspbian/ $(lsb_release -sc) main contrib non-free rpi" | sudo tee /etc/apt/sources.list
+
+if [ ! -f "/etc/apt/sources.list.d/raspi.list.orig" ]; then
+  sudo cp -vf /etc/apt/sources.list.d/raspi.list \
+              /etc/apt/sources.list.d/raspi.list.orig
+fi
+sed -i -e 's/archive.raspberrypi.org/free.nchc.org.tw/g' /etc/apt/sources.list.d/raspi.list
 
 # system upgrade
 sudo apt update
