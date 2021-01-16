@@ -31,7 +31,7 @@ if [ ! -f "/etc/apt/sources.list.d/raspi.list.orig" ]; then
   sudo cp -vf /etc/apt/sources.list.d/raspi.list \
               /etc/apt/sources.list.d/raspi.list.orig
 fi
-sed -i -e 's/archive.raspberrypi.org/free.nchc.org.tw/g' /etc/apt/sources.list.d/raspi.list
+sudo sed -i -e 's/archive.raspberrypi.org/free.nchc.org.tw/g' /etc/apt/sources.list.d/raspi.list
 
 # system upgrade
 sudo apt update
