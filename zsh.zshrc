@@ -17,6 +17,23 @@ export LANG=en_US.UTF-8
 DISABLE_UPDATE_PROMPT=true
 DISABLE_AUTO_UPDATE=true
 
+# setup gcloud auto complete
+if [ -d '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk' ]; then
+  source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+  source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+fi
+
+# setup nvm
+export NVM_DIR="$HOME/.nvm"
+
+if [ -s "/usr/local/opt/nvm/nvm.sh" ]; then
+  source "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+fi
+
+if [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ]; then
+  source "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+fi
+
 # history
 export HIST_STAMPS="yyyy-mm-dd"
 export HISTFILE=~/.zsh_history
@@ -324,3 +341,7 @@ function secure_remove() {
 if [ -f ~/.zshrc.extra ]; then
   source ~/.zshrc.extra
 fi
+
+function gam() {
+  "${HOME}/bin/gam/gam" "$@"
+}
