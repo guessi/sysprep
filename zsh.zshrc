@@ -117,6 +117,10 @@ function dockerimageupdate {
   docker image prune --force
 }
 
+# homebrew / pyenv tricks
+# - ref: https://github.com/pyenv/pyenv/issues/106#issuecomment-625334706
+alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
+
 # google cloud platform
 
 function gcloud_completion() {
