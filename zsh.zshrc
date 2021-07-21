@@ -71,6 +71,9 @@ antigen apply
 unsetopt beep
 
 function prompt-context() {
+  # HINT: uncomment this for enabling prompt detection
+  return
+
   if [ ! -d "${HOME}/.config/gcloud" ] || \
      [ ! -f "${HOME}/.config/gcloud/active_config" ]; then
     return

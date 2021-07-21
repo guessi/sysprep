@@ -86,12 +86,14 @@ autocmd BufNewFile,BufReadPost */roles/*.yaml set filetype=yaml.ansible
 autocmd BufNewFile,BufReadPost *.tf set filetype=terraform
 autocmd BufNewFile,BufReadPost *.tfvars set filetype=terraform
 autocmd BufNewFile,BufReadPost *.tfstate set filetype=terraform
+autocmd BufNewFile,BufReadPost .terraform.lock.hcl set filetype=terraform
 
 " always treat *.ts as javascript file
 autocmd BufNewFile,BufReadPost *.ts set filetype=javascript
 
 " always treat *.jsonnet as terraform
 autocmd BufNewFile,BufReadPost *.jsonnet set filetype=jsonnet
+autocmd BufNewFile,BufRead *.libsonnet set filetype=jsonnet
 
 " always treat Makefile* as make file
 autocmd BufNewFile,BufReadPost Makefile* set filetype=make
