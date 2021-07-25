@@ -131,7 +131,6 @@ cask "amazon-chime"
 cask "android-file-transfer"
 cask "anydesk"
 cask "appcleaner"
-cask "bitwarden"
 cask "caffeine"
 cask "ccleaner"
 cask "charles"
@@ -166,6 +165,7 @@ cask "vlc"
 cask "vnc-viewer"
 cask "wifi-explorer"
 cask "wireshark"
+mas "Bitwarden", id: 1352778147
 mas "Codye", id: 1516894961
 mas "GarageBand", id: 682658836
 mas "iMovie", id: 408981434
