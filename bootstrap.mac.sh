@@ -94,15 +94,14 @@ show_stage "Cache cleanup"
 brew cleanup
 
 show_stage "Setup Antigen"
-if [ -n "$(which git)" ]; then
-  if [ ! -d "~/.antigen" ]; then
-    git clone https://github.com/zsh-users/antigen.git ~/.antigen
-  else
-    cd ~/.antigen && git checkout master && git reset --hard origin/master
-  fi
+if [ -d ~/.antigen ]; then
+  pushd ~/.antigen
+    git checkout master
+    git fetch origin master
+    git reset --hard origin/master
+  popd
 else
-  show_stage "git: command not found, aborting"
-  exit 1
+  git clone https://github.com/zsh-users/antigen.git ~/.antigen
 fi
 
 show_stage "All jobs done!!!"

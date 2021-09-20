@@ -23,6 +23,11 @@ if [ -d '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk' ]; then
   source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 fi
 
+if [ -d ~/google-cloud-sdk ]; then
+  source ~/google-cloud-sdk/completion.zsh.inc
+  source ~/google-cloud-sdk/path.zsh.inc
+fi
+
 # setup nvm
 export NVM_DIR="$HOME/.nvm"
 
@@ -123,20 +128,6 @@ function dockerimageupdate {
 # homebrew / pyenv tricks
 # - ref: https://github.com/pyenv/pyenv/issues/106#issuecomment-625334706
 alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
-
-# google cloud platform
-
-function gcloud_completion() {
-  # workaround for loading completion for google-cloud-sdk
-  source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-  source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-}
-
-function find-load-balancer-by-ip() {
-  if [ $# -eq 1 ]; then
-    gcloud compute forwarding-rules list --filter IPAddress=$1
-  fi
-}
 
 function switch-project() {
   gcloud config set project $1

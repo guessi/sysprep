@@ -142,13 +142,10 @@ echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(lsb_r
 ${DO_INSTALL} virtualbox-6.1
 
 # vagrant
-VAGRANT_VERSION="2.2.15"
-if ! (dpkg -l vagrant >/dev/null 2>&1); then
-  ${SUDO} rm -f /tmp/vagrant_${VAGRANT_VERSION}_x86_64.deb
-  wget https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb \
-    -O /tmp/vagrant_${VAGRANT_VERSION}_x86_64.deb
-  ${SUDO} dpkg -i /tmp/vagrant_${VAGRANT_VERSION}_x86_64.deb
-fi
+curl -fsSL https://apt.releases.hashicorp.com/gpg | ${SUDO} apt-key add -
+echo "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+  ${SUDO} tee /etc/apt/sources.list.d/hashicorp.list
+${SUDO} apt-get update && ${DO_INSTALL} vagrant
 
 # system update
 ${DO_UPDATE}

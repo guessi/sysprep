@@ -27,9 +27,10 @@ DO_UPDATE="${SUDO} dnf update -y"
 ${DO_INSTALL} dnf-plugins-core
 
 ${SUDO} dnf config-manager --add-repo \
-  https://download.docker.com/linux/fedora/docker-ce.repo
+  https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
 
-${DO_INSTALL} docker-ce docker-ce-cli containerd.io
+${SUDO} dnf config-manager --add-repo \
+  https://download.docker.com/linux/fedora/docker-ce.repo
 
 ${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
 [google-chrome]
@@ -39,6 +40,17 @@ enabled=1
 gpgcheck=1
 gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
 EOF
+
+${SUDO} tee /etc/yum.repos.d/google-cloud-sdk.repo >/dev/null <<-EOM
+[google-cloud-sdk]
+name=Google Cloud SDK
+baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOM
 
 if ! rpm -qa | grep -q "rpmfusion-free-release"; then
   ${DO_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
@@ -112,15 +124,20 @@ ${DO_UPDATE}                                                                  \
     openssh-clients                                                           \
     openssh-server
 
+# docker container
+${DO_INSTALL} docker-ce docker-ce-cli containerd.io
+
 # developer tools
 ${DO_INSTALL}                                                                 \
     ShellCheck                                                                \
     ack                                                                       \
+    awscli                                                                    \
     bash                                                                      \
     colordiff                                                                 \
     curl                                                                      \
     ethtool                                                                   \
     fping                                                                     \
+    google-cloud-sdk                                                          \
     git                                                                       \
     git-extras                                                                \
     htop                                                                      \
@@ -141,7 +158,8 @@ ${DO_INSTALL}                                                                 \
     unrar                                                                     \
     unzip                                                                     \
     vim                                                                       \
-    wget
+    wget                                                                      \
+    zsh
 
 # general setup
 ${DO_INSTALL}                                                                 \
@@ -198,10 +216,7 @@ ${DO_INSTALL}                                                             \
 ${DO_INSTALL} VirtualBox
 
 # vagrant
-VAGRANT_VERSION="2.2.15"
-if ! rpm -qa | grep -q "vagrant-${VAGRANT_VERSION}"; then
-  ${DO_INSTALL} https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.rpm
-fi
+${DO_INSTALL} vagrant
 
 ${DO_INSTALL} google-chrome-stable
 
@@ -237,6 +252,17 @@ wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbol
 mv 10-powerline-symbols.conf ${HOMEDIR}/.config/fontconfig/conf.d/
 
 fc-cache -vf ${HOMEDIR}/.local/share/fonts/
+
+# setup antigen
+if [ -d ~/.antigen ]; then
+  pushd ~/.antigen
+    git checkout master
+    git fetch origin master
+    git reset --hard origin/master
+  popd
+else
+  git clone https://github.com/zsh-users/antigen.git ~/.antigen
+fi
 
 # system update
 ${DO_UPDATE}
