@@ -5,7 +5,7 @@ export GOROOT=/usr/local/go
 
 # If you come from bash you might have to change your $PATH.
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-export PATH="/usr/local/opt/curl-openssl/bin:$PATH"
+export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/mysql-client@5.7/bin:$PATH"
 export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
