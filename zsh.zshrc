@@ -61,7 +61,6 @@ antigen bundles << BUNDLES
   terraform
   vagrant
   z
-  zsh_reload
 
   mattberther/zsh-pyenv
 
