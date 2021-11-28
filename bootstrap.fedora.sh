@@ -8,7 +8,7 @@ if [ "$(whoami)" = "root" ]; then
   exit 1
 fi
 
-if [ "${DISTRO}" != "Fedora" ]; then
+if ! echo "${DISTRO}" | grep -i -q "Fedora"; then
   echo "Sorry, this script was written for Fedora only"
   exit 1
 fi
