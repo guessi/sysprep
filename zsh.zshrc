@@ -7,6 +7,7 @@ export GOROOT=/usr/local/go
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/mysql-client@5.7/bin:$PATH"
+export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
 
@@ -326,6 +327,8 @@ function cleanup_history() {
   rm -rf ~/.wget-hsts
   rm -rf ~/.z
   rm -rf ~/.zsh_history
+  rm -rf ~/.zshrc.bak
+  rm -rf ~/.zshrc.zwc
 
   find ~/.vagrant.d/boxes -type d -exec rmdir {} \; 2>/dev/null
 }
@@ -338,6 +341,10 @@ function secure_remove() {
 if [ -f ~/.zshrc.extra ]; then
   source ~/.zshrc.extra
 fi
+
+function ip() {
+  curl -s ipconfig.io/json | jq .
+}
 
 function gam() {
   "${HOME}/bin/gam/gam" "$@"
