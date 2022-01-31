@@ -9,8 +9,8 @@ if [ "$(lsb_release -ds | cut -d' ' -f1)" != "Raspbian" ]; then
 fi
 
 # check os code name
-if [ "$(lsb_release -sc)" != "buster" ] && [ "$(lsb_release -sc)" != "stretch" ]; then
-  echo "support buster (debian 10), or stretch (debian 9) only"
+if [ "$(lsb_release -sc)" != "bullseye" ] && [ "$(lsb_release -sc)" != "buster" ]; then
+  echo "support bullseye (debian 11), or buster (debian 10) only"
   exit 1
 fi
 
@@ -53,25 +53,19 @@ sudo apt install -y                                                           \
 
 # remove unwanted default packages
 sudo apt purge -y                                                             \
-         bluej                                                                \
          claws-mail                                                           \
          debian-reference*                                                    \
          epiphany-browser                                                     \
          geany                                                                \
          geany-common                                                         \
-         greenfoot                                                            \
          idle                                                                 \
          idle3                                                                \
-         minecraft-pi                                                         \
          nodejs                                                               \
          nodejs-legacy                                                        \
-         nodered                                                              \
          python3-jedi                                                         \
          python3-thonny                                                       \
          scratch                                                              \
-         scratch2                                                             \
          sonic-pi                                                             \
-         wolfram-engine                                                       \
          *mathematica*                                                        \
          *game*
 
