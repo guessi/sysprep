@@ -76,7 +76,7 @@ autocmd BufNewFile,BufReadPost Dockerfile* set filetype=dockerfile
 " always treat Jenkinsfile as groovy
 autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
-" always treat *.tf{vars,state} as terraform
+" always treat *.tf{vars,state} as ansible
 autocmd BufNewFile,BufReadPost */playbooks/*.yml set filetype=yaml.ansible
 autocmd BufNewFile,BufReadPost */playbooks/*.yaml set filetype=yaml.ansible
 autocmd BufNewFile,BufReadPost */roles/*.yml set filetype=yaml.ansible
@@ -87,6 +87,10 @@ autocmd BufNewFile,BufReadPost *.tf set filetype=terraform
 autocmd BufNewFile,BufReadPost *.tfvars set filetype=terraform
 autocmd BufNewFile,BufReadPost *.tfstate set filetype=terraform
 autocmd BufNewFile,BufReadPost .terraform.lock.hcl set filetype=terraform
+
+" always treat *.{pkr,pkrvars}.hcl as terraform
+autocmd BufNewFile,BufReadPost *.pkr.hcl set filetype=terraform
+autocmd BufNewFile,BufReadPost *.pkvars.hcl set filetype=terraform
 
 " always treat *.ts as javascript file
 autocmd BufNewFile,BufReadPost *.ts set filetype=javascript
@@ -172,7 +176,19 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-nmap <silent> gb :Gblame<CR>
+nmap <silent> gb :Git blame<CR>
+
+" gs: toggle for turn ignore whitespace on/off for vimdiff
+if &diff
+     map gs :call IwhiteToggle()<CR>
+     function! IwhiteToggle()
+       if &diffopt =~ 'iwhite'
+         set diffopt-=iwhite
+       else
+         set diffopt+=iwhite
+       endif
+     endfunction
+ endif
 
 " manual setup required (macOS):
 " 1. open https://github.com/powerline/fonts

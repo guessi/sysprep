@@ -2,6 +2,10 @@
 export GOPATH=$HOME/go
 # export GOROOT=/usr/local/opt/go/libexec # go package from `brew install golang`
 export GOROOT=/usr/local/go
+export GOPROXY=direct
+
+# set default AWS profile
+export AWS_PROFILE=admin
 
 # If you come from bash you might have to change your $PATH.
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
@@ -10,6 +14,7 @@ export PATH="/usr/local/opt/mysql-client@5.7/bin:$PATH"
 export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
+export PATH="$HOME/.toolbox/bin:$PATH"
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -111,7 +116,10 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias vi='vim'
 alias md5='md5 -r'
-alias watch="watch "
+alias watch='watch '
+alias tree='tree -aFI .git'
+
+alias pycodestyle='pycodestyle --ignore=E501'
 
 # docker
 
@@ -124,10 +132,6 @@ function dockerimageupdate {
   docker image ls -f dangling=false --format '{{.Repository}}:{{.Tag}}' | grep -v "None" | xargs -n 1 docker image pull
   docker image prune --force
 }
-
-# homebrew / pyenv tricks
-# - ref: https://github.com/pyenv/pyenv/issues/106#issuecomment-625334706
-alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
 
 function switch-project() {
   gcloud config set project $1
@@ -152,59 +156,44 @@ if [ $commands[helm] ]; then
   source <(helm completion zsh)
 fi
 
-function get-node-by-type() {
-  local node_regular=$(kubectl get no -l cloud.google.com/gke-preemptible!=true 2>/dev/null)
-  local node_regular_count=$(($(echo $node_regular | wc -l) -1))
-  local node_preemptible=$(kubectl get no -l cloud.google.com/gke-preemptible=true 2>/dev/null)
-  local node_preemptible_count=$(($(echo $node_preemptible | wc -l) -1))
-  local node_total_count=$((node_regular_count + node_preemptible_count))
+# kubernetes shortcuts
 
-  if [ $node_regular_count -gt 0 ]; then
-    echo "==> Node Type: regular (Count: $node_regular_count)"
-    echo
-    echo $node_regular
-    echo
-  fi
+alias k='kubectl'
+alias kd='kubectl describe'
+alias kg='kubectl get'
+alias kgowide='kubectl get -o=wide'
+alias kgoyaml='kubectl get -o=yaml'
+alias klo='kubectl logs -f'
+alias kpf='kubectl port-forward'
+alias krm='kubectl delete'
+alias kex='kubectl exec -i -t'
 
-  if [ $node_preemptible_count -gt 0 ]; then
-    echo "==> Node Type: preemptible (Count: $node_preemptible_count)"
-    echo
-    echo $node_preemptible
-    echo
-  fi
+alias kgn='kubectl get nodes'
+alias kgnw='kubectl get nodes -o wide'
+alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/capacityType,karpenter.sh/capacity-type,eks.amazonaws.com/nodegroup'
 
-  echo "==> Regular Node: $node_regular_count"
-  echo "==> Preemptible Node: $node_preemptible_count"
-  echo
-  echo "==> Total Node: $node_total_count"
-}
+alias kgp='kubectl get pods'
+alias kgpw='kubectl get pods -o wide'
+alias kgpa='kubectl get pods -o wide --all-namespaces'
+alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'
 
-function get-all() {
-  kubectl get hpa,deploy,po,svc,ing,statefulsets,pvc,pv $@
-}
+alias kgd='kubectl get deployment'
+alias kgds='kubectl get daemonsets'
+alias kgi='kubectl get ingress'
+alias kgs='kubectl get service'
+alias kgsts='kubectl get statefulsets'
 
-function get-pod-by-node() {
-  if [ x"$1" = x"--all-namespaces" ]; then
-    kubectl get po $@ -o wide | awk '{print$8,$2,$6}' | sort | column -t
-  else
-    kubectl get po $@ -o wide | awk '{print$7,$1,$5}' | sort | column -t
-  fi
-}
+# kubernetes shortcuts (plugins required)
 
-function set-hpa() {
-  if [ $# -ne 4 ]; then
-    echo "invalid input"
-    return
-  fi
-
-  kubectl -n $1 patch hpa $2 --patch '{"spec":{"minReplicas":'$3',"maxReplicas":'$4'}}'
-}
+alias krc='kubectl resource_capacity'
+alias krcp='kubectl resource_capacity -p'
 
 # golang
 
 function go-setup() {
   local GOVERSION=$1
-  local PKG_REMOTE_PATH="https://dl.google.com/go/go${GOVERSION}.darwin-amd64.tar.gz"
+  local FORCE=$2
+  local PKG_REMOTE_PATH="https://go.dev/dl/go${GOVERSION}.darwin-amd64.tar.gz"
   local PKG_OUTPUT_PATH="/tmp/go${GOVERSION}.darwin-amd64.tar.gz"
   local PKG_EXTRACT_PATH="/tmp/go-${GOVERSION}"
   local PKG_TARGET_PATH="/usr/local/go-${GOVERSION}"
@@ -215,12 +204,15 @@ function go-setup() {
   fi
 
   if [ -e "${PKG_TARGET_PATH}" ]; then
-    echo "abort, target version already existed."
-    return
+    if [ "${FORCE}" != "force" ]; then
+      echo "abort, target version already existed."
+      return
+    fi
+    rm -f ${PKG_OUTPUT_PATH}
   fi
 
   if [ ! -f "${PKG_OUTPUT_PATH}" ]; then
-    wget ${PKG_REMOTE_PATH} -O ${PKG_OUTPUT_PATH}
+    wget ${PKG_REMOTE_PATH} -O ${PKG_OUTPUT_PATH} --no-verbose --show-progress
   fi
 
   rm -rf ${PKG_EXTRACT_PATH}
@@ -229,11 +221,14 @@ function go-setup() {
   if [ $? -ne 0 ]; then
     rm -rf ${PKG_EXTRACT_PATH}
   else
+    echo "Hint: password might be required to finish setup"
     sudo rm -rf ${PKG_TARGET_PATH}
     sudo mv ${PKG_EXTRACT_PATH} ${PKG_TARGET_PATH}
 
     go-switch ${GOVERSION}
   fi
+
+  rm -f ${PKG_OUTPUT_PATH}
 }
 
 function go-switch() {
@@ -247,9 +242,12 @@ function go-switch() {
   if [ ! -d "/usr/local/go-${GOVERSION}" ]; then
     return
   fi
+
+  echo "Hint: password might be required to finish setup"
   sudo rm -f /usr/local/go
   sudo ln -s -f /usr/local/go-${GOVERSION} /usr/local/go
 
+  echo "Hint: check version installed"
   go version
 }
 
@@ -311,8 +309,6 @@ function remove_color() {
 }
 
 function cleanup_history() {
-  # rm -rf ~/.config/gcloud
-  # rm -rf ~/.kube
   rm -rf ~/.DS_Store
   rm -rf ~/.calc_history
   rm -rf ~/.config/gcloud/logs
@@ -337,15 +333,11 @@ function secure_remove() {
   shred -u -n 9 $@
 }
 
-# define your extra configuration in ~/.zshrc.extra
-if [ -f ~/.zshrc.extra ]; then
-  source ~/.zshrc.extra
-fi
-
 function ip() {
   curl -s ipconfig.io/json | jq .
 }
 
-function gam() {
-  "${HOME}/bin/gam/gam" "$@"
-}
+# define your extra configuration in ~/.zshrc.extra
+if [ -f ~/.zshrc.extra ]; then
+  source ~/.zshrc.extra
+fi
