@@ -3,6 +3,9 @@
 USER_NAME="guessi"
 USER_EMAIL="guessi@gmail.com"
 
+WORK_NAME=""
+WORK_EMAIL=""
+
 # git global settings
 git config --global --bool color.status true
 git config --global --bool color.ui true
@@ -32,10 +35,6 @@ git config --global log.date rfc-local
 git config --global pull.rebase false
 git config --global push.default simple
 
-# github specific configs
-git config --global includeIf."gitdir:~/github/".path ~/.gitconfig-github
-git config --global includeIf."gitdir:~/go/src/github.com/".path ~/.gitconfig-github
-
 # go go go: https://golang.org/doc/faq#git_https
 git config --global url."ssh://git@github.com/".insteadOf "https://github.com/"
 
@@ -46,5 +45,15 @@ if [ -z "$(git config --global --get user.name)" ] || \
   git config --global user.email "${USER_EMAIL}"
 fi
 
+# github specific configs
+git config --global includeIf."gitdir:~/github/".path ~/.gitconfig-github
+git config --global includeIf."gitdir:~/go/src/github.com/".path ~/.gitconfig-github
+
 git config -f ~/.gitconfig-github user.name "${USER_NAME}"
 git config -f ~/.gitconfig-github user.email "${USER_EMAIL}"
+
+# work specific configs
+git config --global includeIf."gitdir:~/work/".path ~/.gitconfig-work
+
+git config -f ~/.gitconfig-work user.name "${WORK_NAME}"
+git config -f ~/.gitconfig-work user.email "${WORK_EMAIL}"
