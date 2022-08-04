@@ -210,9 +210,12 @@ let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let NERDTreeShowHidden = 1
 
 " vim-go
-let g:go_def_mode='godef'
-let g:go_fmt_command = "goimports"
-let g:go_info_mode='gocode'
+"
+" reference:
+" - https://github.com/golang/tools/blob/master/gopls/doc/vim.md#vimgo
+let g:go_def_mode='gopls'
+let g:go_fmt_command = "gopls"
+let g:go_info_mode='gopls'
 let g:go_metalinter_command='golangci-lint'
 
 " ansible
