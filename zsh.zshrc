@@ -10,7 +10,6 @@ export AWS_PROFILE=admin
 # If you come from bash you might have to change your $PATH.
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
-export PATH="/usr/local/opt/mysql-client@5.7/bin:$PATH"
 export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
@@ -160,6 +159,7 @@ fi
 # kubernetes shortcuts
 
 alias k='kubectl'
+alias kc='kubecolor'
 alias kd='kubectl describe'
 alias kg='kubectl get'
 alias kpf='kubectl port-forward'
@@ -169,11 +169,14 @@ alias kex='kubectl exec -i -t'
 alias kgn='kubectl get nodes'
 alias kgnw='kubectl get nodes -o wide'
 alias kgny='kubectl get nodes -o yaml'
-alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/capacityType,karpenter.sh/capacity-type,eks.amazonaws.com/nodegroup'
+alias kgnj='kubectl get nodes -o json'
+alias kgnf='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/capacityType,karpenter.sh/capacity-type,eks.amazonaws.com/nodegroup'
+alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone -o wide'
 
 alias kgp='kubectl get pods'
 alias kgpw='kubectl get pods -o wide'
 alias kgpy='kubectl get pods -o yaml'
+alias kgpj='kubectl get pods -o json'
 alias kgpa='kubectl get pods -o wide --all-namespaces'
 alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'
 
