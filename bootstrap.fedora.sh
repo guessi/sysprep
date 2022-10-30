@@ -41,17 +41,6 @@ gpgcheck=1
 gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
 EOF
 
-${SUDO} tee /etc/yum.repos.d/google-cloud-sdk.repo >/dev/null <<-EOM
-[google-cloud-sdk]
-name=Google Cloud SDK
-baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=0
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
-       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-EOM
-
 if ! rpm -qa | grep -q "rpmfusion-free-release"; then
   ${DO_INSTALL} "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${OS_VERSION}.noarch.rpm"
 fi
@@ -89,11 +78,13 @@ setup_extension() {
   echo
 }
 
-setupconfig bash.bashrc       "${HOMEDIR}/.bashrc"
-setupconfig bash.bash_profile "${HOMEDIR}/.bash_profile"
-setupconfig vim.vimrc         "${HOMEDIR}/.vimrc"
-setupconfig tig.tigrc         "${HOMEDIR}/.tigrc"
-setupconfig zsh.zshrc         "${HOMEDIR}/.zshrc"
+setupconfig bash.bashrc         "${HOMEDIR}/.bashrc"
+setupconfig bash.bashrc.aliases "${HOMEDIR}/.bashrc.aliases"
+setupconfig bash.bash_profile   "${HOMEDIR}/.bash_profile"
+setupconfig vim.vimrc           "${HOMEDIR}/.vimrc"
+setupconfig tig.tigrc           "${HOMEDIR}/.tigrc"
+setupconfig zsh.zshrc           "${HOMEDIR}/.zshrc"
+setupconfig zsh.zshrc.aliases   "${HOMEDIR}/.zshrc.aliases"
 
 # ssh config
 mkdir -p "${HOMEDIR}/.ssh"
@@ -137,7 +128,6 @@ ${DO_INSTALL}                                                                 \
     curl                                                                      \
     ethtool                                                                   \
     fping                                                                     \
-    google-cloud-sdk                                                          \
     git                                                                       \
     git-extras                                                                \
     htop                                                                      \
