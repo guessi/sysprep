@@ -71,6 +71,23 @@ alias kgsts='kubectl get statefulsets'
 alias krc='kubectl resource_capacity'
 alias krcp='kubectl resource_capacity -p'
 
+# aws specific
+
+alias awsecsls='aws ecs list-clusters'
+alias awseksls='aws eks list-clusters'
+
+# eks specific
+
+function get-instance-id-by-node() {
+  [ $# -ne 1 ] && return
+  kubectl get nodes $1 -o jsonpath='{.spec.providerID}' | cut -d'/' -f5
+}
+
+function ssm-into-eks-node() {
+local TARGET=$(get-instance-id-by-eks-node-name $1)
+  aws ssm start-session --target ${TARGET}
+}
+
 # golang
 
 function go-setup() {
