@@ -43,25 +43,25 @@ eval "$(pyenv init -)"
 # disable omz update
 zstyle ':omz:update' mode disabled
 
-# antigen
-source ~/.antigen/antigen.zsh
+# antidote
 
-antigen use oh-my-zsh
-antigen theme fishy
+source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+source <(antidote init)
 
-antigen bundles << BUNDLES
-  colored-man-pages
-  command-not-found
-  pyenv
-  screen
-  z
-
-  zsh-users/zsh-completions
-  zsh-users/zsh-autosuggestions
+antidote bundle <<BUNDLES
   zsh-users/zsh-syntax-highlighting
-BUNDLES
+  zsh-users/zsh-autosuggestions
+  zsh-users/zsh-completions
 
-antigen apply
+  ohmyzsh/ohmyzsh path:lib
+  ohmyzsh/ohmyzsh path:plugins/colored-man-pages
+  ohmyzsh/ohmyzsh path:plugins/command-not-found
+  ohmyzsh/ohmyzsh path:plugins/pyenv
+  ohmyzsh/ohmyzsh path:plugins/screen
+  ohmyzsh/ohmyzsh path:plugins/z
+
+  ohmyzsh/ohmyzsh path:themes/fishy.zsh-theme
+BUNDLES
 
 # User configuration
 unsetopt beep
