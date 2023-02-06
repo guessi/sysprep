@@ -24,6 +24,10 @@ export SAVEHIST=10000
 # set default AWS profile
 export AWS_PROFILE=admin
 
+# to fix errot prompt of 'command not found: compdef'
+autoload -Uz compinit
+compinit
+
 # setup nvm
 export NVM_DIR="$HOME/.nvm"
 
