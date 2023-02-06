@@ -20,12 +20,6 @@ alias tree='tree -aFI .git'
 
 alias pycodestyle='pycodestyle --ignore=E501'
 
-# docker
-
-alias dockercontainercleanup='docker container prune --force; docker volume prune --force; docker network prune --force'
-alias dockerimagecleanup='docker image prune --force'
-alias dockerimageupdate="docker container prune --force; (docker image ls -f dangling=false --format '{{.Repository}}:{{.Tag}}' | grep -v 'None' | xargs -n 1 docker image pull); docker image prune --force"
-
 # kubernetes
 
 if [ $commands[kubectl] ]; then

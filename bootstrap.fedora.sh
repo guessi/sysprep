@@ -29,9 +29,6 @@ ${DO_INSTALL} dnf-plugins-core
 ${SUDO} dnf config-manager --add-repo \
   https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
 
-${SUDO} dnf config-manager --add-repo \
-  https://download.docker.com/linux/fedora/docker-ce.repo
-
 ${SUDO} tee /etc/yum.repos.d/google-chrome.repo >/dev/null <<-EOF
 [google-chrome]
 name=google-chrome - 64-bit
@@ -114,9 +111,6 @@ ${DO_UPDATE}                                                                  \
     dnf-plugins-core                                                          \
     openssh-clients                                                           \
     openssh-server
-
-# docker container
-${DO_INSTALL} docker-ce docker-ce-cli containerd.io
 
 # developer tools
 ${DO_INSTALL}                                                                 \
@@ -212,14 +206,6 @@ ${DO_INSTALL} google-chrome-stable
 
 # dropbox (rpmfusion-nonfree)
 ${DO_INSTALL} nautilus-dropbox
-
-# allow current user to run docker with sudo (absolute path)
-${SUDO} tee /etc/sudoers.d/docker >/dev/null <<-EOF
-# allow current user to run docker with sudo (absolute path)
-${USER} ALL=(ALL) NOPASSWD: /usr/bin/docker
-${USER} ALL=(ALL) NOPASSWD: /usr/bin/docker-compose
-${USER} ALL=(ALL) NOPASSWD: /usr/local/bin/docker-compose
-EOF
 
 # gnome-shell-extension
 ${DO_INSTALL}                                                                 \
