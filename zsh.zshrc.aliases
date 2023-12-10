@@ -4,7 +4,6 @@ alias cp='cp -i'
 alias df='df -kTh'
 alias diff='colordiff'
 alias du='du -kh'
-alias g='git'
 alias gr='git fetch upstream; git rebase upstream/$(git branch --show-current)'
 alias h='history'
 alias ll='ls -l'
@@ -33,7 +32,6 @@ fi
 # kubectl
 
 alias k='kubectl'
-alias kc='kubecolor'
 alias kd='kubectl describe'
 alias kg='kubectl get'
 alias kpf='kubectl port-forward'
@@ -44,21 +42,27 @@ alias kgn='kubectl get nodes'
 alias kgnw='kubectl get nodes -o wide'
 alias kgny='kubectl get nodes -o yaml'
 alias kgnj='kubectl get nodes -o json'
-alias kgnf='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/capacityType,karpenter.sh/capacity-type,eks.amazonaws.com/nodegroup'
+alias kgnf='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,karpenter.sh/capacity-type,karpenter.sh/provisioner-name'
 alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone -o wide'
 
 alias kgp='kubectl get pods'
 alias kgpw='kubectl get pods -o wide'
 alias kgpy='kubectl get pods -o yaml'
 alias kgpj='kubectl get pods -o json'
-alias kgpa='kubectl get pods -o wide --all-namespaces'
+alias kgpa='kubectl get pods --all-namespaces'
+alias kgpaw='kubectl get pods -o wide --all-namespaces'
 alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'
 
 alias kgd='kubectl get deployment'
+alias kgda='kubectl get deployment --all-namespaces'
 alias kgds='kubectl get daemonsets'
+alias kgdsa='kubectl get daemonsets --all-namespaces'
 alias kgi='kubectl get ingress'
+alias kgia='kubectl get ingress --all-namespaces'
 alias kgs='kubectl get service'
+alias kgsa='kubectl get service --all-namespaces'
 alias kgsts='kubectl get statefulsets'
+alias kgstsa='kubectl get statefulsets --all-namespaces'
 
 # kubectl (plugins required)
 
@@ -78,7 +82,7 @@ function get-instance-id-by-node() {
 }
 
 function ssm-into-eks-node() {
-local TARGET=$(get-instance-id-by-eks-node-name $1)
+  local TARGET=$(kubectl get nodes $1 -o jsonpath='{.spec.providerID}' | cut -d'/' -f5)
   aws ssm start-session --target ${TARGET}
 }
 
@@ -187,6 +191,6 @@ function secure_remove() {
   shred -u -n 9 $@
 }
 
-function ip() {
+function ipinfo() {
   curl -s ipconfig.io/json | jq .
 }

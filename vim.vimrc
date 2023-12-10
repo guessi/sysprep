@@ -153,6 +153,7 @@ call vundle#begin()
   Plugin 'plasticboy/vim-markdown'
   Plugin 'vim-ruby/vim-ruby'
   Plugin 'google/vim-jsonnet'
+  Plugin 'rust-lang/rust.vim'
 call vundle#end()
 
 set pastetoggle=<F9>
@@ -177,6 +178,9 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 nmap <silent> gb :Git blame<CR>
+
+" format json with "python -m json.tool"
+nmap =j :%!python -m json.tool<CR>
 
 " gs: toggle for turn ignore whitespace on/off for vimdiff
 if &diff

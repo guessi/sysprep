@@ -33,7 +33,6 @@ fi
 # kubectl
 
 alias k='kubectl'
-alias kc='kubecolor'
 alias kd='kubectl describe'
 alias kg='kubectl get'
 alias kpf='kubectl port-forward'
