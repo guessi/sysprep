@@ -39,35 +39,35 @@ sudo apt upgrade -y
 
 # better working environment
 sudo apt install -y                                                           \
-         colordiff                                                            \
-         git-extras                                                           \
-         jq                                                                   \
-         meld                                                                 \
-         ripgrep                                                              \
-         scim-chewing                                                         \
-         tig                                                                  \
-         ttf-wqy-microhei                                                     \
-         ttf-wqy-zenhei                                                       \
-         vim                                                                  \
-         vlc
+  colordiff                                                                   \
+  git-extras                                                                  \
+  jq                                                                          \
+  meld                                                                        \
+  ripgrep                                                                     \
+  scim-chewing                                                                \
+  tig                                                                         \
+  ttf-wqy-microhei                                                            \
+  ttf-wqy-zenhei                                                              \
+  vim                                                                         \
+  vlc
 
 # remove unwanted default packages
 sudo apt purge -y                                                             \
-         claws-mail                                                           \
-         debian-reference*                                                    \
-         epiphany-browser                                                     \
-         geany                                                                \
-         geany-common                                                         \
-         idle                                                                 \
-         idle3                                                                \
-         nodejs                                                               \
-         nodejs-legacy                                                        \
-         python3-jedi                                                         \
-         python3-thonny                                                       \
-         scratch                                                              \
-         sonic-pi                                                             \
-         *mathematica*                                                        \
-         *game*
+  claws-mail                                                                  \
+  debian-reference*                                                           \
+  epiphany-browser                                                            \
+  geany                                                                       \
+  geany-common                                                                \
+  idle                                                                        \
+  idle3                                                                       \
+  nodejs                                                                      \
+  nodejs-legacy                                                               \
+  python3-jedi                                                                \
+  python3-thonny                                                              \
+  scratch                                                                     \
+  sonic-pi                                                                    \
+  *mathematica*                                                               \
+  *game*
 
 # cleanup
 sudo apt autoremove -y
