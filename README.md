@@ -1,27 +1,26 @@
 sysprep
 =======
 
-my personal bootstrap scripts
+DO NOT FORK, it's my personal bootstrap scripts, may not work on your computer.
 
-
-# Bootstrap Ubuntu 20.04+
+### Bootstrap [Ubuntu Server LTS](https://wiki.ubuntu.com/Releases) (latest version only)
 
     $ ./bootstrap.ubuntu.sh
     $ ./bootstrap.git.preference.sh
 
 
-# Bootstrap Fedora Workstation 33+
+### Bootstrap [Fedora Workstation 39](https://fedoraproject.org/workstation/) (or newer versions)
 
     $ ./bootstrap.fedora.sh
     $ ./bootstrap.git.preference.sh
 
 
-# Bootstrap macOS High Sierra 10.15.0+
+### Bootstrap [macOS Ventura](https://en.wikipedia.org/wiki/MacOS_Ventura) (or newer versions)
 
     $ ./bootstrap.mac.sh
     $ ./bootstrap.git.preference.sh
 
-# Bootstrap raspbian 10+ (raspberry pi 3)
+### Bootstrap [Raspberry Pi OS with Debian 12 (64-bit)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit)
 
     $ ./bootstrap.rspi3.sh
     $ ./bootstrap.git.preference.sh

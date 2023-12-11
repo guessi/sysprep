@@ -2,15 +2,9 @@
 
 set -e
 
-# check os version
-if [ "$(lsb_release -ds | cut -d' ' -f1)" != "Raspbian" ]; then
-  echo "support raspbian only"
-  exit 1
-fi
-
 # check os code name
-if [ "$(lsb_release -sc)" != "bullseye" ] && [ "$(lsb_release -sc)" != "buster" ]; then
-  echo "support bullseye (debian 11), or buster (debian 10) only"
+if [ "$(lsb_release -sc)" != "bookworm" ]; then
+  echo "Debian 12 (Bookworm) is the only supported version"
   exit 1
 fi
 
