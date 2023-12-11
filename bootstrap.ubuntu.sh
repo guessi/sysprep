@@ -17,7 +17,7 @@ else
 fi
 
 DO_INSTALL="${SUDO} apt install -y"
-DO_UPDATE="${SUDO} apt dist-upgrade -y"
+DO_UPGRADE="${SUDO} apt upgrade -y"
 
 # detect current running user
 if [ -n "${SUDO_USER}" ]; then
@@ -150,5 +150,5 @@ echo "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) mai
   ${SUDO} tee /etc/apt/sources.list.d/hashicorp.list
 ${SUDO} apt-get update && ${DO_INSTALL} vagrant
 
-# system update
-${DO_UPDATE}
+# apt upgrade
+${DO_UPGRADE}
