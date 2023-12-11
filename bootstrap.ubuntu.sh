@@ -142,7 +142,7 @@ wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | ${SUDO} a
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | ${SUDO} apt-key add -
 echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib" | \
   ${SUDO} tee /etc/apt/sources.list.d/virtualbox.list
-${DO_INSTALL} virtualbox-6.1
+${DO_INSTALL} virtualbox-7.0
 
 # vagrant
 curl -fsSL https://apt.releases.hashicorp.com/gpg | ${SUDO} apt-key add -
