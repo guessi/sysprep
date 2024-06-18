@@ -1,5 +1,7 @@
 # general
 
+alias docker='finch'
+
 alias cp='cp -i'
 alias df='df -kTh'
 alias diff='colordiff'
@@ -69,16 +71,19 @@ alias kgstsa='kubectl get statefulsets --all-namespaces'
 alias krc='kubectl resource_capacity'
 alias krcp='kubectl resource_capacity -p'
 
-# aws specific
+# helm
 
-alias awsecsls='aws ecs list-clusters'
-alias awseksls='aws eks list-clusters'
+alias hlsa='helm list --all-namespaces'
 
 # eks specific
 
 function get-instance-id-by-node() {
   [ $# -ne 1 ] && return
   kubectl get nodes $1 -o jsonpath='{.spec.providerID}' | cut -d'/' -f5
+}
+
+function ssm-into-ec2-node() {
+  aws ssm start-session --target ${1}
 }
 
 function ssm-into-eks-node() {

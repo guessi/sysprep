@@ -216,11 +216,12 @@ let NERDTreeShowHidden = 1
 " vim-go
 "
 " reference:
+" - https://github.com/fatih/vim-go/wiki/Tutorial
 " - https://github.com/golang/tools/blob/master/gopls/doc/vim.md#vimgo
 let g:go_def_mode='gopls'
-let g:go_fmt_command = "gopls"
 let g:go_info_mode='gopls'
-let g:go_metalinter_command='golangci-lint'
+let g:go_fmt_command = "goimports"
+let g:go_textobj_include_function_doc = 1
 
 " ansible
 let g:ansible_name_highlight = 'b'

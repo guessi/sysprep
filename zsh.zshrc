@@ -2,12 +2,15 @@
 export GOPATH=$HOME/go
 export GOROOT=/usr/local/go
 export GOPROXY=direct
+export GOBIN=$GOPATH/bin
 
 # PATH
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 export PATH="/usr/local/opt/node@20/bin:$PATH"
+export PATH="/usr/local/opt/ruby@3.2/bin:$PATH"
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
 export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
 export PATH="$HOME/.toolbox/bin:$PATH"
