@@ -17,6 +17,8 @@ alias md5='md5 -r'
 alias watch='watch '
 alias tree='tree -aFI .git'
 
+alias vimdiffs='vimdiff -c "set diffopt+=iwhite"'
+
 # python
 
 alias pycodestyle='pycodestyle --ignore=E501'
@@ -83,12 +85,21 @@ function get-instance-id-by-node() {
 }
 
 function ssm-into-ec2-node() {
-  aws ssm start-session --target ${1}
+  local TARGET=${1}
+  local REGION=${2}
+  if [ ${#REGION} -le 0 ]; then
+    REGION=$(aws configure get region)
+  fi
+  aws ssm start-session --target ${TARGET} --region ${REGION}
 }
 
 function ssm-into-eks-node() {
-  local TARGET=$(kubectl get nodes $1 -o jsonpath='{.spec.providerID}' | cut -d'/' -f5)
-  aws ssm start-session --target ${TARGET}
+  local TARGET=$(kubectl get nodes ${1} -o jsonpath='{.spec.providerID}' | cut -d'/' -f5)
+  local REGION=${2}
+  if [ ${#REGION} -le 0 ]; then
+    REGION=$(aws configure get region)
+  fi
+  aws ssm start-session --target ${TARGET} --region ${REGION}
 }
 
 # golang
