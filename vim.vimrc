@@ -76,7 +76,7 @@ autocmd BufNewFile,BufReadPost Dockerfile* set filetype=dockerfile
 " always treat Jenkinsfile as groovy
 autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
-" always treat *.tf{vars,state} as ansible
+" always treat */{playbooks/roles}/*.y[a]ml as ansible
 autocmd BufNewFile,BufReadPost */playbooks/*.yml set filetype=yaml.ansible
 autocmd BufNewFile,BufReadPost */playbooks/*.yaml set filetype=yaml.ansible
 autocmd BufNewFile,BufReadPost */roles/*.yml set filetype=yaml.ansible
