@@ -107,59 +107,59 @@ chmod 0640 "${HOMEDIR}/.ssh/config"
 
 # ensure we are running with latest dnf
 ${DO_UPDATE}                                                                  \
-    dnf                                                                       \
-    dnf-plugins-core                                                          \
-    openssh-clients                                                           \
-    openssh-server
+  dnf                                                                         \
+  dnf-plugins-core                                                            \
+  openssh-clients                                                             \
+  openssh-server
 
 # developer tools
 ${DO_INSTALL}                                                                 \
-    ShellCheck                                                                \
-    ack                                                                       \
-    awscli                                                                    \
-    bash                                                                      \
-    colordiff                                                                 \
-    curl                                                                      \
-    ethtool                                                                   \
-    fping                                                                     \
-    git                                                                       \
-    git-extras                                                                \
-    htop                                                                      \
-    iftop                                                                     \
-    iperf                                                                     \
-    jq                                                                        \
-    keepassxc                                                                 \
-    libcurl                                                                   \
-    meld                                                                      \
-    openssl                                                                   \
-    p7zip                                                                     \
-    p7zip-plugins                                                             \
-    ripgrep                                                                   \
-    ruby-devel                                                                \
-    rubygems                                                                  \
-    tcpdump                                                                   \
-    tig                                                                       \
-    unrar                                                                     \
-    unzip                                                                     \
-    vim                                                                       \
-    wget                                                                      \
-    zsh
+  ShellCheck                                                                  \
+  ack                                                                         \
+  awscli                                                                      \
+  bash                                                                        \
+  colordiff                                                                   \
+  curl                                                                        \
+  ethtool                                                                     \
+  fping                                                                       \
+  git                                                                         \
+  git-extras                                                                  \
+  htop                                                                        \
+  iftop                                                                       \
+  iperf                                                                       \
+  jq                                                                          \
+  keepassxc                                                                   \
+  libcurl                                                                     \
+  meld                                                                        \
+  openssl                                                                     \
+  p7zip                                                                       \
+  p7zip-plugins                                                               \
+  ripgrep                                                                     \
+  ruby-devel                                                                  \
+  rubygems                                                                    \
+  tcpdump                                                                     \
+  tig                                                                         \
+  unrar                                                                       \
+  unzip                                                                       \
+  vim                                                                         \
+  wget                                                                        \
+  zsh
 
 # general setup
 ${DO_INSTALL}                                                                 \
-    hexchat                                                                   \
-    ibus-chewing                                                              \
-    pcmanx-gtk2                                                               \
-    google-noto-sans-cjk-ttc-fonts                                            \
-    google-noto-serif-cjk-ttc-fonts                                           \
-    google-noto-fonts-common                                                  \
-    google-noto-cjk-fonts-common                                              \
-    google-noto-emoji-color-fonts                                             \
-    google-noto-sans-sinhala-fonts                                            \
-    google-droid-sans-fonts                                                   \
-    google-droid-sans-mono-fonts                                              \
-    wqy-microhei-fonts                                                        \
-    wqy-zenhei-fonts
+  hexchat                                                                     \
+  ibus-chewing                                                                \
+  pcmanx-gtk2                                                                 \
+  google-noto-sans-cjk-ttc-fonts                                              \
+  google-noto-serif-cjk-ttc-fonts                                             \
+  google-noto-fonts-common                                                    \
+  google-noto-cjk-fonts-common                                                \
+  google-noto-emoji-color-fonts                                               \
+  google-noto-sans-sinhala-fonts                                              \
+  google-droid-sans-fonts                                                     \
+  google-droid-sans-mono-fonts                                                \
+  wqy-microhei-fonts                                                          \
+  wqy-zenhei-fonts
 
 # create link for git-prompt.sh
 if [ -f /etc/profile.d/git-prompt.sh ] || [ -L /etc/profile.d/git-prompt.sh ]; then
@@ -175,26 +175,26 @@ curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOMEDIR}/.zjump
 
 # gnome toolkits
 ${DO_INSTALL}                                                                 \
-    dconf-editor                                                              \
-    gnome-shell-extension-user-theme                                          \
-    gnome-tweak-tool                                                          \
-    gnome-nettool                                                             \
-    nautilus-open-terminal
+  dconf-editor                                                                \
+  gnome-shell-extension-user-theme                                            \
+  gnome-tweak-tool                                                            \
+  gnome-nettool                                                               \
+  nautilus-open-terminal
 
 gsettings set org.gnome.shell always-show-log-out true
 
 ${DO_INSTALL}                                                                 \
-    alsa-plugins-pulseaudio                                                   \
-    ffmpeg                                                                    \
-    vlc
+  alsa-plugins-pulseaudio                                                     \
+  ffmpeg                                                                      \
+  vlc
 
-${DO_INSTALL}                                                             \
-    gstreamer1                                                            \
-    gstreamer1-plugins-bad-free                                           \
-    gstreamer1-plugins-base                                               \
-    gstreamer1-plugins-good                                               \
-    gstreamer1-plugins-ugly                                               \
-    gstreamer1-plugins-ugly-free
+${DO_INSTALL}                                                                 \
+  gstreamer1                                                                  \
+  gstreamer1-plugins-bad-free                                                 \
+  gstreamer1-plugins-base                                                     \
+  gstreamer1-plugins-good                                                     \
+  gstreamer1-plugins-ugly                                                     \
+  gstreamer1-plugins-ugly-free
 
 # virtualbox
 ${DO_INSTALL} VirtualBox
@@ -209,12 +209,12 @@ ${DO_INSTALL} nautilus-dropbox
 
 # gnome-shell-extension
 ${DO_INSTALL}                                                                 \
-    gnome-shell-extension-caffeine                                            \
-    gnome-shell-extension-do-not-disturb-button                               \
-    gnome-shell-extension-launch-new-instance                                 \
-    gnome-shell-extension-netspeed                                            \
-    gnome-shell-extension-topicons-plus                                       \
-    gnome-shell-extension-user-theme
+  gnome-shell-extension-caffeine                                              \
+  gnome-shell-extension-do-not-disturb-button                                 \
+  gnome-shell-extension-launch-new-instance                                   \
+  gnome-shell-extension-netspeed                                              \
+  gnome-shell-extension-topicons-plus                                         \
+  gnome-shell-extension-user-theme
 
 # font setup for vim-airline
 # reference:

@@ -1,10 +1,11 @@
 # general
 
+alias docker='finch'
+
 alias cp='cp -i'
 alias df='df -kTh'
 alias diff='colordiff'
 alias du='du -kh'
-alias g='git'
 alias gr='git fetch upstream; git rebase upstream/$(git branch --show-current)'
 alias h='history'
 alias ll='ls -l'
@@ -16,9 +17,7 @@ alias md5='md5 -r'
 alias watch='watch '
 alias tree='tree -aFI .git'
 
-# python
-
-alias pycodestyle='pycodestyle --ignore=E501'
+alias vimdiffs='vimdiff -c "set diffopt+=iwhite"'
 
 # kubernetes
 
@@ -33,7 +32,6 @@ fi
 # kubectl
 
 alias k='kubectl'
-alias kc='kubecolor'
 alias kd='kubectl describe'
 alias kg='kubectl get'
 alias kpf='kubectl port-forward'
@@ -44,31 +42,24 @@ alias kgn='kubectl get nodes'
 alias kgnw='kubectl get nodes -o wide'
 alias kgny='kubectl get nodes -o yaml'
 alias kgnj='kubectl get nodes -o json'
-alias kgnf='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/capacityType,karpenter.sh/capacity-type,eks.amazonaws.com/nodegroup'
 alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone -o wide'
 
 alias kgp='kubectl get pods'
 alias kgpw='kubectl get pods -o wide'
 alias kgpy='kubectl get pods -o yaml'
 alias kgpj='kubectl get pods -o json'
-alias kgpa='kubectl get pods -o wide --all-namespaces'
+alias kgpa='kubectl get pods --all-namespaces'
+alias kgpaw='kubectl get pods -o wide --all-namespaces'
 alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'
-
-alias kgd='kubectl get deployment'
-alias kgds='kubectl get daemonsets'
-alias kgi='kubectl get ingress'
-alias kgs='kubectl get service'
-alias kgsts='kubectl get statefulsets'
 
 # kubectl (plugins required)
 
 alias krc='kubectl resource_capacity'
 alias krcp='kubectl resource_capacity -p'
 
-# aws specific
+# helm
 
-alias awsecsls='aws ecs list-clusters'
-alias awseksls='aws eks list-clusters'
+alias hlsa='helm list --all-namespaces'
 
 # eks specific
 
@@ -77,9 +68,22 @@ function get-instance-id-by-node() {
   kubectl get nodes $1 -o jsonpath='{.spec.providerID}' | cut -d'/' -f5
 }
 
+function ssm-into-ec2-node() {
+  local TARGET=${1}
+  local REGION=${2}
+  if [ ${#REGION} -le 0 ]; then
+    REGION=$(aws configure get region)
+  fi
+  aws ssm start-session --target ${TARGET} --region ${REGION}
+}
+
 function ssm-into-eks-node() {
-local TARGET=$(get-instance-id-by-eks-node-name $1)
-  aws ssm start-session --target ${TARGET}
+  local TARGET=$(kubectl get nodes ${1} -o jsonpath='{.spec.providerID}' | cut -d'/' -f5)
+  local REGION=${2}
+  if [ ${#REGION} -le 0 ]; then
+    REGION=$(aws configure get region)
+  fi
+  aws ssm start-session --target ${TARGET} --region ${REGION}
 }
 
 # golang
@@ -187,6 +191,6 @@ function secure_remove() {
   shred -u -n 9 $@
 }
 
-function ip() {
+function ipinfo() {
   curl -s ipconfig.io/json | jq .
 }
