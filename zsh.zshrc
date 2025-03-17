@@ -17,6 +17,7 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
 export PATH="$HOME/.toolbox/bin:$PATH"
+export PATH="$(gem environment gemdir)/bin:$PATH"
 
 # locale
 export LC_ALL=en_US.UTF-8
@@ -69,8 +70,8 @@ RPROMPT=''
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 # customized aliases
 if [ -f ~/.zshrc.aliases ]; then
