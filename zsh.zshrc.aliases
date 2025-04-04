@@ -91,8 +91,9 @@ function ssm-into-eks-node() {
 function go-setup() {
   local GOVERSION=$1
   local FORCE=$2
-  local PKG_REMOTE_PATH="https://go.dev/dl/go${GOVERSION}.darwin-amd64.tar.gz"
-  local PKG_OUTPUT_PATH="/tmp/go${GOVERSION}.darwin-amd64.tar.gz"
+  local PKG_NAME="go${GOVERSION}.$(uname -o | tr '[A-Z]' '[a-z]')-$(uname -m).tar.gz"
+  local PKG_REMOTE_PATH="https://go.dev/dl/${PKG_NAME}"
+  local PKG_OUTPUT_PATH="/tmp/${PKG_NAME}"
   local PKG_EXTRACT_PATH="/tmp/go-${GOVERSION}"
   local PKG_TARGET_PATH="/usr/local/go-${GOVERSION}"
 
@@ -180,6 +181,7 @@ function cleanup_history() {
   rm -rf ~/.terraform.d/checkpoint_*
   rm -rf ~/.wget-hsts
   rm -rf ~/.z
+  rm -rf ~/.zcompdump
   rm -rf ~/.zsh_history
   rm -rf ~/.zshrc.bak
   rm -rf ~/.zshrc.zwc
