@@ -198,6 +198,7 @@ function cleanup_history() {
   rm -rf ~/.zshrc.zwc
 
   find ~/.vagrant.d/boxes -type d -exec rmdir {} \; 2>/dev/null
+  find ~/ -type f -maxdepth 3 -name .DS_Store -delete 2>/dev/null
 }
 
 function secure_remove() {
@@ -205,5 +206,5 @@ function secure_remove() {
 }
 
 function ipinfo() {
-  curl -s ipconfig.io/json | jq .
+  curl -sSL https://ifconfig.io/all.json | jq .
 }
