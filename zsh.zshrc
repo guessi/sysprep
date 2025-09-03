@@ -1,6 +1,5 @@
 # GOPATH
 export GOPATH=$HOME/go
-export GOROOT=/usr/local/go
 export GOPROXY=direct
 export GOBIN=$GOPATH/bin
 
@@ -14,7 +13,7 @@ export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
 export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
+export PATH="/usr/local/go/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/.krew/bin:$PATH"
 export PATH="$HOME/.toolbox/bin:$PATH"
 export PATH="$(gem environment gemdir)/bin:$PATH"
