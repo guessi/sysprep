@@ -1,12 +1,9 @@
 # general
 
-alias docker='finch'
-
 alias cp='cp -i'
 alias df='df -kTh'
 alias diff='colordiff'
 alias du='du -kh'
-alias gr='git fetch upstream; git rebase upstream/$(git branch --show-current)'
 alias h='history'
 alias ll='ls -l'
 alias ls='ls -F'
@@ -17,6 +14,14 @@ alias md5='md5 -r'
 alias watch='watch '
 alias tree='tree -aFI .git'
 
+# docker
+alias docker='finch'
+
+# git
+alias gc='git config --list --show-origin'
+alias gr='git fetch upstream; git rebase upstream/$(git branch --show-current)'
+
+# vim
 alias vimdiffs='vimdiff -c "set diffopt+=iwhite"'
 
 # kubernetes
@@ -34,15 +39,12 @@ fi
 alias k='kubectl'
 alias kd='kubectl describe'
 alias kg='kubectl get'
-alias kpf='kubectl port-forward'
-alias krm='kubectl delete'
-alias kex='kubectl exec -i -t'
 
 alias kgn='kubectl get nodes'
 alias kgnw='kubectl get nodes -o wide'
 alias kgny='kubectl get nodes -o yaml'
 alias kgnj='kubectl get nodes -o json'
-alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone -o wide'
+alias kgna='kubectl get nodes -o wide --label-columns="node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/compute-type"'
 
 alias kgp='kubectl get pods'
 alias kgpw='kubectl get pods -o wide'
@@ -51,15 +53,6 @@ alias kgpj='kubectl get pods -o json'
 alias kgpa='kubectl get pods --all-namespaces'
 alias kgpaw='kubectl get pods -o wide --all-namespaces'
 alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'
-
-# kubectl (plugins required)
-
-alias krc='kubectl resource_capacity'
-alias krcp='kubectl resource_capacity -p'
-
-# helm
-
-alias hlsa='helm list --all-namespaces'
 
 # eks specific
 
@@ -71,10 +64,21 @@ function get-instance-id-by-node() {
 function ssm-into-ec2-node() {
   local TARGET=${1}
   local REGION=${2}
+  local EC2_ID=""
+
   if [ ${#REGION} -le 0 ]; then
     REGION=$(aws configure get region)
   fi
-  aws ssm start-session --target ${TARGET} --region ${REGION}
+
+  if [[ ${TARGET} =~ ^i-[0-9a-f]{6,17} ]]; then
+    EC2_ID="${TARGET}"
+  else
+    EC2_ID=$(aws ec2 describe-instances \
+      --query "Reservations[0].Instances[0].InstanceId" --output "text" \
+      --filters "Name=private-dns-name,Values=${privateDnsName}" --region ${REGION})
+  fi
+
+  aws ssm start-session --target ${EC2_ID} --region ${REGION}
 }
 
 function ssm-into-eks-node() {
@@ -84,6 +88,23 @@ function ssm-into-eks-node() {
     REGION=$(aws configure get region)
   fi
   aws ssm start-session --target ${TARGET} --region ${REGION}
+}
+
+function ssm-proxy-to-ec2-node() {
+  local TARGET=${1}
+  local REGION=${2}
+  local EC2_ID=""
+
+  if [ ${#REGION} -le 0 ]; then
+    REGION=$(aws configure get region)
+  fi
+
+  if [[ ${TARGET} =~ ^i-[0-9a-f]{6,17} ]]; then
+    aws ssm start-session --target ${TARGET} \
+      --document-name AWS-StartPortForwardingSession \
+      --parameters '{"portNumber":["22"],"localPortNumber":["2222"]}' \
+      --region ${REGION}
+  fi
 }
 
 # golang

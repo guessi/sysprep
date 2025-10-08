@@ -75,11 +75,12 @@ setup_extension() {
   echo
 }
 
+setupconfig bash.bash_profile   "${HOMEDIR}/.bash_profile"
 setupconfig bash.bashrc         "${HOMEDIR}/.bashrc"
 setupconfig bash.bashrc.aliases "${HOMEDIR}/.bashrc.aliases"
-setupconfig bash.bash_profile   "${HOMEDIR}/.bash_profile"
-setupconfig vim.vimrc           "${HOMEDIR}/.vimrc"
+setupconfig kubectl.kuberc      "${HOMEDIR}/.kube/kuberc"
 setupconfig tig.tigrc           "${HOMEDIR}/.tigrc"
+setupconfig vim.vimrc           "${HOMEDIR}/.vimrc"
 setupconfig zsh.zshrc           "${HOMEDIR}/.zshrc"
 setupconfig zsh.zshrc.aliases   "${HOMEDIR}/.zshrc.aliases"
 
