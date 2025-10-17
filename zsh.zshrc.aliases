@@ -30,10 +30,6 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-if [ $commands[helm] ]; then
-  source <(helm completion zsh)
-fi
-
 # kubectl
 
 alias k='kubectl'
@@ -42,14 +38,10 @@ alias kg='kubectl get'
 
 alias kgn='kubectl get nodes'
 alias kgnw='kubectl get nodes -o wide'
-alias kgny='kubectl get nodes -o yaml'
-alias kgnj='kubectl get nodes -o json'
-alias kgna='kubectl get nodes -o wide --label-columns="node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/compute-type"'
+alias kgna='kubectl get nodes -o wide --label-columns="node.kubernetes.io/instance-type,topology.kubernetes.io/zone"'
 
 alias kgp='kubectl get pods'
 alias kgpw='kubectl get pods -o wide'
-alias kgpy='kubectl get pods -o yaml'
-alias kgpj='kubectl get pods -o json'
 alias kgpa='kubectl get pods --all-namespaces'
 alias kgpaw='kubectl get pods -o wide --all-namespaces'
 alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'

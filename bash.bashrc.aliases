@@ -27,53 +27,21 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-if [ $commands[helm] ]; then
-  source <(helm completion zsh)
-fi
-
 # kubectl
 
 alias k='kubectl'
 alias kd='kubectl describe'
 alias kg='kubectl get'
-alias kpf='kubectl port-forward'
-alias krm='kubectl delete'
-alias kex='kubectl exec -i -t'
 
 alias kgn='kubectl get nodes'
 alias kgnw='kubectl get nodes -o wide'
-alias kgny='kubectl get nodes -o yaml'
-alias kgnj='kubectl get nodes -o json'
-alias kgnf='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,karpenter.sh/capacity-type,karpenter.sh/provisioner-name'
-alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone -o wide'
+alias kgna='kubectl get nodes -o wide --label-columns="node.kubernetes.io/instance-type,topology.kubernetes.io/zone"'
 
 alias kgp='kubectl get pods'
 alias kgpw='kubectl get pods -o wide'
-alias kgpy='kubectl get pods -o yaml'
-alias kgpj='kubectl get pods -o json'
 alias kgpa='kubectl get pods --all-namespaces'
 alias kgpaw='kubectl get pods -o wide --all-namespaces'
 alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'
-
-alias kgd='kubectl get deployment'
-alias kgda='kubectl get deployment --all-namespaces'
-alias kgds='kubectl get daemonsets'
-alias kgdsa='kubectl get daemonsets --all-namespaces'
-alias kgi='kubectl get ingress'
-alias kgia='kubectl get ingress --all-namespaces'
-alias kgs='kubectl get service'
-alias kgsa='kubectl get service --all-namespaces'
-alias kgsts='kubectl get statefulsets'
-alias kgstsa='kubectl get statefulsets --all-namespaces'
-
-# kubectl (plugins required)
-
-alias krc='kubectl resource_capacity'
-alias krcp='kubectl resource_capacity -p'
-
-# helm
-
-alias hlsa='helm list --all-namespaces'
 
 # eks specific
 
