@@ -1,10 +1,11 @@
 # general
 
+alias docker='finch'
+
 alias cp='cp -i'
 alias df='df -kTh'
 alias diff='colordiff'
 alias du='du -kh'
-alias g='git'
 alias gr='git fetch upstream; git rebase upstream/$(git branch --show-current)'
 alias h='history'
 alias ll='ls -l'
@@ -26,44 +27,37 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-if [ $commands[helm] ]; then
-  source <(helm completion zsh)
-fi
-
 # kubectl
 
 alias k='kubectl'
-alias kc='kubecolor'
 alias kd='kubectl describe'
 alias kg='kubectl get'
-alias kpf='kubectl port-forward'
-alias krm='kubectl delete'
-alias kex='kubectl exec -i -t'
 
 alias kgn='kubectl get nodes'
 alias kgnw='kubectl get nodes -o wide'
-alias kgny='kubectl get nodes -o yaml'
-alias kgnj='kubectl get nodes -o json'
-alias kgnf='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/capacityType,karpenter.sh/capacity-type,eks.amazonaws.com/nodegroup'
-alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone -o wide'
+alias kgna='kubectl get nodes -o wide --label-columns="node.kubernetes.io/instance-type,topology.kubernetes.io/zone"'
 
 alias kgp='kubectl get pods'
 alias kgpw='kubectl get pods -o wide'
-alias kgpy='kubectl get pods -o yaml'
-alias kgpj='kubectl get pods -o json'
-alias kgpa='kubectl get pods -o wide --all-namespaces'
+alias kgpa='kubectl get pods --all-namespaces'
+alias kgpaw='kubectl get pods -o wide --all-namespaces'
 alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'
 
-alias kgd='kubectl get deployment'
-alias kgds='kubectl get daemonsets'
-alias kgi='kubectl get ingress'
-alias kgs='kubectl get service'
-alias kgsts='kubectl get statefulsets'
+# eks specific
 
-# kubectl (plugins required)
+function get-instance-id-by-node() {
+  [ $# -ne 1 ] && return
+  kubectl get nodes $1 -o jsonpath='{.spec.providerID}' | cut -d'/' -f5
+}
 
-alias krc='kubectl resource_capacity'
-alias krcp='kubectl resource_capacity -p'
+function ssm-into-ec2-node() {
+  aws ssm start-session --target ${1}
+}
+
+function ssm-into-eks-node() {
+  local TARGET=$(kubectl get nodes $1 -o jsonpath='{.spec.providerID}' | cut -d'/' -f5)
+  aws ssm start-session --target ${TARGET}
+}
 
 # golang
 
@@ -130,12 +124,6 @@ function go-switch() {
 
 # misc
 
-function random_password() {
-  bw generate -ulns --length 16
-  bw generate -uln  --length 16
-  bw generate --words 5 -p
-}
-
 function ssl_certs_check() {
   echo | openssl s_client -servername $1 -connect $1:443 2>/dev/null | openssl x509 -noout -dates
 }
@@ -170,6 +158,6 @@ function secure_remove() {
   shred -u -n 9 $@
 }
 
-function ip() {
+function ipinfo() {
   curl -s ipconfig.io/json | jq .
 }

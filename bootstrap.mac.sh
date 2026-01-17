@@ -40,11 +40,12 @@ setupconfig() {
   echo "Done"
 }
 
+setupconfig bash.bash_profile   "${HOMEDIR}/.bash_profile"
 setupconfig bash.bashrc         "${HOMEDIR}/.bashrc"
 setupconfig bash.bashrc.aliases "${HOMEDIR}/.bashrc.aliases"
-setupconfig bash.bash_profile   "${HOMEDIR}/.bash_profile"
-setupconfig vim.vimrc           "${HOMEDIR}/.vimrc"
+setupconfig kubectl.kuberc      "${HOMEDIR}/.kube/kuberc"
 setupconfig tig.tigrc           "${HOMEDIR}/.tigrc"
+setupconfig vim.vimrc           "${HOMEDIR}/.vimrc"
 setupconfig zsh.zshrc           "${HOMEDIR}/.zshrc"
 setupconfig zsh.zshrc.aliases   "${HOMEDIR}/.zshrc.aliases"
 
@@ -59,26 +60,20 @@ if [ -f "${HOMEDIR}/.ssh/config" ]; then
 fi
 cat > "${HOMEDIR}/.ssh/config" <<-EOF
 Host *
-  StrictHostKeyChecking no
-  UserKnownHostsFile /dev/null
   ServerAliveInterval 60
-  # UseRoaming no
   UseKeychain yes
-  LogLevel quiet
+  LogLevel ERROR
+  # StrictHostKeyChecking no
+  # UserKnownHostsFile /dev/null
 EOF
 cat "${HOMEDIR}/.ssh/config.bak" | tee -a "${HOMEDIR}/.ssh/config" >/dev/null
 sed -i -e '2,$s/^Host /\'$'\nHost /g' "${HOMEDIR}/.ssh/config"
 chmod 0640 "${HOMEDIR}/.ssh/config"
 
-if [ -z "$(which ruby)" ]; then
-  show_stage "ruby: command not found, aborting"
-  exit 1
-fi
-
 show_stage "Checking for Homebrew existence"
 if [ -z "$(which brew)" ]; then
-  HOMEBREW="https://raw.githubusercontent.com/Homebrew/install/master/install"
-  ruby -e "$(curl -fsSL ${HOMEBREW})"
+  show_stage "Installing Homebrew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 show_stage "Cheking updates for Homebrew"

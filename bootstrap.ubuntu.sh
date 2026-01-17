@@ -5,10 +5,24 @@ if [ "$(whoami)" = "root" ]; then
   exit 1
 fi
 
+# Install lsb-release if missing
+if ! command -v lsb_release >/dev/null 2>&1; then
+  sudo apt update
+  sudo apt install -y lsb-release
+fi
+
 if [ "$(lsb_release -is)" != "Ubuntu" ]; then
   echo "Sorry, this script was written for Ubuntu only"
   exit 1
 fi
+
+# Install required tools if missing
+for tool in awk diff; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "Error: Required tool '$tool' not found"
+    exit 1
+  fi
+done
 
 if [ "$(whoami)" != "root" ]; then
   SUDO='sudo -E'
@@ -17,7 +31,7 @@ else
 fi
 
 DO_INSTALL="${SUDO} apt install -y"
-DO_UPDATE="${SUDO} apt dist-upgrade -y"
+DO_UPGRADE="${SUDO} apt upgrade -y"
 
 # detect current running user
 if [ -n "${SUDO_USER}" ]; then
@@ -38,11 +52,12 @@ setupconfig() {
   cp "${1}" "${2}"
 }
 
+setupconfig bash.bash_profile   "${HOMEDIR}/.bash_profile"
 setupconfig bash.bashrc         "${HOMEDIR}/.bashrc"
 setupconfig bash.bashrc.aliases "${HOMEDIR}/.bashrc.aliases"
-setupconfig bash.bash_profile   "${HOMEDIR}/.bash_profile"
-setupconfig vim.vimrc           "${HOMEDIR}/.vimrc"
+setupconfig kubectl.kuberc      "${HOMEDIR}/.kube/kuberc"
 setupconfig tig.tigrc           "${HOMEDIR}/.tigrc"
+setupconfig vim.vimrc           "${HOMEDIR}/.vimrc"
 setupconfig zsh.zshrc           "${HOMEDIR}/.zshrc"
 setupconfig zsh.zshrc.aliases   "${HOMEDIR}/.zshrc.aliases"
 
@@ -57,12 +72,10 @@ if [ -f "${HOMEDIR}/.ssh/config" ]; then
 fi
 cat > "${HOMEDIR}/.ssh/config" <<-EOF
 Host *
-  StrictHostKeyChecking no
-  UserKnownHostsFile /dev/null
   ServerAliveInterval 60
-  UseRoaming no
-  # UseKeychain yes
-  LogLevel quiet
+  LogLevel ERROR
+  # StrictHostKeyChecking no
+  # UserKnownHostsFile /dev/null
 EOF
 cat "${HOMEDIR}/.ssh/config.bak" | tee -a "${HOMEDIR}/.ssh/config" >/dev/null
 sed -i -e '2,$s/^Host /\nHost /g' "${HOMEDIR}/.ssh/config"
@@ -108,12 +121,6 @@ curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOMEDIR}/.zjump
 # general tools
 ${DO_INSTALL} p7zip p7zip-full unrar unzip
 
-# bbs
-${DO_INSTALL} pcmanx-gtk2
-
-# irc
-${DO_INSTALL} hexchat
-
 # chinese fonts
 ${DO_INSTALL} fonts-wqy-microhei fonts-wqy-zenhei
 
@@ -129,7 +136,7 @@ ${DO_INSTALL} gnome-shell-extension-caffeine
 ${DO_INSTALL} ruby ruby-dev rubygems-integration
 
 # multimedia
-${DO_INSTALL} ffmpeg flashplugin-installer \
+${DO_INSTALL} ffmpeg \
   gstreamer1.0-plugins-bad \
   gstreamer1.0-plugins-good \
   gstreamer1.0-plugins-ugly
@@ -137,18 +144,5 @@ ${DO_INSTALL} ffmpeg flashplugin-installer \
 # vlc
 ${DO_INSTALL} vlc
 
-# virtualbox
-wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | ${SUDO} apt-key add -
-wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | ${SUDO} apt-key add -
-echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib" | \
-  ${SUDO} tee /etc/apt/sources.list.d/virtualbox.list
-${DO_INSTALL} virtualbox-6.1
-
-# vagrant
-curl -fsSL https://apt.releases.hashicorp.com/gpg | ${SUDO} apt-key add -
-echo "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-  ${SUDO} tee /etc/apt/sources.list.d/hashicorp.list
-${SUDO} apt-get update && ${DO_INSTALL} vagrant
-
-# system update
-${DO_UPDATE}
+# apt upgrade
+${DO_UPGRADE}

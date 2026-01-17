@@ -2,15 +2,13 @@
 
 set -e
 
-# check os version
-if [ "$(lsb_release -ds | cut -d' ' -f1)" != "Raspbian" ]; then
-  echo "support raspbian only"
-  exit 1
-fi
+# verified with clean raspberry-pi-os (debian 12)
+# - https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit
+# - https://www.raspberrypi.com/documentation/computers/os.html
 
 # check os code name
-if [ "$(lsb_release -sc)" != "bullseye" ] && [ "$(lsb_release -sc)" != "buster" ]; then
-  echo "support bullseye (debian 11), or buster (debian 10) only"
+if [ "$(lsb_release -sc)" != "bookworm" ]; then
+  echo "Debian 12 (Bookworm) is the only supported version"
   exit 1
 fi
 
@@ -20,76 +18,44 @@ if [ $(id -u) -ne 1000 ]; then
   exit 1
 fi
 
-# speed up installation
-if [ ! -f "/etc/apt/sources.list.orig" ]; then
-  sudo cp -vf /etc/apt/sources.list \
-              /etc/apt/sources.list.orig
-fi
-echo "deb http://free.nchc.org.tw/raspbian/raspbian/ $(lsb_release -sc) main contrib non-free rpi" | sudo tee /etc/apt/sources.list
-
-if [ ! -f "/etc/apt/sources.list.d/raspi.list.orig" ]; then
-  sudo cp -vf /etc/apt/sources.list.d/raspi.list \
-              /etc/apt/sources.list.d/raspi.list.orig
-fi
-sudo sed -i -e 's/archive.raspberrypi.org/free.nchc.org.tw/g' /etc/apt/sources.list.d/raspi.list
-
 # system upgrade
 sudo apt update
 sudo apt upgrade -y
 
 # better working environment
-sudo apt install -y                                                           \
-         colordiff                                                            \
-         git-extras                                                           \
-         jq                                                                   \
-         meld                                                                 \
-         ripgrep                                                              \
-         scim-chewing                                                         \
-         tig                                                                  \
-         ttf-wqy-microhei                                                     \
-         ttf-wqy-zenhei                                                       \
-         vim                                                                  \
-         vlc
+sudo apt install --no-install-recommends -y                                   \
+  colordiff                                                                   \
+  fonts-wqy-microhei                                                          \
+  fonts-wqy-zenhei                                                            \
+  git-extras                                                                  \
+  jq                                                                          \
+  ripgrep                                                                     \
+  tig                                                                         \
+  vim                                                                         \
+  vlc
 
 # remove unwanted default packages
 sudo apt purge -y                                                             \
-         claws-mail                                                           \
-         debian-reference*                                                    \
-         epiphany-browser                                                     \
-         geany                                                                \
-         geany-common                                                         \
-         idle                                                                 \
-         idle3                                                                \
-         nodejs                                                               \
-         nodejs-legacy                                                        \
-         python3-jedi                                                         \
-         python3-thonny                                                       \
-         scratch                                                              \
-         sonic-pi                                                             \
-         *mathematica*                                                        \
-         *game*
+  debian-reference-common                                                     \
+  debian-reference-en
 
 # cleanup
 sudo apt autoremove -y
 
-# setup z jump
-curl https://raw.githubusercontent.com/rupa/z/master/z.sh > ${HOME}/.zjump
-
 # remove unwanted menu items
-sudo rm -rf /usr/share/raspi-ui-overrides/applications/debian-reference-common.desktop
-sudo rm -rf /usr/share/raspi-ui-overrides/applications/magpi.desktop
-sudo rm -rf /usr/share/raspi-ui-overrides/applications/python-games.desktop
-sudo rm -rf /usr/share/raspi-ui-overrides/applications/raspi_resources.desktop
+sudo rm -vf /usr/share/raspi-ui-overrides/applications/debian-reference-common.desktop
+sudo rm -vf /usr/share/raspi-ui-overrides/applications/magpi.desktop
+sudo rm -vf /usr/share/raspi-ui-overrides/applications/raspi_getstart.desktop
+sudo rm -vf /usr/share/raspi-ui-overrides/applications/raspi_help.desktop
+sudo rm -vf /usr/share/raspi-ui-overrides/applications/raspi_resources.desktop
 
 # unhide useful menu items
 sudo sed -i '/^NoDisplay/s/true/false/' /usr/share/raspi-ui-overrides/applications/htop.desktop
 
-# cleanup unwanted contents after packages removal
-rm -rf ~/.config/geany/
-rm -rf ~/.config/sonic-pi.net/
-rm -rf ~/.thonny/
-rm -rf ~/Documents/*
-rm -rf ~/python_games
-
 # cleanup default directories if not empty
-rmdir ~/Documents ~/Downloads ~/Music ~/Pictures ~/Public ~/Templates ~/Videos 2>/dev/null || true
+rmdir -v ~/{Documents,Downloads,Music,Pictures,Public,Templates,Videos} 2>/dev/null || true
+
+# locale setup
+sudo debconf-set-selections <<< 'locales locales/default_environment_locale select en_US.UTF-8'
+sudo dpkg-reconfigure --frontend=noninteractive locales
+sudo update-locale

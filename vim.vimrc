@@ -76,7 +76,7 @@ autocmd BufNewFile,BufReadPost Dockerfile* set filetype=dockerfile
 " always treat Jenkinsfile as groovy
 autocmd BufNewFile,BufReadPost Jenkinsfile* set filetype=groovy
 
-" always treat *.tf{vars,state} as ansible
+" always treat */{playbooks/roles}/*.y[a]ml as ansible
 autocmd BufNewFile,BufReadPost */playbooks/*.yml set filetype=yaml.ansible
 autocmd BufNewFile,BufReadPost */playbooks/*.yaml set filetype=yaml.ansible
 autocmd BufNewFile,BufReadPost */roles/*.yml set filetype=yaml.ansible
@@ -153,6 +153,7 @@ call vundle#begin()
   Plugin 'plasticboy/vim-markdown'
   Plugin 'vim-ruby/vim-ruby'
   Plugin 'google/vim-jsonnet'
+  Plugin 'rust-lang/rust.vim'
 call vundle#end()
 
 set pastetoggle=<F9>
@@ -177,6 +178,9 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 nmap <silent> gb :Git blame<CR>
+
+" format json with "python -m json.tool"
+nmap =j :%!python -m json.tool<CR>
 
 " gs: toggle for turn ignore whitespace on/off for vimdiff
 if &diff
@@ -212,11 +216,12 @@ let NERDTreeShowHidden = 1
 " vim-go
 "
 " reference:
+" - https://github.com/fatih/vim-go/wiki/Tutorial
 " - https://github.com/golang/tools/blob/master/gopls/doc/vim.md#vimgo
 let g:go_def_mode='gopls'
-let g:go_fmt_command = "gopls"
 let g:go_info_mode='gopls'
-let g:go_metalinter_command='golangci-lint'
+let g:go_fmt_command = "goimports"
+let g:go_textobj_include_function_doc = 1
 
 " ansible
 let g:ansible_name_highlight = 'b'

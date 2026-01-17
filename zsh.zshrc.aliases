@@ -4,8 +4,6 @@ alias cp='cp -i'
 alias df='df -kTh'
 alias diff='colordiff'
 alias du='du -kh'
-alias g='git'
-alias gr='git fetch upstream; git rebase upstream/$(git branch --show-current)'
 alias h='history'
 alias ll='ls -l'
 alias ls='ls -F'
@@ -16,9 +14,15 @@ alias md5='md5 -r'
 alias watch='watch '
 alias tree='tree -aFI .git'
 
-# python
+# docker
+alias docker='finch'
 
-alias pycodestyle='pycodestyle --ignore=E501'
+# git
+alias gc='git config --list --show-origin'
+alias gr='git fetch upstream; git rebase upstream/$(git branch --show-current)'
+
+# vim
+alias vimdiffs='vimdiff -c "set diffopt+=iwhite"'
 
 # kubernetes
 
@@ -26,60 +30,94 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-if [ $commands[helm] ]; then
-  source <(helm completion zsh)
-fi
-
 # kubectl
 
 alias k='kubectl'
-alias kc='kubecolor'
 alias kd='kubectl describe'
 alias kg='kubectl get'
-alias kpf='kubectl port-forward'
-alias krm='kubectl delete'
-alias kex='kubectl exec -i -t'
 
 alias kgn='kubectl get nodes'
 alias kgnw='kubectl get nodes -o wide'
-alias kgny='kubectl get nodes -o yaml'
-alias kgnj='kubectl get nodes -o json'
-alias kgnf='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone,eks.amazonaws.com/capacityType,karpenter.sh/capacity-type,eks.amazonaws.com/nodegroup'
-alias kgna='kubectl get nodes --label-columns=node.kubernetes.io/instance-type,topology.kubernetes.io/zone -o wide'
+alias kgna='kubectl get nodes -o wide --label-columns="node.kubernetes.io/instance-type,topology.kubernetes.io/zone"'
 
 alias kgp='kubectl get pods'
 alias kgpw='kubectl get pods -o wide'
-alias kgpy='kubectl get pods -o yaml'
-alias kgpj='kubectl get pods -o json'
-alias kgpa='kubectl get pods -o wide --all-namespaces'
+alias kgpa='kubectl get pods --all-namespaces'
+alias kgpaw='kubectl get pods -o wide --all-namespaces'
 alias kgpas='kubectl get pods -o wide --all-namespaces --sort-by spec.nodeName'
 
-alias kgd='kubectl get deployment'
-alias kgds='kubectl get daemonsets'
-alias kgi='kubectl get ingress'
-alias kgs='kubectl get service'
-alias kgsts='kubectl get statefulsets'
-
-# kubectl (plugins required)
-
-alias krc='kubectl resource_capacity'
-alias krcp='kubectl resource_capacity -p'
-
-# aws specific
-
-alias awsecsls='aws ecs list-clusters'
-alias awseksls='aws eks list-clusters'
-
 # eks specific
+
+function cleanup-legacy-oidc-providers() {
+  if [ ${#1} -le 0 ]; then
+    echo "No CLUSTER_NAME define"
+    return
+  fi
+
+  if [ ${#2} -le 0 ]; then
+    echo "No CLUSTER_REGION define"
+    return
+  fi
+
+  local CLUSTER_NAME=${1}
+  local CLUSTER_REGION=${2}
+  local CLUSTER_ID=$(aws eks describe-cluster --name "${CLUSTER_NAME}" --query "cluster.identity.oidc.issuer" --region ${CLUSTER_REGION} --output "text" | cut -d"/" -f5)
+
+  echo "Cleaning up OIDC Providers other than ${CLUSTER_NAME} under ${CLUSTER_REGION}"
+  aws iam list-open-id-connect-providers --output json --query 'OpenIDConnectProviderList[*]' --region "${CLUSTER_REGION}" | \
+    jq '.[] | select(.Arn | endswith("'${CLUSTER_ID}'") | not) | .Arn' | \
+    xargs -n 1 aws iam delete-open-id-connect-provider --region "${CLUSTER_REGION}" --open-id-connect-provider-arn
+}
 
 function get-instance-id-by-node() {
   [ $# -ne 1 ] && return
   kubectl get nodes $1 -o jsonpath='{.spec.providerID}' | cut -d'/' -f5
 }
 
+function ssm-into-ec2-node() {
+  local TARGET=${1}
+  local REGION=${2}
+  local EC2_ID=""
+
+  if [ ${#REGION} -le 0 ]; then
+    REGION=$(aws configure get region)
+  fi
+
+  if [[ ${TARGET} =~ ^i-[0-9a-f]{6,17} ]]; then
+    EC2_ID="${TARGET}"
+  else
+    EC2_ID=$(aws ec2 describe-instances \
+      --query "Reservations[0].Instances[0].InstanceId" --output "text" \
+      --filters "Name=private-dns-name,Values=${privateDnsName}" --region ${REGION})
+  fi
+
+  aws ssm start-session --target ${EC2_ID} --region ${REGION}
+}
+
 function ssm-into-eks-node() {
-local TARGET=$(get-instance-id-by-eks-node-name $1)
-  aws ssm start-session --target ${TARGET}
+  local TARGET=$(kubectl get nodes ${1} -o jsonpath='{.spec.providerID}' | cut -d'/' -f5)
+  local REGION=${2}
+  if [ ${#REGION} -le 0 ]; then
+    REGION=$(aws configure get region)
+  fi
+  aws ssm start-session --target ${TARGET} --region ${REGION}
+}
+
+function ssm-proxy-to-ec2-node() {
+  local TARGET=${1}
+  local REGION=${2}
+  local EC2_ID=""
+
+  if [ ${#REGION} -le 0 ]; then
+    REGION=$(aws configure get region)
+  fi
+
+  if [[ ${TARGET} =~ ^i-[0-9a-f]{6,17} ]]; then
+    aws ssm start-session --target ${TARGET} \
+      --document-name AWS-StartPortForwardingSession \
+      --parameters '{"portNumber":["22"],"localPortNumber":["2222"]}' \
+      --region ${REGION}
+  fi
 }
 
 # golang
@@ -87,8 +125,9 @@ local TARGET=$(get-instance-id-by-eks-node-name $1)
 function go-setup() {
   local GOVERSION=$1
   local FORCE=$2
-  local PKG_REMOTE_PATH="https://go.dev/dl/go${GOVERSION}.darwin-amd64.tar.gz"
-  local PKG_OUTPUT_PATH="/tmp/go${GOVERSION}.darwin-amd64.tar.gz"
+  local PKG_NAME="go${GOVERSION}.$(uname -o | tr '[A-Z]' '[a-z]')-$(uname -m).tar.gz"
+  local PKG_REMOTE_PATH="https://go.dev/dl/${PKG_NAME}"
+  local PKG_OUTPUT_PATH="/tmp/${PKG_NAME}"
   local PKG_EXTRACT_PATH="/tmp/go-${GOVERSION}"
   local PKG_TARGET_PATH="/usr/local/go-${GOVERSION}"
 
@@ -147,10 +186,15 @@ function go-switch() {
 
 # misc
 
-function random_password() {
-  bw generate -ulns --length 16
-  bw generate -uln  --length 16
-  bw generate --words 5 -p
+function ppcsv() {
+  mlr --icsv --opprint cat $1
+}
+
+function brewuu() {
+  brew update
+  brew upgrade
+  brew cu --all
+  brew cleanup --prune=all
 }
 
 function ssl_certs_check() {
@@ -176,17 +220,24 @@ function cleanup_history() {
   rm -rf ~/.terraform.d/checkpoint_*
   rm -rf ~/.wget-hsts
   rm -rf ~/.z
+  rm -rf ~/.zcompdump
   rm -rf ~/.zsh_history
   rm -rf ~/.zshrc.bak
   rm -rf ~/.zshrc.zwc
 
+  rm -rf ~/.aws/amazonq/cache
+  rm -rf ~/.aws/amazonq/history
+  rm -rf ~/.aws/login/cache
+  rm -rf ~/.aws/sso/cache
+
   find ~/.vagrant.d/boxes -type d -exec rmdir {} \; 2>/dev/null
+  find ~/ -type f -maxdepth 3 -name .DS_Store -delete 2>/dev/null
 }
 
 function secure_remove() {
   shred -u -n 9 $@
 }
 
-function ip() {
-  curl -s ipconfig.io/json | jq .
+function ipinfo() {
+  curl -sSL https://ifconfig.io/all.json | jq .
 }

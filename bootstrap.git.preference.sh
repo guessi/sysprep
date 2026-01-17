@@ -12,10 +12,6 @@ git config --global --bool color.ui true
 git config --global --bool log.decorate true
 git config --global --bool merge.ff true
 
-git config --global alias.br 'branch'
-git config --global alias.ci 'commit'
-git config --global alias.co 'checkout'
-git config --global alias.d 'diff'
 git config --global alias.dc 'diff --cached'
 git config --global alias.dcs 'diff --cached --stat'
 git config --global alias.ds 'diff --stat'
@@ -23,7 +19,6 @@ git config --global alias.find '!git ls-files | grep -i'
 git config --global alias.hist 'log --pretty=format:"%C(yellow)%h%C(reset) %C(dim green)%ad%C(reset) %s%C(red)%d%C(reset) [%C(cyan)%an%C(reset)]" --graph --date=short'
 git config --global alias.lo 'log --oneline --decorate'
 git config --global alias.lt '!git describe --tags --abbrev=0 2>/dev/null || echo "not tag defined"'
-git config --global alias.s 'show'
 git config --global alias.ss 'show --stat'
 git config --global alias.st 'status -s'
 
