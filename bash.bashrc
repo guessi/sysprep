@@ -2,14 +2,13 @@
 
 # define GOPATH
 export GOPATH=$HOME/go
-export GOROOT=/usr/local/go
 
 # define PYENV
 export PYENV_ROOT="$HOME/.pyenv"
 
 # setup PATH
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
+export PATH="/usr/local/go/bin:$GOPATH/bin:$PATH"
 export PATH="$PYENV_ROOT/bin:$PATH"
 
 if command -v pyenv 1>/dev/null 2>&1; then
